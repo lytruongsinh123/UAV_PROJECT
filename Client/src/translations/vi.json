@@ -1,0 +1,24 @@
+{
+    "common": {
+        "welcome": "Chào mừng",
+        "hello": "Xin chào",
+        "save": "Lưu",
+        "cancel": "Hủy",
+        "edit": "Sửa",
+        "delete": "Xóa",
+        "confirm": "Xác nhận",
+        "loading": "Đang tải..."
+    },
+    "user": {
+        "login": "Đăng nhập",
+        "logout": "Đăng xuất",
+        "username": "Tên đăng nhập",
+        "password": "Mật khẩu",
+        "email": "Email",
+        "profile": "Hồ sơ"
+    },
+    "app": {
+        "title": "Dự án UAV",
+        "description": "Hệ thống quản lý dự án UAV"
+    }
+}

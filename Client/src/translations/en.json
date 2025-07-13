@@ -1,0 +1,24 @@
+{
+    "common": {
+        "welcome": "Welcome",
+        "hello": "Hello",
+        "save": "Save",
+        "cancel": "Cancel",
+        "edit": "Edit",
+        "delete": "Delete",
+        "confirm": "Confirm",
+        "loading": "Loading..."
+    },
+    "user": {
+        "login": "Login",
+        "logout": "Logout",
+        "username": "Username",
+        "password": "Password",
+        "email": "Email",
+        "profile": "Profile"
+    },
+    "app": {
+        "title": "UAV Project",
+        "description": "UAV Project Management System"
+    }
+}
