@@ -64,7 +64,6 @@ let handleUserLogin = (useremail, password) => {
         }
     });
 };
-
 let checkUserEmail = (useremail) => {
     return new Promise(async (resolve, reject) => {
         try {
@@ -110,7 +109,6 @@ let getAllUser = (userid) => {
         }
     });
 };
-
 let creatNewUser = (data) => {
     return new Promise(async (resolve, reject) => {
         try {
@@ -143,7 +141,6 @@ let creatNewUser = (data) => {
         }
     });
 };
-
 let deleteUser = (userid) => {
     return new Promise(async (resolve, reject) => {
         try {
@@ -173,7 +170,6 @@ let deleteUser = (userid) => {
         }
     });
 };
-
 let updateUserData = (data) => {
     return new Promise(async (resolve, reject) => {
         try {
@@ -222,7 +218,6 @@ let updateUserData = (data) => {
         }
     });
 };
-
 let getAllCodeService = (typeInput) => {
     return new Promise(async (resolve, reject) => {
         try {
@@ -247,6 +242,8 @@ let getAllCodeService = (typeInput) => {
         }
     });
 };
+
+
 module.exports = {
     handleUserLogin: handleUserLogin,
     getAllUser: getAllUser,

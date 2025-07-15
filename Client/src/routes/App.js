@@ -12,8 +12,11 @@ import {
     userIsNotAuthenticated,
 } from "../hoc/Authentication";
 import "react-toastify/dist/ReactToastify.css";
-import HomePage from "../containers/HomePage";
+import HomePage from "../containers/Homepage/HomePage";
+import Dashboard from "../containers/Dashboard/Dashboard";
+import Registration from "../pages/Uav/Registration/Registration";
 import Login from "../pages/User/Login/Login";
+import "@fortawesome/fontawesome-free/css/all.min.css";
 
 class App extends Component {
     constructor(props) {
@@ -56,10 +59,26 @@ class App extends Component {
                                     path={"/login"}
                                     Component={userIsNotAuthenticated(Login)}
                                 />
+                                {/* HomePage layout với Header + Sidebar */}
                                 <Route
                                     path={"/home"}
-                                    Component={userIsAuthenticated(HomePage)}
-                                />
+                                    Component={userIsAuthenticated(
+                                        HomePage
+                                    )}>
+                                </Route>
+
+                                {/* Dashboard standalone route cũng có header + sidebar */}
+                                <Route
+                                    path={"/dashboard"}
+                                    Component={userIsAuthenticated(HomePage)}>
+                                    <Route index element={<Dashboard />} />
+                                </Route>
+                                
+                                <Route
+                                    path={"/registration"}
+                                    Component={userIsAuthenticated(HomePage)}>
+                                    <Route index element={<Registration />} />
+                                </Route>
                                 <Route
                                     path="/"
                                     element={<Navigate to="/login" replace />}

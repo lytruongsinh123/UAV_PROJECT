@@ -1,0 +1,198 @@
+
+
+/* ========================== */
+/*          HEADER            */
+/* ========================== */
+.header {
+  width: 100%;
+  background-color: #ffffff;
+  border-bottom: 1px solid #e5e7eb;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  padding: 0 24px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  position: relative;
+  overflow: hidden; /* ✅ Chặn tràn chiều ngang */
+  sticky: top 0;
+}
+
+/* Container giới hạn chiều rộng */
+.header-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  overflow-x: hidden; /* ✅ Chặn tràn phần tử con */
+}
+
+/* Không cho phần tử con bị co hoặc tràn */
+.header-container > * {
+  flex-shrink: 0;
+  min-width: 0;
+}
+
+/* Logo */
+.header-logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+}
+
+.header-logo .logo-icon {
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.header-logo .logo-icon .logo-svg {
+  color: white;
+  width: 24px;
+  height: 24px;
+}
+
+.header-logo .logo-icon i {
+  color: white;
+  font-size: 20px;
+}
+
+.header-logo .logo-text {
+  font-size: 24px;
+  font-weight: 700;
+  color: #1f2937;
+  font-family: "Poppins", sans-serif;
+}
+
+/* Navigation */
+.header-nav {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.header-nav .nav-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: #6b7280;
+  font-weight: 500;
+  user-select: none;
+}
+
+.header-nav .nav-item:hover {
+  background-color: #f3f4f6;
+  color: #374151;
+}
+
+.header-nav .nav-item.active {
+  background-color: #eff6ff;
+  color: #2563eb;
+  border: 1px solid #bfdbfe;
+}
+
+.header-nav .nav-item.active .nav-icon {
+  color: #2563eb;
+}
+
+.header-nav .nav-item .nav-icon {
+  width: 20px;
+  height: 20px;
+  font-size: 16px;
+  transition: color 0.2s ease;
+}
+
+.header-nav .nav-item span {
+  font-size: 16px;
+  white-space: nowrap;
+}
+
+/* Logout Button */
+.header-actions {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  margin-left: auto; /* ✅ Đẩy logout về bên phải */
+}
+
+.header-actions .btn-logout {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background-color: #fee2e2;
+  border: 1px solid #fecaca;
+  border-radius: 8px;
+  color: #dc2626;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.header-actions .btn-logout:hover {
+  background-color: #fecaca;
+  border-color: #f87171;
+}
+
+.header-actions .btn-logout svg,
+.header-actions .btn-logout i {
+  width: 18px;
+  height: 18px;
+  font-size: 16px;
+}
+
+.header-actions .btn-logout span {
+  font-size: 14px;
+}
+
+/* ========================== */
+/*        RESPONSIVE          */
+/* ========================== */
+
+/* Max-width 768px */
+@media (max-width: 768px) {
+  .header {
+    padding: 0 16px;
+  }
+
+  .header-nav .nav-item {
+    padding: 8px 12px;
+  }
+
+  .header-nav .nav-item span {
+    display: none;
+  }
+
+  .header-actions .btn-logout span {
+    display: none;
+  }
+}
+
+/* Max-width 640px */
+@media (max-width: 640px) {
+  .header-logo .logo-text {
+    font-size: 20px;
+  }
+
+  .header-nav {
+    gap: 4px;
+  }
+
+  .header-nav .nav-item {
+    padding: 8px;
+  }
+}
+

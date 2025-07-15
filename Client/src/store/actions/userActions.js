@@ -10,7 +10,7 @@ export const HandleLoginStart = (email, password) => {
         try {
             let res = await handleLogin(email, password);
             if (res && res.errCode === 0) {
-                dispatch(handleLoginSuccess(email, password, res));
+                dispatch(handleLoginSuccess(res));
                 toast.success("Login successful!");
             } else {
                 dispatch(handleLoginFail(res));
@@ -21,17 +21,20 @@ export const HandleLoginStart = (email, password) => {
         }
     }
 }
-export const handleLoginSuccess = (email, password, res) => ({
+export const handleLoginSuccess = (res) => ({
     type: actionTypes.LOGIN_SUCCESS,
-    payload: res,
+    payload: res.message,
     userInfo: {
-        email: email,
-        password: password,
+        email: res.user.email,
+        password: res.user.password,
+        firstName: res.user.firstName,
+        lastName: res.user.lastName,
+        positionId: res.user.positionId,
     },
 })
 export const handleLoginFail = (res) => ({
     type: actionTypes.LOGIN_FAIL,
-    payload: res,
+    payload: res.message,
     userInfo: {},
 })
 
