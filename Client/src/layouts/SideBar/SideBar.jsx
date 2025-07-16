@@ -32,7 +32,7 @@ class SlideBar extends Component {
                 <div className="main-section">
                     <div
                         className="home"
-                        onClick={() => this.handleNavigate("home")}>
+                        onClick={() => this.handleNavigate("homeuav")}>
                         <i className="fas fa-home"></i>
                         {isOpenSidebar ? <span>Home</span> : ""}
                     </div>

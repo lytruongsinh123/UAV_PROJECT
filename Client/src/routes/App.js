@@ -14,6 +14,7 @@ import {
 import "react-toastify/dist/ReactToastify.css";
 import HomePage from "../containers/Homepage/HomePage";
 import Dashboard from "../containers/Dashboard/Dashboard";
+import Homeuav from "../containers/Homeuav/Homeuav";
 import Registration from "../pages/Uav/Registration/Registration";
 import Login from "../pages/User/Login/Login";
 import "@fortawesome/fontawesome-free/css/all.min.css";
@@ -73,7 +74,11 @@ class App extends Component {
                                     Component={userIsAuthenticated(HomePage)}>
                                     <Route index element={<Dashboard />} />
                                 </Route>
-                                
+                                <Route
+                                    path={"/homeuav"}
+                                    Component={userIsAuthenticated(HomePage)}>
+                                    <Route index element={<Homeuav />} />
+                                </Route>
                                 <Route
                                     path={"/registration"}
                                     Component={userIsAuthenticated(HomePage)}>
