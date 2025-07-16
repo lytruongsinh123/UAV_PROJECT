@@ -1,17 +1,19 @@
-import ReactDOM from 'react-dom';
-import App from './routes/App';
-import * as serviceWorker from './serviceWorker';
-import { Provider } from 'react-redux';
-import reduxStore, { persistor } from './redux';
-import IntlProviderWrapper from './hoc/IntlProviderWrapper';
+import ReactDOM from "react-dom";
+import App from "./routes/App";
+import * as serviceWorker from "./serviceWorker";
+import { Provider } from "react-redux";
+import reduxStore, { persistor } from "./redux";
+import IntlProviderWrapper from "./hoc/IntlProviderWrapper";
+import "bootstrap/dist/css/bootstrap.min.css";
+
 const renderApp = () => {
     ReactDOM.render(
         <Provider store={reduxStore}>
             <IntlProviderWrapper>
-                <App persistor={persistor}/>
+                <App persistor={persistor} />
             </IntlProviderWrapper>
         </Provider>,
-        document.getElementById('root')
+        document.getElementById("root")
     );
 };
 

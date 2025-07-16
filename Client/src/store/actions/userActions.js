@@ -25,6 +25,7 @@ export const handleLoginSuccess = (res) => ({
     type: actionTypes.LOGIN_SUCCESS,
     payload: res.message,
     userInfo: {
+        id: res.user.id,
         email: res.user.email,
         password: res.user.password,
         firstName: res.user.firstName,

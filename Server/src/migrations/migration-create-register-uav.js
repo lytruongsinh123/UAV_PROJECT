@@ -1,17 +1,25 @@
 "use strict";
 module.exports = {
     up: async (queryInterface, Sequelize) => {
-        await queryInterface.createTable("Uavs", {
+        await queryInterface.createTable("RegisterUavs", {
+
+            // ownerId: DataTypes.INTEGER,
             // droneId: DataTypes.STRING,
             // droneName: DataTypes.STRING,
-            // speedMax: DataTypes.INTEGER,
-            // hightMax: DataTypes.INTEGER,
-            // performance: DataTypes.STRING,
+            // startPoint: DataTypes.STRING,
+            // endPoint: DataTypes.STRING,
+            // heightFly: DataTypes.INTEGER,
+            // speed: DataTypes.INTEGER,
+            // status: DataTypes.STRING,
             id: {
                 allowNull: false,
                 autoIncrement: true,
                 primaryKey: true,
                 type: Sequelize.INTEGER,
+            },
+            ownerId: {
+                type: Sequelize.INTEGER,
+                allowNull: false,
             },
             droneId: {
                 type: Sequelize.STRING,
@@ -21,15 +29,23 @@ module.exports = {
                 type: Sequelize.STRING,
                 allowNull: false,
             },
-            speedMax: {
+            startPoint: {
+                type: Sequelize.STRING,
+                allowNull: false,
+            },
+            endPoint: {
+                type: Sequelize.STRING,
+                allowNull: false,
+            },
+            heightFly: {
                 type: Sequelize.INTEGER,
                 allowNull: false,
             },
-            hightMax: {
+            speed: {
                 type: Sequelize.INTEGER,
                 allowNull: false,
             },
-            performance: {
+            status: {
                 type: Sequelize.STRING,
                 allowNull: false,
             },
@@ -45,7 +61,7 @@ module.exports = {
         });
     },
     down: async (queryInterface, Sequelize) => {
-        await queryInterface.dropTable("Uavs");
+        await queryInterface.dropTable("RegisterUavs");
     },
 };
 // npx sequelize-cli db:migrate --to migration-create-user.js

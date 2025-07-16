@@ -1,6 +1,6 @@
 import express from "express";
 import userController from "../controllers/userController";
-import uavController from "../controllers/uavController";
+import registerUavController from "../controllers/registerUavController";
 
 let router = express.Router();
 let initWebRouters = (app) => {
@@ -12,12 +12,13 @@ let initWebRouters = (app) => {
     router.delete("/api/delete-user", userController.handleDeleteUser);
     router.get("/api/allcode", userController.getAllCode);
 
-    // API UAV
-    router.post("/api/create-new-uav", uavController.handleCreateNewUav);
-    router.get("/api/get-all-uavs", uavController.handleGetAllUavs);
-    router.get("/api/get-all-uavs-by-owner/:ownerId", uavController.handleGetAllUavsByOwner);
-
-
+    // API UAV REGISTER
+    router.post("/api/register-new-uav", registerUavController.handleRegisterNewUav);
+    router.get("/api/get-all-uavs", registerUavController.handleGetAllUavs);
+    router.get("/api/get-all-uavs-register-by-owner/:ownerId", registerUavController.handleGetAllUavsRegisterByOwner);
+    router.post("/api/update-uav", registerUavController.handleUpdateUav);
+    router.get("/api/get-uavs-by-droneId/:droneId", registerUavController.handleGetUavsByDroneId);
+    
     return app.use("/", router);
 };
 module.exports = initWebRouters;

@@ -1,2 +1,2 @@
 export * from "./userActions";
-export * from "./uavActions";
+export * from "./uavRegisterActions";

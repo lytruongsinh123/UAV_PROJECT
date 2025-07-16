@@ -1,20 +1,37 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { FormattedMessage } from "react-intl";
+import * as actions from "../../store/actions/uavRegisterActions";
+import { useNavigate } from "react-router-dom";
+import ModalUav from "../../components/Modal/Modal";
 import "./Dashboard.css";
 class Dashboard extends Component {
     constructor(props) {
         super(props);
         this.state = {
             currentTime: new Date(),
+            countUavs: 0,
+            isOpenModal: false,
         };
     }
 
     componentDidMount = async () => {
+        const { userInfo } = this.props;
+        if (userInfo && userInfo.id) {
+            await this.props.fetchUavsRegisteredByOwner(userInfo.id);
+        }
+
         // Update time every second
         this.timeInterval = setInterval(() => {
             this.setState({ currentTime: new Date() });
         }, 1000);
+    };
+    componentDidUpdate = async (prevProps) => {
+        if (this.props.uavs !== prevProps.uavs) {
+            this.setState({
+                countUavs: this.props.uavs.length,
+            });
+        }
     };
 
     componentWillUnmount() {
@@ -41,10 +58,17 @@ class Dashboard extends Component {
         });
     };
 
+    handleRegisterUAV = (path) => {
+        if (this.props.navigate) {
+            this.props.navigate(`/${path}`); // Dùng navigate để chuyển hướng
+        }
+    };
+    handleOpenModal = () => {
+        this.setState({ isOpenModal: !this.state.isOpenModal });
+    };
     render() {
         const { userInfo } = this.props;
         const { currentTime } = this.state;
-        console.log("User Info:", userInfo);
         return (
             <div className="dashboard">
                 <div className="dashboard-container">
@@ -117,12 +141,16 @@ class Dashboard extends Component {
 
                     {/* Stats Cards */}
                     <div className="stats-grid">
-                        <div className="stat-card">
+                        <div
+                            className="stat-card"
+                            onClick={() => this.handleOpenModal()}>
                             <div className="stat-icon">
                                 <i className="fas fa-plane"></i>
                             </div>
                             <div className="stat-content">
-                                <div className="stat-number">12</div>
+                                <div className="stat-number">
+                                    {this.state.countUavs}
+                                </div>
                                 <div className="stat-label">
                                     Registered UAVs
                                 </div>
@@ -212,7 +240,11 @@ class Dashboard extends Component {
                     <div className="quick-actions">
                         <h3>Quick Actions</h3>
                         <div className="actions-grid">
-                            <button className="action-btn">
+                            <button
+                                className="action-btn"
+                                onClick={() =>
+                                    this.handleRegisterUAV("registration")
+                                }>
                                 <i className="fas fa-plus"></i>
                                 <span>Register New UAV</span>
                             </button>
@@ -230,21 +262,43 @@ class Dashboard extends Component {
                             </button>
                         </div>
                     </div>
+
+                    {/* Modal for Registering UAV */}
+                    <ModalUav
+                        isOpen={this.state.isOpenModal}
+                        toggleModal={() =>
+                            this.setState({
+                                isOpenModal: !this.state.isOpenModal,
+                            })
+                        }
+                        listUav ={this.props.uavs}
+                    />
                 </div>
             </div>
         );
     }
 }
-
+const withNavigate = (Component) => {
+    return (props) => {
+        const navigate = useNavigate();
+        return <Component {...props} navigate={navigate} />;
+    };
+};
 const mapStateToProps = (state) => {
     return {
+        uavs: state.uavRegister.uavs,
         userInfo: state.user.userInfo,
         isLoggedIn: state.user.isLoggedIn,
     };
 };
 
 const mapDispatchToProps = (dispatch) => {
-    return {};
+    return {
+        fetchUavsRegisteredByOwner: (ownerId) =>
+            dispatch(actions.fetchAllUavsByOwner(ownerId)),
+    };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);
+export default withNavigate(
+    connect(mapStateToProps, mapDispatchToProps)(Dashboard)
+);

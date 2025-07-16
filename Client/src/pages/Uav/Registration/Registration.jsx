@@ -1,14 +1,113 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { FormattedMessage } from "react-intl";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import * as actions from "../../../store/actions";
+import { crud_actions } from "../../../utils/constants.js";
+import { getUavsByDroneId } from "../../../service/uavRegisterService";
+import emitter from "../../../utils/eventBus.js";
 import "./Registration.css";
 
 class RegisterUav extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            ownerId: null,
+            droneId: "",
+            droneName: "",
+            startPoint: "",
+            endPoint: "",
+            heightFly: null,
+            speed: null,
+            status: "pending",
+        };
+    }
+
+    async componentDidMount() {
+        console.log("=== componentDidMount ===");
+        console.log("Props actions:", this.props.actions);
+        console.log("crud_actions.EDIT:", crud_actions.EDIT);
+        console.log("Actions match:", this.props.actions === crud_actions.EDIT);
+
+        if (this.props.actions === crud_actions.EDIT) {
+            console.log("✅ Setting up EDIT mode listener");
+
+            this.handler = async (id) => {
+                console.log("🔔 Received ID from event bus:", id);
+
+                try {
+                    console.log("📞 Calling getUavsByDroneId with ID:", id);
+                    let res = await getUavsByDroneId(id);
+                    console.log("📡 API response:", res);
+
+                    if (res && res.errCode === 0) {
+                        let uav = res.uavs;
+                        console.log("✅ UAV data found:", uav);
+                        console.log("📝 About to setState with:", {
+                            ownerId: uav.ownerId,
+                            droneId: uav.droneId,
+                            droneName: uav.droneName,
+                            startPoint: uav.startPoint,
+                            endPoint: uav.endPoint,
+                            heightFly: uav.heightFly,
+                            speed: uav.speed,
+                            status: uav.status,
+                        });
+
+                        // ✅ Sử dụng callback để debug setState
+                        this.setState(
+                            {
+                                ownerId: uav.ownerId,
+                                droneId: uav.droneId,
+                                droneName: uav.droneName,
+                                startPoint: uav.startPoint,
+                                endPoint: uav.endPoint,
+                                heightFly: uav.heightFly,
+                                speed: uav.speed,
+                                status: uav.status,
+                            },
+                            () => {
+                                console.log("🎉 setState COMPLETED!");
+                                console.log("🔍 New state:", this.state);
+                                console.log(
+                                    "🆔 DroneId in state:",
+                                    this.state.droneId
+                                );
+                                console.log(
+                                    "📝 DroneName in state:",
+                                    this.state.droneName
+                                );
+                            }
+                        );
+                    } else {
+                        console.error("❌ API error:", res);
+                    }
+                } catch (error) {
+                    console.error("💥 Error loading UAV:", error);
+                }
+            };
+
+            emitter.on("sendId", this.handler);
+            console.log("👂 Event listener registered for 'sendId'");
+        } else {
+            console.log("⚠️ Not in EDIT mode, skipping listener setup");
+        }
+    }
+    componentWillUnmount() {
+        console.log("🧹 componentWillUnmount - cleaning up");
+        if (this.handler) {
+            emitter.off("sendId", this.handler);
+            console.log("✅ Event listener removed");
+        }
+    }
+    handleInputChange = (event) => {
+        const { name, value } = event.target;
+        this.setState({
+            [name]: value,
+        });
+    };
+    handleCancel = () => {
+        this.setState({
             ownerId: "",
             droneId: "",
             droneName: "",
@@ -17,19 +116,8 @@ class RegisterUav extends Component {
             heightFly: "",
             speed: "",
             status: "pending",
-        };
-    }
-
-    componentDidMount = async () => {};
-    componentDidUpdate = async (prevProps, prevState, snapshot) => {};
-
-    handleInputChange = (event) => {
-        const { name, value } = event.target;
-        this.setState({
-            [name]: value,
         });
     };
-
     handleSubmit = (event) => {
         event.preventDefault();
         const {
@@ -42,26 +130,31 @@ class RegisterUav extends Component {
             speed,
             status,
         } = this.state;
-        this.props.createUavStart({
-            ownerId,
-            droneId,
-            droneName,
-            startPoint,
-            endPoint,
-            heightFly,
-            speed,
-            status,
-        });
-        this.setState({
-            ownerId: "",
-            droneId: "",
-            droneName: "",
-            startPoint: "",
-            endPoint: "",
-            heightFly: "",
-            speed: "",
-            status: "pending",
-        });
+        if (actions === crud_actions.CREATE) {
+            let res = this.props.RegisterUavStart({
+                ownerId,
+                droneId,
+                droneName,
+                startPoint,
+                endPoint,
+                heightFly,
+                speed,
+                status,
+            });
+            if (res && res.errCode === 0) {
+                this.setState({
+                    ownerId: "",
+                    droneId: "",
+                    droneName: "",
+                    startPoint: "",
+                    endPoint: "",
+                    heightFly: "",
+                    speed: "",
+                    status: "pending",
+                });
+            }
+        } else if (actions === crud_actions.EDIT) {
+        }
     };
 
     render() {
@@ -75,7 +168,6 @@ class RegisterUav extends Component {
             speed,
             status,
         } = this.state;
-        console.log("check state:", this.state);
         return (
             <div className="registration-uav-container">
                 <div className="registration-header">
@@ -234,7 +326,10 @@ class RegisterUav extends Component {
                     </div>
 
                     <div className="form-actions">
-                        <button type="button" className="btn-cancel">
+                        <button
+                            type="button"
+                            className="btn-cancel"
+                            onClick={() => this.handleCancel()}>
                             <i className="fas fa-times"></i>
                             Cancel
                         </button>
@@ -255,19 +350,21 @@ class RegisterUav extends Component {
 const withNavigate = (Component) => {
     return (props) => {
         const navigate = useNavigate();
-        return <Component {...props} navigate={navigate} />;
+        const location = useLocation();
+        return <Component {...props} navigate={navigate} location={location} />;
     };
 };
 
 const mapStateToProps = (state) => {
     return {
-        // language: state.app.language,
+        actions: state.uavRegister.actions,
     };
 };
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        createUavStart: (data) => dispatch(actions.createUavStart(data)), // ✅ Sửa tên
+        RegisterUavStart: (data) => dispatch(actions.registerUav(data)), // ✅ Sửa tên
+        UpdateUavStart: (data) => dispatch(actions.updateUavRedux(data)), // ✅ Sửa tên
     };
 };
 
