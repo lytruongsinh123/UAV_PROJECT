@@ -2,10 +2,6 @@ import db from "../models/index";
 let handleRegisterNewUav = async (data) => {
     return new Promise(async (resolve, reject) => {
         try {
-            console.log("=== DEBUG: Input data ===");
-            console.log("Data received:", data);
-            console.log("DroneId:", data.droneId);
-            console.log("Type of droneId:", typeof data.droneId);
             if (
                 !data.ownerId ||
                 !data.droneId ||
@@ -13,8 +9,7 @@ let handleRegisterNewUav = async (data) => {
                 !data.startPoint ||
                 !data.endPoint ||
                 !data.heightFly ||
-                !data.speed ||
-                !data.status
+                !data.speed
             ) {
                 resolve({
                     errCode: 1,
@@ -40,7 +35,7 @@ let handleRegisterNewUav = async (data) => {
                         endPoint: data.endPoint,
                         heightFly: data.heightFly,
                         speed: data.speed,
-                        status: data.status,
+                        status: "S0",
                     });
                     resolve({
                         errCode: 0,
@@ -110,7 +105,6 @@ let handleUpdateUav = async (data) => {
                 uav.endPoint = data.endPoint;
                 uav.heightFly = data.heightFly;
                 uav.speed = data.speed;
-                uav.status = data.status;
                 await uav.save();
                 resolve({
                     errCode: 0,
@@ -151,10 +145,158 @@ let handleGetUavsByDroneId = async (droneId) => {
         }
     });
 };
+
+let handleChangeUavStatus = async (droneId, newStatus) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            if (!droneId || !newStatus) {
+                return resolve({
+                    errCode: 1,
+                    message: "Missing required parameters",
+                });
+            }
+            let uav = await db.RegisterUav.findOne({
+                where: { droneId: droneId },
+            });
+
+            if (uav) {
+                if (uav.status === "S0") {// Nếu UAV đang chờ hoạt động
+                    switch (newStatus) {
+                        case "S1": // Chuyển sang hoạt động 
+                            uav.status = "S1";
+                            await uav.save();
+                            resolve({
+                                errCode: 0,
+                                message: "UAV status updated to active",
+                            });
+                            break;
+                        case "S2": // Chuyển sang bảo trì
+                            uav.status = "S2";
+                            await uav.save();
+                            resolve({
+                                errCode: 0,
+                                message: "UAV status updated to maintenance",
+                            });
+                            break;
+                        default:
+                            resolve({
+                                errCode: 2,
+                                message: "Not change or invalid status change",
+                            });
+                    }
+                }
+                if(uav.status === "S1") {// Nếu UAV đang hoạt động
+                    switch (newStatus) {
+                        case "S3": // Chuyển sang hoàn thành lịch trình
+                            uav.status = "S3";
+                            await uav.save();
+                            resolve({
+                                errCode: 0,
+                                message: "UAV status updated to completed",
+                            });
+                            break;
+                        default:
+                            resolve({
+                                errCode: 2,
+                                message: "Not change or invalid status change",
+                            });
+                    }
+                }
+                if(uav.status === "S2") {// Nếu UAV đang bảo trì
+                    resolve({
+                        errCode: 2,
+                        message: "UAV is under maintenance, cannot change status",
+                    })
+                }
+                if(uav.status === "S3") {// Nếu UAV đã hoàn thành lịch trình
+                    switch (newStatus) {
+                        case "S0": // Chuyển sang chờ hoạt động
+                            uav.status = "S0";
+                            await uav.save();
+                            resolve({
+                                errCode: 0,
+                                message: "UAV status updated to pending",
+                            });
+                            break;
+                        default:
+                            resolve({
+                                errCode: 2,
+                                message: "Invalid status change",
+                            });
+                    }
+                }
+            } else {
+                resolve({
+                    errCode: 1,
+                    message: "UAV not found",
+                });
+            }
+        } catch (error) {
+            console.error("Error changing UAV status:", error);
+            reject({
+                errCode: -1,
+                message: "Error from server...",
+            });
+        }
+    });
+};
+let handleGetUavByStatus = async (status, ownerId) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let uavs = await db.RegisterUav.findAll({
+                where: {
+                    status: status,
+                    ownerId: ownerId
+                }
+            });
+            resolve({
+                errCode: 0,
+                message: "OK",
+                uavs: uavs,
+            });
+        } catch (error) {
+            console.error("Error getting UAV by status:", error);
+            reject({
+                errCode: -1,
+                message: "Error from server...",
+            });
+        }
+    });
+};
+let handleDeleteUav = async (droneId) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let uav = await db.RegisterUav.findOne({
+                where: { droneId: droneId },
+            });
+            if (uav) {
+                await uav.destroy();
+                resolve({
+                    errCode: 0,
+                    message: "UAV deleted successfully",
+                });
+            } else {
+                resolve({
+                    errCode: 1,
+                    message: "UAV not found",
+                });
+            }
+        } catch (error) {
+            console.error("Error deleting UAV:", error);
+            reject({
+                errCode: -1,
+                message: "Error from server...",
+            });
+        }
+    });
+};
 module.exports = {
     handleRegisterNewUav,
     handleGetAllUavs,
     handleGetAllUavsRegisterByOwner,
     handleUpdateUav,
     handleGetUavsByDroneId,
+    handleChangeUavStatus,
+    handleGetUavByStatus,
+    handleDeleteUav
 };

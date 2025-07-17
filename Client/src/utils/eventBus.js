@@ -1,11 +1,32 @@
-import { EventEmitter } from 'events';
+// eventBus.js
+const events = {};
+let lastPayload = {};  // dùng để "remember" emit gần nhất
 
-class EventBus extends EventEmitter {
-    constructor() {
-        super();
-        this.setMaxListeners(20); // Tăng giới hạn listener
-    }
-}
+const emitter = {
+    on: (event, callback) => {
+        if (!events[event]) {
+            events[event] = [];
+        }
+        events[event].push(callback);
 
-const emitter = new EventBus();
+        // ✅ Nếu đã từng emit, thì gọi lại callback ngay (replay)
+        if (lastPayload[event]) {
+            callback(lastPayload[event]);
+        }
+    },
+
+    emit: (event, data) => {
+        lastPayload[event] = data;
+        if (events[event]) {
+            events[event].forEach((cb) => cb(data));
+        }
+    },
+
+    off: (event, callback) => {
+        if (events[event]) {
+            events[event] = events[event].filter((cb) => cb !== callback);
+        }
+    },
+};
+
 export default emitter;

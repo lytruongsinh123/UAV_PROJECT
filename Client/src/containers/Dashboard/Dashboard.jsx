@@ -3,6 +3,8 @@ import { connect } from "react-redux";
 import { FormattedMessage } from "react-intl";
 import * as actions from "../../store/actions/uavRegisterActions";
 import { useNavigate } from "react-router-dom";
+import { statusUav } from "../../utils/constants";
+import { getUavByStatusAndOwner } from "../../service/uavRegisterService";
 import ModalUav from "../../components/Modal/Modal";
 import "./Dashboard.css";
 class Dashboard extends Component {
@@ -11,7 +13,11 @@ class Dashboard extends Component {
         this.state = {
             currentTime: new Date(),
             countUavs: 0,
+            countActiveUavs: 0,
             isOpenModal: false,
+            isOpenUavsActiveModal: null,
+            listCompletedUavs: [],
+            countFlightPaths: 0,
         };
     }
 
@@ -19,6 +25,18 @@ class Dashboard extends Component {
         const { userInfo } = this.props;
         if (userInfo && userInfo.id) {
             await this.props.fetchUavsRegisteredByOwner(userInfo.id);
+            await this.props.fetchUavsByStatusAndOwner(
+                statusUav.ACTIVE,
+                userInfo.id
+            );
+            let listUavsByStatus = await getUavByStatusAndOwner(
+                statusUav.COMPLETED,
+                userInfo.id
+            );
+            this.setState({
+                listCompletedUavs: listUavsByStatus,
+                countFlightPaths: listUavsByStatus.uavs.length,
+            });
         }
 
         // Update time every second
@@ -27,9 +45,17 @@ class Dashboard extends Component {
         }, 1000);
     };
     componentDidUpdate = async (prevProps) => {
-        if (this.props.uavs !== prevProps.uavs) {
+        if (this.props.uavs && this.props.uavs !== prevProps.uavs) {
             this.setState({
                 countUavs: this.props.uavs.length,
+            });
+        }
+        if (
+            this.props.uavsByStatus &&
+            this.props.uavsByStatus !== prevProps.uavsByStatus
+        ) {
+            this.setState({
+                countActiveUavs: this.props.uavsByStatus.length,
             });
         }
     };
@@ -63,12 +89,22 @@ class Dashboard extends Component {
             this.props.navigate(`/${path}`); // Dùng navigate để chuyển hướng
         }
     };
+    handleOpenUavsActive = () => {
+        this.setState({
+            isOpenModal: !this.state.isOpenModal,
+            isOpenUavsActiveModal: true,
+        });
+    };
     handleOpenModal = () => {
-        this.setState({ isOpenModal: !this.state.isOpenModal });
+        this.setState({
+            isOpenModal: !this.state.isOpenModal,
+            isOpenUavsActiveModal: false,
+        });
     };
     render() {
         const { userInfo } = this.props;
         const { currentTime } = this.state;
+        console.log("check state: ", this.state);
         return (
             <div className="dashboard">
                 <div className="dashboard-container">
@@ -162,17 +198,23 @@ class Dashboard extends Component {
                                 <i className="fas fa-route"></i>
                             </div>
                             <div className="stat-content">
-                                <div className="stat-number">8</div>
+                                <div className="stat-number">
+                                    {this.state.countFlightPaths}
+                                </div>
                                 <div className="stat-label">Flight Paths</div>
                             </div>
                         </div>
 
-                        <div className="stat-card">
+                        <div
+                            className="stat-card"
+                            onClick={() => this.handleOpenUavsActive()}>
                             <div className="stat-icon">
                                 <i className="fas fa-map-marker-alt"></i>
                             </div>
                             <div className="stat-content">
-                                <div className="stat-number">3</div>
+                                <div className="stat-number">
+                                    {this.state.countActiveUavs}
+                                </div>
                                 <div className="stat-label">Active Flights</div>
                             </div>
                         </div>
@@ -266,12 +308,14 @@ class Dashboard extends Component {
                     {/* Modal for Registering UAV */}
                     <ModalUav
                         isOpen={this.state.isOpenModal}
+                        isOpenUavsActiveModal={this.state.isOpenUavsActiveModal}
                         toggleModal={() =>
                             this.setState({
                                 isOpenModal: !this.state.isOpenModal,
                             })
                         }
-                        listUav ={this.props.uavs}
+                        listUav={this.props.uavs}
+                        listUavByStatus={this.props.uavsByStatus}
                     />
                 </div>
             </div>
@@ -286,6 +330,7 @@ const withNavigate = (Component) => {
 };
 const mapStateToProps = (state) => {
     return {
+        uavsByStatus: state.uavRegister.uavsByStatus,
         uavs: state.uavRegister.uavs,
         userInfo: state.user.userInfo,
         isLoggedIn: state.user.isLoggedIn,
@@ -296,6 +341,8 @@ const mapDispatchToProps = (dispatch) => {
     return {
         fetchUavsRegisteredByOwner: (ownerId) =>
             dispatch(actions.fetchAllUavsByOwner(ownerId)),
+        fetchUavsByStatusAndOwner: (status, ownerId) =>
+            dispatch(actions.fetchUavsByStatusAndOwner(status, ownerId)),
     };
 };
 

@@ -11,6 +11,7 @@ module.exports = {
             // heightFly: DataTypes.INTEGER,
             // speed: DataTypes.INTEGER,
             // status: DataTypes.STRING,
+            // distance: DataTypes.INTEGER
             id: {
                 allowNull: false,
                 autoIncrement: true,
@@ -49,7 +50,10 @@ module.exports = {
                 type: Sequelize.STRING,
                 allowNull: false,
             },
-            
+            distance: {
+                type: Sequelize.INTEGER,
+                allowNull: false,
+            },
             createdAt: {
                 allowNull: false,
                 type: Sequelize.DATE,

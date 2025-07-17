@@ -18,7 +18,10 @@ let initWebRouters = (app) => {
     router.get("/api/get-all-uavs-register-by-owner/:ownerId", registerUavController.handleGetAllUavsRegisterByOwner);
     router.post("/api/update-uav", registerUavController.handleUpdateUav);
     router.get("/api/get-uavs-by-droneId/:droneId", registerUavController.handleGetUavsByDroneId);
-    
+    router.post("/api/change-uav-status", registerUavController.handleChangeUavStatus);
+    router.get("/api/get-uav-by-status", registerUavController.handleGetUavByStatus);
+    router.delete("/api/delete-uav", registerUavController.handleDeleteUav);
+
     return app.use("/", router);
 };
 module.exports = initWebRouters;

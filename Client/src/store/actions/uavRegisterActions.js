@@ -5,7 +5,8 @@ import {
     registerNewUav,
     getAllUavsRegisterByOwner,
     updateUav,
-    getUavsByDroneId
+    handleChangeStatus,
+    getUavByStatusAndOwner
 } from "../../service/uavRegisterService";
 
 export const ActionUavRegister = (action) => {
@@ -124,4 +125,64 @@ export const updateUavFail = (error) => ({
     payload: error,
 });
 
+
+
+// Change UAV status action
+export const changeUavStatus = (droneId, newStatus) => {
+    return async (dispatch, getState) => {
+        try {
+            let res = await handleChangeStatus(droneId, newStatus);
+            if (res && res.errCode === 0) {
+                dispatch(changeStatusUavSuccess(res));
+                toast.success("UAV status changed successfully!");
+            } else {
+                dispatch(changeStatusUavFail(res));
+                toast.error("Failed to change UAV status: " + res.message);
+            }
+        } catch (error) {
+            dispatch(changeStatusUavFail(error));
+            toast.error("Error changing UAV status: " + error.message);
+        }
+    };
+};
+export const changeStatusUavSuccess = (res) => ({
+    type: actionTypes.CHANGE_STATUS_UAV_SUCCESS,
+    payload: res.message,
+});
+export const changeStatusUavFail = (error) => ({
+    type: actionTypes.CHANGE_STATUS_UAV_FAIL,
+    payload: error,
+});
+
+
+
+
+
+// Fetach UAVs by status and owner action
+export const fetchUavsByStatusAndOwner = (status, ownerId) => {
+    return async (dispatch, getState) => {
+        try {
+            let res = await getUavByStatusAndOwner(status, ownerId);
+            if (res && res.errCode === 0) {
+                dispatch(fetchUavsByStatusAndOwnerSuccess(res.uavs));
+                toast.success("Fetched UAVs by status and owner successfully!");
+            } else {
+                dispatch(fetchUavsByStatusAndOwnerFail(res));
+            }
+        } catch (error) {
+            dispatch(fetchUavsByStatusAndOwnerFail(error));
+            toast.error("Error fetching UAVs by status and owner: " + error.message);
+        }
+    };
+};
+export const fetchUavsByStatusAndOwnerSuccess = (uavs) => ({
+    type: actionTypes.FETCH_UAVS_BY_STATUS_AND_OWNER_SUCCESS,
+    uavsByStatus: uavs,
+    payload: uavs.message,
+});
+export const fetchUavsByStatusAndOwnerFail = (error) => ({
+    type: actionTypes.FETCH_UAVS_BY_STATUS_AND_OWNER_FAIL,
+    payload: error,
+    uavsByStatus: [], // Ensure this is an empty array to avoid undefined issues
+});
 

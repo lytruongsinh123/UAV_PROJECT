@@ -16,6 +16,7 @@ import HomePage from "../containers/Homepage/HomePage";
 import Dashboard from "../containers/Dashboard/Dashboard";
 import Homeuav from "../containers/Homeuav/Homeuav";
 import Registration from "../pages/Uav/Registration/Registration";
+import RouteActionResetter from "../utils/RouterActionResetter";
 import Login from "../pages/User/Login/Login";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 
@@ -53,6 +54,7 @@ class App extends Component {
         return (
             <Fragment>
                 <Router>
+                    <RouteActionResetter />
                     <div className="main-container">
                         <div className="content-container">
                             <Routes>

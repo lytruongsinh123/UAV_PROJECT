@@ -12,6 +12,7 @@ class RegisterUav extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            receivedId: "",
             ownerId: null,
             droneId: "",
             droneName: "",
@@ -23,27 +24,13 @@ class RegisterUav extends Component {
         };
     }
 
-    async componentDidMount() {
-        console.log("=== componentDidMount ===");
-        console.log("Props actions:", this.props.actions);
-        console.log("crud_actions.EDIT:", crud_actions.EDIT);
-        console.log("Actions match:", this.props.actions === crud_actions.EDIT);
-
-        if (this.props.actions === crud_actions.EDIT) {
-            console.log("✅ Setting up EDIT mode listener");
-
-            this.handler = async (id) => {
-                console.log("🔔 Received ID from event bus:", id);
-
-                try {
-                    console.log("📞 Calling getUavsByDroneId with ID:", id);
-                    let res = await getUavsByDroneId(id);
-                    console.log("📡 API response:", res);
-
+    handleReceiveId = (id) => {
+        if (id) {
+            this.setState({ receivedId: id }, () => {
+                getUavsByDroneId(id).then((res) => {
                     if (res && res.errCode === 0) {
-                        let uav = res.uavs;
-                        console.log("✅ UAV data found:", uav);
-                        console.log("📝 About to setState with:", {
+                        const uav = res.uavs;
+                        this.setState({
                             ownerId: uav.ownerId,
                             droneId: uav.droneId,
                             droneName: uav.droneName,
@@ -53,51 +40,18 @@ class RegisterUav extends Component {
                             speed: uav.speed,
                             status: uav.status,
                         });
-
-                        // ✅ Sử dụng callback để debug setState
-                        this.setState(
-                            {
-                                ownerId: uav.ownerId,
-                                droneId: uav.droneId,
-                                droneName: uav.droneName,
-                                startPoint: uav.startPoint,
-                                endPoint: uav.endPoint,
-                                heightFly: uav.heightFly,
-                                speed: uav.speed,
-                                status: uav.status,
-                            },
-                            () => {
-                                console.log("🎉 setState COMPLETED!");
-                                console.log("🔍 New state:", this.state);
-                                console.log(
-                                    "🆔 DroneId in state:",
-                                    this.state.droneId
-                                );
-                                console.log(
-                                    "📝 DroneName in state:",
-                                    this.state.droneName
-                                );
-                            }
-                        );
-                    } else {
-                        console.error("❌ API error:", res);
                     }
-                } catch (error) {
-                    console.error("💥 Error loading UAV:", error);
-                }
-            };
-
-            emitter.on("sendId", this.handler);
-            console.log("👂 Event listener registered for 'sendId'");
-        } else {
-            console.log("⚠️ Not in EDIT mode, skipping listener setup");
+                });
+            });
         }
-    }
-    componentWillUnmount() {
-        console.log("🧹 componentWillUnmount - cleaning up");
-        if (this.handler) {
-            emitter.off("sendId", this.handler);
-            console.log("✅ Event listener removed");
+    };
+
+    async componentDidMount() {
+        this.setState({
+            ownerId: this.props.userInfo.id,
+        });
+        if (this.props.actions === crud_actions.EDIT) {
+            emitter.on("sendId", (id) => this.handleReceiveId(id));
         }
     }
     handleInputChange = (event) => {
@@ -117,8 +71,9 @@ class RegisterUav extends Component {
             speed: "",
             status: "pending",
         });
+        this.props.HandleChangeAction(crud_actions.CREATE);
     };
-    handleSubmit = (event) => {
+    handleSubmit = async (event) => {
         event.preventDefault();
         const {
             ownerId,
@@ -130,6 +85,7 @@ class RegisterUav extends Component {
             speed,
             status,
         } = this.state;
+        const { actions } = this.props;
         if (actions === crud_actions.CREATE) {
             let res = this.props.RegisterUavStart({
                 ownerId,
@@ -143,7 +99,6 @@ class RegisterUav extends Component {
             });
             if (res && res.errCode === 0) {
                 this.setState({
-                    ownerId: "",
                     droneId: "",
                     droneName: "",
                     startPoint: "",
@@ -154,12 +109,36 @@ class RegisterUav extends Component {
                 });
             }
         } else if (actions === crud_actions.EDIT) {
+            let res = this.props.UpdateUavStart({
+                ownerId,
+                droneId,
+                droneName,
+                startPoint,
+                endPoint,
+                heightFly,
+                speed,
+                status,
+            });
+            if (res && res.errCode === 0) {
+                this.setState({
+                    droneId: "",
+                    droneName: "",
+                    startPoint: "",
+                    endPoint: "",
+                    heightFly: "",
+                    speed: "",
+                    status: "pending",
+                });
+            }
+        }
+        await this.props.fetchUavsRegisteredByOwner(ownerId); // Gọi fetch trước
+        if (this.props.navigate) {
+            this.props.navigate("/dashboard");
         }
     };
 
     render() {
         const {
-            ownerId,
             droneId,
             droneName,
             startPoint,
@@ -168,6 +147,8 @@ class RegisterUav extends Component {
             speed,
             status,
         } = this.state;
+        const { userInfo } = this.props;
+        console.log("State in render:", this.state);
         return (
             <div className="registration-uav-container">
                 <div className="registration-header">
@@ -192,10 +173,11 @@ class RegisterUav extends Component {
                                 type="number"
                                 id="ownerId"
                                 name="ownerId"
-                                value={ownerId}
+                                value={userInfo.id}
                                 onChange={this.handleInputChange}
                                 placeholder="Enter owner ID"
                                 required
+                                readOnly
                             />
                         </div>
 
@@ -214,42 +196,6 @@ class RegisterUav extends Component {
                                 placeholder="e.g., DR-001-2024"
                                 required
                             />
-                        </div>
-
-                        {/* Drone Name */}
-                        <div className="form-group">
-                            <label htmlFor="droneName">
-                                <i className="fas fa-tag"></i>
-                                Drone Name
-                            </label>
-                            <input
-                                type="text"
-                                id="droneName"
-                                name="droneName"
-                                value={droneName}
-                                onChange={this.handleInputChange}
-                                placeholder="e.g., Sky Falcon X1"
-                                required
-                            />
-                        </div>
-
-                        {/* Status */}
-                        <div className="form-group">
-                            <label htmlFor="status">
-                                <i className="fas fa-info-circle"></i>
-                                Status
-                            </label>
-                            <select
-                                id="status"
-                                name="status"
-                                value={status}
-                                onChange={this.handleInputChange}
-                                required>
-                                <option value="pending">Pending</option>
-                                <option value="active">Active</option>
-                                <option value="inactive">Inactive</option>
-                                <option value="maintenance">Maintenance</option>
-                            </select>
                         </div>
 
                         {/* Start Point */}
@@ -323,6 +269,23 @@ class RegisterUav extends Component {
                                 required
                             />
                         </div>
+
+                        {/* Drone Name */}
+                        <div className="form-group">
+                            <label htmlFor="droneName">
+                                <i className="fas fa-tag"></i>
+                                Drone Name
+                            </label>
+                            <input
+                                type="text"
+                                id="droneName"
+                                name="droneName"
+                                value={droneName}
+                                onChange={this.handleInputChange}
+                                placeholder="e.g., Sky Falcon X1"
+                                required
+                            />
+                        </div>
                     </div>
 
                     <div className="form-actions">
@@ -338,7 +301,9 @@ class RegisterUav extends Component {
                             className="btn-submit"
                             onClick={this.handleSubmit}>
                             <i className="fas fa-paper-plane"></i>
-                            Register UAV
+                            {this.props.actions === crud_actions.CREATE
+                                ? "Register UAV"
+                                : "Update UAV"}
                         </button>
                     </div>
                 </form>
@@ -357,14 +322,19 @@ const withNavigate = (Component) => {
 
 const mapStateToProps = (state) => {
     return {
+        userInfo: state.user.userInfo,
         actions: state.uavRegister.actions,
     };
 };
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        RegisterUavStart: (data) => dispatch(actions.registerUav(data)), // ✅ Sửa tên
-        UpdateUavStart: (data) => dispatch(actions.updateUavRedux(data)), // ✅ Sửa tên
+        fetchUavsRegisteredByOwner: (ownerId) =>
+            dispatch(actions.fetchAllUavsByOwner(ownerId)),
+        RegisterUavStart: (data) => dispatch(actions.registerUav(data)),
+        UpdateUavStart: (data) => dispatch(actions.updateUavRedux(data)),
+        HandleChangeAction: (action) =>
+            dispatch(actions.ActionUavRegister(action)),
     };
 };
 

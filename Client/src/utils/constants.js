@@ -27,7 +27,12 @@ export const crud_actions = {
 export const dateFormat = {
     SEND_TO_SERVER: "DD/MM/YYYY",
 };
-
+export const statusUav = {
+    PENDING: "S0", // Chờ duyệt
+    ACTIVE: "S1", // Đang hoạt động
+    MAINTENANCE: "S2", // Bảo trì
+    COMPLETED: "S3", // Hoàn thành lịch trình
+};
 export const YesNoObj = {
     YES: "Y",
     NO: "N",

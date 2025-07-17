@@ -70,10 +70,60 @@ let handleGetUavsByDroneId = async (req, res) => {
         });
     }
 };
+
+let handleChangeUavStatus = async (req, res) => {
+    try {
+        let { droneId, newStatus } = req.query;
+        let result = await registerUavService.handleChangeUavStatus(
+            droneId,
+            newStatus
+        );
+        return res.status(200).json(result);
+    } catch (e) {
+        console.log(e);
+        return res.status(500).json({
+            errCode: -1,
+            message: "Error from server...",
+        });
+    }
+};
+let handleGetUavByStatus = async (req, res) => {
+    try {
+        let status = req.query.status;
+        let ownerId = req.query.ownerId;
+        let result = await registerUavService.handleGetUavByStatus(
+            status,
+            ownerId
+        );
+        return res.status(200).json(result);
+    } catch (e) {
+        console.log(e);
+        return res.status(200).json({
+            errCode: -1,
+            message: "Error from server...",
+        });
+    }
+};
+let handleDeleteUav = async (req, res) => { 
+    try {
+        let droneId = req.query.droneId;
+        let result = await registerUavService.handleDeleteUav(droneId);
+        return res.status(200).json(result);
+    } catch (e) {
+        console.log(e);
+        return res.status(500).json({
+            errCode: -1,
+            message: "Error from server...",
+        });
+    }
+}
 module.exports = {
     handleRegisterNewUav,
     handleGetAllUavs,
     handleGetAllUavsRegisterByOwner,
     handleUpdateUav,
     handleGetUavsByDroneId,
+    handleChangeUavStatus,
+    handleGetUavByStatus,
+    handleDeleteUav,
 };

@@ -3,164 +3,129 @@ import { connect } from "react-redux";
 import { FormattedMessage } from "react-intl";
 import { useNavigate } from "react-router-dom";
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
-import { crud_actions } from "../../utils/constants";
+import { crud_actions, statusUav } from "../../utils/constants";
 import * as actions from "../../store/actions";
 import emitter from "../../utils/eventBus";
+import CardUavItem from "../Card/CardUavItem";
+import { deleteUav } from "../../service/uavRegisterService";
+
 import "./Modal.css";
 
 class ModalUav extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            uavStates: {}, // Lưu trạng thái của từng UAV
             listUav: [],
         };
     }
-
-    componentDidMount = async () => {
-        this.setState({
-            listUav: this.props.listUav,
-        });
-    };
-
-    componentDidUpdate = async (prevProps, prevState, snapshot) => {
-        if (prevProps.listUav !== this.props.listUav) {
-            this.setState({
-                listUav: this.props.listUav,
+    async componentDidMount() {
+        await this.props.fetchUavsRegisteredByOwner(this.props.userInfo.id);
+        const currentList = this.props.listUav;
+        if (
+            Array.isArray(currentList) &&
+            currentList.length > 0
+        ) {
+            const uavStates = {};
+            currentList.forEach((uav) => {
+                uavStates[uav.droneId] = uav.status;
             });
+            this.setState({ listUav: currentList, uavStates });
         }
     };
-
-    getStatusIcon = (status) => {
-        switch (status?.toLowerCase()) {
-            case "active":
-                return "✅";
-            case "pending":
-                return "⏳";
-            case "inactive":
-                return "❌";
-            case "maintenance":
-                return "🔧";
-            default:
-                return "❓";
+    componentDidUpdate = async (prevProps, prevState, snapshot) => {
+        const currentList = this.props.listUav;
+        if (
+            Array.isArray(prevProps.listUav) &&
+            prevProps.listUav.length > 0 &&
+            prevProps.listUav !== currentList &&
+            Array.isArray(currentList)
+        ) {
+            const uavStates = {};
+            currentList.forEach((uav) => {
+                uavStates[uav.droneId] = uav.status;
+            });
+            this.setState({ listUav: currentList, uavStates });
         }
     };
 
     handleRegisterUAV = () => {
-        // Navigate to registration page
+        this.props.HandleChangeAction(crud_actions.CREATE);
         this.props.navigate("/registration");
         this.props.toggleModal();
     };
-    HandleChangeActionAndLinkTo = (action, uav) => {
-        this.props.HandleChangeAction(action);
+    // ✅ Handler functions
+    handleEdit = (uav) => {
+        this.props.HandleChangeAction(crud_actions.EDIT);
         emitter.emit("sendId", uav.droneId);
-        if (this.props.navigate) {
-            this.props.navigate(`/registration`);
-        }
+        this.props.navigate("/registration");
         this.props.toggleModal();
     };
+    handleDelete = async (uav) => {
+        if (window.confirm("Are you sure you want to delete this UAV?")) {
+            await deleteUav(uav.droneId);
+            this.props.fetchUavsRegisteredByOwner(this.props.userInfo.id);
+        }
+    };
+
+    handleActivate = async (uav) => {
+        let copyUavStates = { ...this.state.uavStates };
+        copyUavStates[uav.droneId] = statusUav.ACTIVE;
+        this.setState({ uavStates: copyUavStates });
+        try {
+            await this.props.HandleChangeStatus(uav.droneId, statusUav.ACTIVE);
+            await this.props.fetchUavsByStatusAndOwner(
+                statusUav.ACTIVE,
+                this.props.userInfo.id
+            );
+        } catch (error) {
+            let rollbackUavStates = { ...this.state.uavStates };
+            rollbackUavStates[uav.droneId] = uav.status; // Restore original status
+            this.setState({ uavStates: rollbackUavStates });
+        }
+    };
+
+    handleMaintenance = (uav) => {
+        this.props.HandleChangeStatus(uav.droneId, statusUav.MAINTENANCE);
+        let copyUavStates = { ...this.state.uavStates };
+        copyUavStates[uav.droneId] = statusUav.MAINTENANCE;
+        this.setState({ uavStates: copyUavStates });
+    };
+
     render() {
-        let { listUav } = this.state;
+        let { isOpenUavsActiveModal } = this.props;
+        let listUav = [];
+        if (isOpenUavsActiveModal) {
+            listUav = this.props.listUavByStatus;
+        } else {
+            listUav = this.props.listUav;
+        }
 
         return (
             <Modal isOpen={this.props.isOpen} size="xl">
                 <ModalHeader toggle={this.props.toggleModal}>
-                    <i className="fas fa-helicopter"></i> UAV Registry
+                    <i className="fas fa-helicopter"></i>{" "}
+                    {isOpenUavsActiveModal ? "Active UAVs" : "All UAVs"}
                 </ModalHeader>
                 <ModalBody>
                     <div className="uav-list">
                         {listUav && listUav.length > 0 ? (
-                            listUav.map((uav, index) => (
-                                <div key={index} className="uav-item">
-                                    <div className="uav-header">
-                                        <div className="uav-id">
-                                            <i className="fas fa-drone"></i>
-                                            <span>{uav.droneId}</span>
-                                        </div>
-                                        <div
-                                            className="uav-status"
-                                            data-status={uav.status?.toLowerCase()}>
-                                            {this.getStatusIcon(uav.status)}{" "}
-                                            {uav.status}
-                                        </div>
-                                    </div>
-
-                                    <div className="uav-body">
-                                        <div className="uav-info">
-                                            <div className="info-item">
-                                                <i className="fas fa-tag"></i>
-                                                <span className="label">
-                                                    Name:
-                                                </span>
-                                                <span className="value">
-                                                    {uav.droneName}
-                                                </span>
-                                            </div>
-
-                                            <div className="info-item">
-                                                <i className="fas fa-map-marker-alt"></i>
-                                                <span className="label">
-                                                    Start Point:
-                                                </span>
-                                                <span className="value">
-                                                    {uav.startPoint}
-                                                </span>
-                                            </div>
-
-                                            <div className="info-item">
-                                                <i className="fas fa-flag-checkered"></i>
-                                                <span className="label">
-                                                    End Point:
-                                                </span>
-                                                <span className="value">
-                                                    {uav.endPoint}
-                                                </span>
-                                            </div>
-
-                                            <div className="info-item">
-                                                <i className="fas fa-arrows-alt-v"></i>
-                                                <span className="label">
-                                                    Height:
-                                                </span>
-                                                <span className="value">
-                                                    {uav.heightFly}m
-                                                </span>
-                                            </div>
-
-                                            <div className="info-item">
-                                                <i className="fas fa-tachometer-alt"></i>
-                                                <span className="label">
-                                                    Speed:
-                                                </span>
-                                                <span className="value">
-                                                    {uav.speed} km/h
-                                                </span>
-                                            </div>
-                                        </div>
-
-                                        <div className="uav-actions">
-                                            <button
-                                                className="btn-edit"
-                                                onClick={() =>
-                                                    this.HandleChangeActionAndLinkTo(
-                                                        crud_actions.EDIT,
-                                                        uav
-                                                    )
-                                                }>
-                                                <i className="fas fa-edit"></i>
-                                                Edit
-                                            </button>
-                                            <button className="btn-delete">
-                                                <i className="fas fa-trash"></i>
-                                                Delete
-                                            </button>
-                                            <button className="btn-launch">
-                                                <i className="fas fa-rocket"></i>
-                                                Launch
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            ))
+                            listUav.map((uav, index) => {
+                                const currentState =
+                                    this.state.uavStates[uav.droneId];
+                                return (
+                                    <CardUavItem
+                                        key={index}
+                                        uav={uav}
+                                        uavState={currentState}
+                                        index={index}
+                                        onEdit={this.handleEdit}
+                                        onDelete={this.handleDelete}
+                                        onActivate={this.handleActivate}
+                                        onMaintenance={this.handleMaintenance}
+                                    />
+                                );
+                            })
                         ) : (
                             <div className="empty-state">
                                 <i className="fas fa-helicopter"></i>
@@ -192,14 +157,21 @@ const withNavigate = (Component) => {
 
 const mapStateToProps = (state) => {
     return {
-        // language: state.app.language,
+        userInfo: state.user.userInfo,
+        actions: state.uavRegister.actions,
     };
 };
 
 const mapDispatchToProps = (dispatch) => {
     return {
+        fetchUavsRegisteredByOwner: (ownerId) =>
+            dispatch(actions.fetchAllUavsByOwner(ownerId)),
         HandleChangeAction: (action) =>
             dispatch(actions.ActionUavRegister(action)),
+        HandleChangeStatus: (droneId, status) =>
+            dispatch(actions.changeUavStatus(droneId, status)),
+        fetchUavsByStatusAndOwner: (status, ownerId) =>
+            dispatch(actions.fetchUavsByStatusAndOwner(status, ownerId)),
     };
 };
 

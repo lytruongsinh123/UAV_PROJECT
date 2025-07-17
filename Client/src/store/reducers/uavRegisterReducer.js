@@ -2,6 +2,7 @@ import actionTypes from "../actions/actionTypes";
 const initialState = {
     actions: "CREATE", // Default action
     uavs: [],
+    uavsByStatus: [],
     message: "",
 };
 const uavRegisterReducer = (state = initialState, action) => {
@@ -48,6 +49,28 @@ const uavRegisterReducer = (state = initialState, action) => {
             return {
                 ...state,
                 message: "Failed to update UAV: " + action.payload,
+            };
+        case actionTypes.CHANGE_STATUS_UAV_SUCCESS:
+            return {
+                ...state,
+                message: "UAV status changed successfully!",
+            };
+        case actionTypes.CHANGE_STATUS_UAV_FAIL:
+            return {
+                ...state,
+                message: "Failed to change UAV status: " + action.payload,
+            };
+        case actionTypes.FETCH_UAVS_BY_STATUS_AND_OWNER_SUCCESS:
+            return {
+                ...state,
+                uavsByStatus: action.uavsByStatus,
+                message: "Fetched UAVs by status and owner successfully!",
+            };
+        case actionTypes.FETCH_UAVS_BY_STATUS_AND_OWNER_FAIL:
+            return {
+                ...state,
+                uavsByStatus: [],
+                message: "Failed to fetch UAVs by status and owner: " + action.payload,
             };
         default:
             return state;
