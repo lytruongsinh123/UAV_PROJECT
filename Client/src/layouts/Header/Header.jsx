@@ -15,11 +15,11 @@ class Header extends Component {
             this.props.onToggleSidebar(); // Gọi hàm từ cha
         }
     };
-    handleLinkTo = (path) => { 
+    handleLinkTo = (path) => {
         if (this.props.navigate) {
             this.props.navigate(`/${path}`); // Dùng navigate để chuyển hướng
         }
-    }
+    };
     render() {
         return (
             <div className="header">
@@ -55,21 +55,28 @@ class Header extends Component {
                     {/* Navigation Menu */}
                     <div className="header-nav">
                         <div className="nav-item">
-                            <div onClick={()=> this.handleLinkTo('registration')}>
+                            <div
+                                onClick={() =>
+                                    this.handleLinkTo("registration")
+                                }>
                                 <i className="fa-solid fa-file-alt"></i>
                                 <span>Registration</span>
                             </div>
                         </div>
 
                         <div className="nav-item">
-                            <div onClick={()=> this.handleLinkTo('fly-paths')}>
+                            <div
+                                onClick={() => this.handleLinkTo("flightpath")}>
                                 <i className="fa-solid fa-route"></i>
                                 <span>Flight Paths</span>
                             </div>
                         </div>
 
                         <div className="nav-item">
-                            <div onClick={()=> this.handleLinkTo('live-tracking')}>
+                            <div
+                                onClick={() =>
+                                    this.handleLinkTo("live-tracking")
+                                }>
                                 <i className="fa-solid fa-map-marker-alt"></i>
                                 <span>Live Tracking</span>
                             </div>

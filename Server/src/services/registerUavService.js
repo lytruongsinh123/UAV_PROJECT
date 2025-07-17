@@ -1,4 +1,6 @@
 import db from "../models/index";
+import MapService from "./MapService";
+
 let handleRegisterNewUav = async (data) => {
     return new Promise(async (resolve, reject) => {
         try {
@@ -36,6 +38,10 @@ let handleRegisterNewUav = async (data) => {
                         heightFly: data.heightFly,
                         speed: data.speed,
                         status: "S0",
+                        distance: await MapService.getDistance(
+                            await MapService.getCoordinates(data.startPoint),
+                            await MapService.getCoordinates(data.endPoint)
+                        ),
                     });
                     resolve({
                         errCode: 0,
@@ -105,6 +111,10 @@ let handleUpdateUav = async (data) => {
                 uav.endPoint = data.endPoint;
                 uav.heightFly = data.heightFly;
                 uav.speed = data.speed;
+                uav.distance = await MapService.getDistance(
+                    await MapService.getCoordinates(data.startPoint),
+                    await MapService.getCoordinates(data.endPoint)
+                );
                 await uav.save();
                 resolve({
                     errCode: 0,
@@ -160,9 +170,10 @@ let handleChangeUavStatus = async (droneId, newStatus) => {
             });
 
             if (uav) {
-                if (uav.status === "S0") {// Nếu UAV đang chờ hoạt động
+                if (uav.status === "S0") {
+                    // Nếu UAV đang chờ hoạt động
                     switch (newStatus) {
-                        case "S1": // Chuyển sang hoạt động 
+                        case "S1": // Chuyển sang hoạt động
                             uav.status = "S1";
                             await uav.save();
                             resolve({
@@ -185,7 +196,8 @@ let handleChangeUavStatus = async (droneId, newStatus) => {
                             });
                     }
                 }
-                if(uav.status === "S1") {// Nếu UAV đang hoạt động
+                if (uav.status === "S1") {
+                    // Nếu UAV đang hoạt động
                     switch (newStatus) {
                         case "S3": // Chuyển sang hoàn thành lịch trình
                             uav.status = "S3";
@@ -202,13 +214,16 @@ let handleChangeUavStatus = async (droneId, newStatus) => {
                             });
                     }
                 }
-                if(uav.status === "S2") {// Nếu UAV đang bảo trì
+                if (uav.status === "S2") {
+                    // Nếu UAV đang bảo trì
                     resolve({
                         errCode: 2,
-                        message: "UAV is under maintenance, cannot change status",
-                    })
+                        message:
+                            "UAV is under maintenance, cannot change status",
+                    });
                 }
-                if(uav.status === "S3") {// Nếu UAV đã hoàn thành lịch trình
+                if (uav.status === "S3") {
+                    // Nếu UAV đã hoàn thành lịch trình
                     switch (newStatus) {
                         case "S0": // Chuyển sang chờ hoạt động
                             uav.status = "S0";
@@ -246,8 +261,8 @@ let handleGetUavByStatus = async (status, ownerId) => {
             let uavs = await db.RegisterUav.findAll({
                 where: {
                     status: status,
-                    ownerId: ownerId
-                }
+                    ownerId: ownerId,
+                },
             });
             resolve({
                 errCode: 0,
@@ -298,5 +313,5 @@ module.exports = {
     handleGetUavsByDroneId,
     handleChangeUavStatus,
     handleGetUavByStatus,
-    handleDeleteUav
+    handleDeleteUav,
 };

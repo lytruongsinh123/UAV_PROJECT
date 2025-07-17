@@ -15,8 +15,9 @@ class Dashboard extends Component {
             countUavs: 0,
             countActiveUavs: 0,
             isOpenModal: false,
-            isOpenUavsActiveModal: null,
+            isOpenTypeModal: null,
             listCompletedUavs: [],
+            sumTotalHours: 0, // = distance / speed
             countFlightPaths: 0,
         };
     }
@@ -37,6 +38,14 @@ class Dashboard extends Component {
                 listCompletedUavs: listUavsByStatus,
                 countFlightPaths: listUavsByStatus.uavs.length,
             });
+            // Calculate total flight hours
+            let totalHours = 0;
+            listUavsByStatus.uavs.forEach((uav) => {
+                if (uav.distance && uav.speed) {
+                    totalHours += uav.distance / uav.speed;
+                }
+            });
+            this.setState({ sumTotalHours: totalHours });
         }
 
         // Update time every second
@@ -92,13 +101,19 @@ class Dashboard extends Component {
     handleOpenUavsActive = () => {
         this.setState({
             isOpenModal: !this.state.isOpenModal,
-            isOpenUavsActiveModal: true,
+            isOpenTypeModal: "active",
         });
     };
     handleOpenModal = () => {
         this.setState({
             isOpenModal: !this.state.isOpenModal,
-            isOpenUavsActiveModal: false,
+            isOpenTypeModal: "all",
+        });
+    };
+    handleOpenModalCompleted = () => {
+        this.setState({
+            isOpenModal: !this.state.isOpenModal,
+            isOpenTypeModal: "completed",
         });
     };
     render() {
@@ -219,12 +234,16 @@ class Dashboard extends Component {
                             </div>
                         </div>
 
-                        <div className="stat-card">
+                        <div
+                            className="stat-card"
+                            onClick={() => this.handleOpenModalCompleted()}>
                             <div className="stat-icon">
                                 <i className="fas fa-clock"></i>
                             </div>
                             <div className="stat-content">
-                                <div className="stat-number">24.5</div>
+                                <div className="stat-number">
+                                    {this.state.sumTotalHours.toFixed(2)}
+                                </div>
                                 <div className="stat-label">Total Hours</div>
                             </div>
                         </div>
@@ -308,7 +327,7 @@ class Dashboard extends Component {
                     {/* Modal for Registering UAV */}
                     <ModalUav
                         isOpen={this.state.isOpenModal}
-                        isOpenUavsActiveModal={this.state.isOpenUavsActiveModal}
+                        isOpenTypeModal={this.state.isOpenTypeModal}
                         toggleModal={() =>
                             this.setState({
                                 isOpenModal: !this.state.isOpenModal,
@@ -316,6 +335,7 @@ class Dashboard extends Component {
                         }
                         listUav={this.props.uavs}
                         listUavByStatus={this.props.uavsByStatus}
+                        listUavCompleted={this.state.listCompletedUavs.uavs}
                     />
                 </div>
             </div>

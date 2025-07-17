@@ -17,6 +17,7 @@ import Dashboard from "../containers/Dashboard/Dashboard";
 import Homeuav from "../containers/Homeuav/Homeuav";
 import Registration from "../pages/Uav/Registration/Registration";
 import RouteActionResetter from "../utils/RouterActionResetter";
+import FlightPath from "../pages/Uav/FlightPath/FlightPath";
 import Login from "../pages/User/Login/Login";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 
@@ -85,6 +86,11 @@ class App extends Component {
                                     path={"/registration"}
                                     Component={userIsAuthenticated(HomePage)}>
                                     <Route index element={<Registration />} />
+                                </Route>
+                                <Route
+                                    path={"/flightpath"}
+                                    Component={userIsAuthenticated(HomePage)}>
+                                    <Route index element={<FlightPath />} />
                                 </Route>
                                 <Route
                                     path="/"

@@ -26,6 +26,7 @@
     "mysql2": "^3.14.1",
     "node-fetch": "^2.7.0",
     "nodemailer": "6.6.3",
+    "openrouteservice-js": "^0.4.1",
     "sequelize": "^6.6.2",
     "uuid": "8.3.2"
   },

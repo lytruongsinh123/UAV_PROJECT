@@ -87,7 +87,7 @@ class RegisterUav extends Component {
         } = this.state;
         const { actions } = this.props;
         if (actions === crud_actions.CREATE) {
-            let res = this.props.RegisterUavStart({
+            let res = await this.props.RegisterUavStart({
                 ownerId,
                 droneId,
                 droneName,
@@ -109,7 +109,7 @@ class RegisterUav extends Component {
                 });
             }
         } else if (actions === crud_actions.EDIT) {
-            let res = this.props.UpdateUavStart({
+            let res = await this.props.UpdateUavStart({
                 ownerId,
                 droneId,
                 droneName,

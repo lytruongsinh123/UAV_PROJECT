@@ -22,17 +22,14 @@ class ModalUav extends Component {
     async componentDidMount() {
         await this.props.fetchUavsRegisteredByOwner(this.props.userInfo.id);
         const currentList = this.props.listUav;
-        if (
-            Array.isArray(currentList) &&
-            currentList.length > 0
-        ) {
+        if (Array.isArray(currentList) && currentList.length > 0) {
             const uavStates = {};
             currentList.forEach((uav) => {
                 uavStates[uav.droneId] = uav.status;
             });
             this.setState({ listUav: currentList, uavStates });
         }
-    };
+    }
     componentDidUpdate = async (prevProps, prevState, snapshot) => {
         const currentList = this.props.listUav;
         if (
@@ -93,19 +90,23 @@ class ModalUav extends Component {
     };
 
     render() {
-        let { isOpenUavsActiveModal } = this.props;
+        let { isOpenTypeModal } = this.props;
         let listUav = [];
-        if (isOpenUavsActiveModal) {
-            listUav = this.props.listUavByStatus;
-        } else {
+        if (isOpenTypeModal === "all") {
             listUav = this.props.listUav;
+        } else {
+            if (isOpenTypeModal === "active") {
+                listUav = this.props.listUavByStatus;
+            } else if (isOpenTypeModal === "completed") {
+                listUav = this.props.listUavCompleted;
+            }
         }
 
         return (
             <Modal isOpen={this.props.isOpen} size="xl">
                 <ModalHeader toggle={this.props.toggleModal}>
                     <i className="fas fa-helicopter"></i>{" "}
-                    {isOpenUavsActiveModal ? "Active UAVs" : "All UAVs"}
+                    {isOpenTypeModal === "active" ? "Active UAVs" : "All UAVs"}
                 </ModalHeader>
                 <ModalBody>
                     <div className="uav-list">
@@ -114,16 +115,25 @@ class ModalUav extends Component {
                                 const currentState =
                                     this.state.uavStates[uav.droneId];
                                 return (
-                                    <CardUavItem
-                                        key={index}
-                                        uav={uav}
-                                        uavState={currentState}
-                                        index={index}
-                                        onEdit={this.handleEdit}
-                                        onDelete={this.handleDelete}
-                                        onActivate={this.handleActivate}
-                                        onMaintenance={this.handleMaintenance}
-                                    />
+                                    <>
+                                        <CardUavItem
+                                            key={index}
+                                            uav={uav}
+                                            uavState={currentState}
+                                            index={index}
+                                            onEdit={this.handleEdit}
+                                            onDelete={this.handleDelete}
+                                            onActivate={this.handleActivate}
+                                            onMaintenance={
+                                                this.handleMaintenance
+                                            }
+                                        />
+                                        {isOpenTypeModal === "completed" && (
+                                            <span>
+                                                Hour of Flight: {(uav.distance / uav.speed).toFixed(2)}{" "}
+                                            </span>
+                                        )}
+                                    </>
                                 );
                             })
                         ) : (

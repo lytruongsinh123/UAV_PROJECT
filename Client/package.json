@@ -19,7 +19,8 @@
     "bootstrap": "^5.3.7",
     "connected-react-router": "^6.9.3",
     "history": "^4.10.1",
-    "leaflet": "^1.8.0",
+    "leaflet": "^1.9.4",
+    "leaflet-routing-machine": "^3.2.12",
     "lodash": "^4.17.21",
     "markdown-it": "^12.3.2",
     "mitt": "^3.0.1",
@@ -63,6 +64,7 @@
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^12.1.5",
     "@testing-library/user-event": "^13.5.0",
+    "@types/dotenv": "^8.2.3",
     "babel-loader": "^8.2.5",
     "redux-mock-store": "^1.5.4",
     "sass": "^1.89.2"
