@@ -33,6 +33,12 @@ export const statusUav = {
     MAINTENANCE: "S2", // Bảo trì
     COMPLETED: "S3", // Hoàn thành lịch trình
 };
+export const statusFlightPath = {
+    S0: "PENDING", // Chờ duyệt
+    S1: "ACTIVE", // Đang hoạt động
+    S2: "MAINTENANCE", // Bảo trì
+    S3: "COMPLETED", // Hoàn thành lịch trình
+};
 export const YesNoObj = {
     YES: "Y",
     NO: "N",

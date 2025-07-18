@@ -1,8 +1,9 @@
-/* filepath: c:\Users\Admin\Desktop\UAV_Project\Client\src\layouts\Dashboard\Dashboard.css */
+/* Dashboard Component with Theme Support */
 .dashboard {
     padding: 24px;
-    background-color: #f8fafc;
+    background-color: var(--bg-primary);
     min-height: 100vh;
+    transition: background-color 0.3s ease;
 }
 
 .dashboard-container {
@@ -18,23 +19,27 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background: white;
+    background: var(--bg-secondary);
     padding: 24px;
     border-radius: 12px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 1px 3px var(--shadow-light);
+    border: 1px solid var(--border-primary);
+    transition: all 0.3s ease;
 }
 
 .welcome-section .welcome-title {
     font-size: 28px;
     font-weight: 700;
-    color: #1f2937;
+    color: var(--text-primary);
     margin: 0 0 8px 0;
+    transition: color 0.3s ease;
 }
 
 .welcome-section .welcome-subtitle {
     font-size: 16px;
-    color: #6b7280;
+    color: var(--text-secondary);
     margin: 0;
+    transition: color 0.3s ease;
 }
 
 .time-section {
@@ -44,44 +49,54 @@
 .current-time {
     font-size: 24px;
     font-weight: 600;
-    color: #3b82f6;
+    color: var(--accent-primary);
     font-family: monospace;
+    transition: color 0.3s ease;
 }
 
 .current-date {
     font-size: 14px;
-    color: #6b7280;
+    color: var(--text-secondary);
     margin-top: 4px;
+    transition: color 0.3s ease;
 }
 
 /* User Info Card */
 .user-info-card {
-    background: white;
+    background: var(--bg-secondary);
     padding: 24px;
     border-radius: 12px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 1px 3px var(--shadow-light);
+    border: 1px solid var(--border-primary);
     display: flex;
     align-items: center;
     gap: 24px;
+    transition: all 0.3s ease;
 }
 
 .user-avatar {
     width: 80px;
     height: 80px;
-    background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+    background: linear-gradient(
+        135deg,
+        var(--accent-primary),
+        var(--accent-secondary)
+    );
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 32px;
     color: white;
+    transition: background 0.3s ease;
 }
 
 .user-details h3 {
     margin: 0 0 16px 0;
-    color: #1f2937;
+    color: var(--text-primary);
     font-size: 18px;
     font-weight: 600;
+    transition: color 0.3s ease;
 }
 
 .user-item {
@@ -92,27 +107,32 @@
 
 .user-item .label {
     font-weight: 500;
-    color: #6b7280;
+    color: var(--text-secondary);
     min-width: 80px;
+    transition: color 0.3s ease;
 }
 
 .user-item .value {
-    color: #1f2937;
+    color: var(--text-primary);
     font-weight: 500;
+    transition: color 0.3s ease;
 }
 
 .role-badge {
-    background: #dbeafe;
-    color: #3b82f6;
+    background: rgba(59, 130, 246, 0.1);
+    color: var(--accent-primary);
     padding: 2px 8px;
     border-radius: 4px;
     font-size: 12px;
     text-transform: uppercase;
+    border: 1px solid var(--accent-primary);
+    transition: all 0.3s ease;
 }
 
 .status-active {
-    color: #10b981;
+    color: var(--success-primary);
     font-weight: 600;
+    transition: color 0.3s ease;
 }
 
 /* Stats Grid */
@@ -123,52 +143,66 @@
 }
 
 .stat-card {
-    background: white;
+    background: var(--bg-secondary);
     padding: 24px;
     border-radius: 12px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 1px 3px var(--shadow-light);
+    border: 1px solid var(--border-primary);
     display: flex;
     align-items: center;
     gap: 16px;
+    transition: all 0.3s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px var(--shadow-light);
+    border-color: var(--border-secondary);
 }
 
 .stat-icon {
     width: 48px;
     height: 48px;
-    background: #eff6ff;
+    background: var(--bg-tertiary);
     border-radius: 8px;
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 20px;
-    color: #3b82f6;
+    color: var(--accent-primary);
+    transition: all 0.3s ease;
 }
 
 .stat-number {
     font-size: 24px;
     font-weight: 700;
-    color: #1f2937;
+    color: var(--text-primary);
     margin-bottom: 4px;
+    transition: color 0.3s ease;
 }
 
 .stat-label {
     font-size: 14px;
-    color: #6b7280;
+    color: var(--text-secondary);
+    transition: color 0.3s ease;
 }
 
 /* Recent Activity */
 .recent-activity {
-    background: white;
+    background: var(--bg-secondary);
     padding: 24px;
     border-radius: 12px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 1px 3px var(--shadow-light);
+    border: 1px solid var(--border-primary);
+    transition: all 0.3s ease;
 }
 
 .recent-activity h3 {
     margin: 0 0 16px 0;
-    color: #1f2937;
+    color: var(--text-primary);
     font-size: 18px;
     font-weight: 600;
+    transition: color 0.3s ease;
 }
 
 .activity-list {
@@ -182,48 +216,62 @@
     align-items: center;
     gap: 16px;
     padding: 12px 0;
-    border-bottom: 1px solid #f3f4f6;
+    border-bottom: 1px solid var(--border-primary);
+    transition: all 0.3s ease;
 }
 
 .activity-item:last-child {
     border-bottom: none;
 }
 
+.activity-item:hover {
+    background: var(--bg-tertiary);
+    margin: 0 -12px;
+    padding: 12px;
+    border-radius: 8px;
+}
+
 .activity-icon {
     width: 40px;
     height: 40px;
-    background: #f0fdf4;
+    background: var(--bg-tertiary);
     border-radius: 8px;
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 16px;
-    color: #10b981;
+    color: var(--success-primary);
+    transition: all 0.3s ease;
 }
 
 .activity-title {
     font-weight: 500;
-    color: #1f2937;
+    color: var(--text-primary);
+    transition: color 0.3s ease;
 }
 
 .activity-time {
     font-size: 14px;
-    color: #6b7280;
+    color: var(--text-secondary);
+    transition: color 0.3s ease;
 }
 
 /* Quick Actions */
 .quick-actions {
-    background: white;
+    background: var(--bg-secondary);
     padding: 24px;
     border-radius: 12px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 1px 3px var(--shadow-light);
+    border: 1px solid var(--border-primary);
+    transition: all 0.3s ease;
 }
 
 .quick-actions h3 {
     margin: 0 0 16px 0;
-    color: #1f2937;
+    color: var(--text-primary);
     font-size: 18px;
     font-weight: 600;
+    transition: color 0.3s ease;
 }
 
 .actions-grid {
@@ -237,23 +285,90 @@
     align-items: center;
     gap: 12px;
     padding: 16px;
-    background: #f8fafc;
-    border: 1px solid #e5e7eb;
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-primary);
     border-radius: 8px;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: all 0.3s ease;
     font-weight: 500;
-    color: #374151;
+    color: var(--text-primary);
+    text-decoration: none;
 }
 
 .action-btn:hover {
-    background: #3b82f6;
+    background: var(--accent-primary);
     color: white;
-    border-color: #3b82f6;
+    border-color: var(--accent-primary);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px var(--shadow-light);
 }
 
 .action-btn i {
     font-size: 16px;
+}
+
+/* Recent UAVs List */
+.recent-uavs-list {
+    margin-top: 12px;
+    padding-left: 20px;
+    border-left: 2px solid var(--border-primary);
+    background: var(--bg-primary);
+    border-radius: 8px;
+    padding: 16px;
+}
+
+.recent-uav-item {
+    display: flex;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border-primary);
+    transition: all 0.3s ease;
+}
+
+.recent-uav-item:last-child {
+    border-bottom: none;
+}
+
+.recent-uav-item:hover {
+    background: var(--bg-secondary);
+    border-radius: 8px;
+    padding-left: 8px;
+}
+
+.uav-info {
+    flex: 1;
+}
+
+.uav-name {
+    font-weight: 600;
+    color: var(--text-primary);
+    font-size: 14px;
+    margin-bottom: 4px;
+}
+
+.uav-details {
+    display: flex;
+    gap: 16px;
+    font-size: 12px;
+    color: var(--text-secondary);
+}
+
+.uav-details span {
+    padding: 2px 8px;
+    background: var(--bg-secondary);
+    border-radius: 4px;
+    border: 1px solid var(--border-primary);
+}
+
+.no-recent-uavs {
+    text-align: center;
+    padding: 20px;
+    color: var(--text-secondary);
+    font-style: italic;
+}
+
+.no-recent-uavs p {
+    margin: 0;
 }
 
 /* Responsive */

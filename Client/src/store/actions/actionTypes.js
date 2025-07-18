@@ -1,4 +1,6 @@
 const actionTypes = Object.freeze({
+    // App actions
+    CHANGE_LANGUAGE: "CHANGE_LANGUAGE",
     // CRUD actions user
     LOGIN_SUCCESS: "LOGIN_SUCCESS",
     LOGIN_FAIL: "LOGIN_FAIL",

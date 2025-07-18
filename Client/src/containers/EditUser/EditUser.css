@@ -1,0 +1,93 @@
+.edituser-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 80vh;
+    background: linear-gradient(120deg, #f8fafc 0%, #e0e7ff 100%);
+}
+.edituser-card {
+    background: #fff;
+    border-radius: 20px;
+    box-shadow: 0 8px 32px rgba(78, 84, 200, 0.18);
+    padding: 40px 36px;
+    width: 100%;
+    max-width: 95vw;
+    text-align: center;
+}
+.edituser-title {
+    font-size: 1.6rem;
+    color: #4e54c8;
+    margin-bottom: 28px;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+.form-group {
+    margin-bottom: 20px;
+    text-align: left;
+}
+.form-group label {
+    font-weight: 500;
+    color: #333;
+    margin-bottom: 6px;
+    display: block;
+}
+.form-group input,
+.form-group select {
+    width: 100%;
+    padding: 10px 14px;
+    border-radius: 10px;
+    border: 1px solid #d1d5db;
+    font-size: 1rem;
+    background: #f8fafc;
+    margin-top: 2px;
+    transition: border 0.2s;
+}
+.form-group input:focus,
+.form-group select:focus {
+    border: 1.5px solid #4e54c8;
+    outline: none;
+}
+.edituser-btn {
+    width: 100%;
+    padding: 14px;
+    background: linear-gradient(135deg, #4e54c8 60%, #8f94fb 100%);
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    font-size: 1.15rem;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: background 0.2s;
+    box-shadow: 0 2px 8px rgba(78, 84, 200, 0.1);
+}
+.edituser-btn:hover {
+    background: linear-gradient(135deg, #8f94fb 60%, #4e54c8 100%);
+}
+.preview-img-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 18px;
+    background: none; /* bỏ nền tím */
+    border-radius: 0; /* bỏ bo góc nền */
+    padding: 0;
+    box-shadow: none; /* bỏ bóng đổ nền */
+    min-height: unset;
+}
+
+.preview-img {
+    width: 140px; /* tăng kích thước ảnh */
+    height: 140px;
+    border-radius: 50%;
+    object-fit: cover;
+    box-shadow: 0 4px 16px rgba(78, 84, 200, 0.15);
+    border: none; /* bỏ viền tím */
+    background: #fff;
+    transition: box-shadow 0.2s, transform 0.2s;
+}
+
+.preview-img:hover {
+    box-shadow: 0 8px 32px rgba(78, 84, 200, 0.22);
+    transform: scale(1.05);
+}

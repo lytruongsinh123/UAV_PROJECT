@@ -6,6 +6,12 @@ import { useNavigate } from "react-router-dom";
 import { statusUav } from "../../utils/constants";
 import { getUavByStatusAndOwner } from "../../service/uavRegisterService";
 import ModalUav from "../../components/Modal/Modal";
+import themeUtils from "../../utils/ThemeUtils";
+import {
+    getUavsRegisteredRecently,
+    getUavsUpdatedRecently,
+    getUavCompletedRecently,
+} from "../../service/uavRegisterService";
 import "./Dashboard.css";
 class Dashboard extends Component {
     constructor(props) {
@@ -19,6 +25,13 @@ class Dashboard extends Component {
             listCompletedUavs: [],
             sumTotalHours: 0, // = distance / speed
             countFlightPaths: 0,
+            currentTheme: themeUtils.getCurrentTheme(),
+            showRecentUavs: false,
+            recentUavs: [],
+            showUpdatedUavs: false,
+            updatedUavs: [],
+            showCompletedUavs: false,
+            completedUavs: [],
         };
     }
 
@@ -52,7 +65,84 @@ class Dashboard extends Component {
         this.timeInterval = setInterval(() => {
             this.setState({ currentTime: new Date() });
         }, 1000);
+
+        // Listen for theme changes
+        themeUtils.addListener(this.handleThemeChange);
     };
+
+    handleThemeChange = (theme) => {
+        this.setState({ currentTheme: theme });
+    };
+
+    loadRecentUavs = async () => {
+        const { userInfo } = this.props;
+        if (userInfo && userInfo.id) {
+            try {
+                let response = await getUavsRegisteredRecently(userInfo.id);
+                if (response && response.errCode === 0) {
+                    this.setState({ recentUavs: response.uavs });
+                }
+            } catch (error) {
+                console.error("Error loading recent UAVs:", error);
+            }
+        }
+    };
+
+    handleToggleRecentUavs = async () => {
+        if (!this.state.showRecentUavs && this.state.recentUavs.length === 0) {
+            await this.loadRecentUavs();
+        }
+        this.setState({ showRecentUavs: !this.state.showRecentUavs });
+    };
+
+    loadUpdatedUavs = async () => {
+        const { userInfo } = this.props;
+        if (userInfo && userInfo.id) {
+            try {
+                let response = await getUavsUpdatedRecently(userInfo.id);
+                if (response && response.errCode === 0) {
+                    this.setState({ updatedUavs: response.uavs });
+                }
+            } catch (error) {
+                console.error("Error loading updated UAVs:", error);
+            }
+        }
+    };
+
+    handleToggleUpdatedUavs = async () => {
+        if (
+            !this.state.showUpdatedUavs &&
+            this.state.updatedUavs.length === 0
+        ) {
+            await this.loadUpdatedUavs();
+        }
+        this.setState({ showUpdatedUavs: !this.state.showUpdatedUavs });
+    };
+
+    loadCompletedUavs = async () => {
+        const { userInfo } = this.props;
+        if (userInfo && userInfo.id) {
+            try {
+                let response = await getUavCompletedRecently(userInfo.id);
+                if (response && response.errCode === 0) {
+                    this.setState({ completedUavs: response.uavs });
+                }
+            } catch (error) {
+                console.error("Error loading completed UAVs:", error);
+            }
+        }
+    };
+
+    handleToggleCompletedUavs = async () => {
+        if (
+            !this.state.showCompletedUavs &&
+            this.state.completedUavs.length === 0
+        ) {
+            await this.loadCompletedUavs();
+        }
+        this.setState({ showCompletedUavs: !this.state.showCompletedUavs });
+    };
+
     componentDidUpdate = async (prevProps) => {
         if (this.props.uavs && this.props.uavs !== prevProps.uavs) {
             this.setState({
@@ -63,6 +153,21 @@ class Dashboard extends Component {
             this.props.uavsByStatus &&
             this.props.uavsByStatus !== prevProps.uavsByStatus
         ) {
+            let listUavsByStatus = await getUavByStatusAndOwner(
+                statusUav.COMPLETED,
+                this.props.userInfo.id
+            );
+            this.setState({
+                listCompletedUavs: listUavsByStatus,
+                countFlightPaths: listUavsByStatus.uavs.length,
+            });
+            let totalHours = 0;
+            listUavsByStatus.uavs.forEach((uav) => {
+                if (uav.distance && uav.speed) {
+                    totalHours += uav.distance / uav.speed;
+                }
+            });
+            this.setState({ sumTotalHours: totalHours });
             this.setState({
                 countActiveUavs: this.props.uavsByStatus.length,
             });
@@ -73,6 +178,9 @@ class Dashboard extends Component {
         if (this.timeInterval) {
             clearInterval(this.timeInterval);
         }
+
+        // Remove theme listener
+        themeUtils.removeListener(this.handleThemeChange);
     }
 
     formatTime = (date) => {
@@ -116,6 +224,11 @@ class Dashboard extends Component {
             isOpenTypeModal: "completed",
         });
     };
+    handleToLinkFlightPaths = () => {
+        if (this.props.navigate) {
+            this.props.navigate("/flightpath");
+        }
+    };
     render() {
         const { userInfo } = this.props;
         const { currentTime } = this.state;
@@ -136,8 +249,7 @@ class Dashboard extends Component {
                                 !
                             </h1>
                             <p className="welcome-subtitle">
-                                Here's what's happening with your UAV registry
-                                today
+                                <FormattedMessage id="dashboard.text-notice" />
                             </p>
                         </div>
                         <div className="time-section">
@@ -156,15 +268,22 @@ class Dashboard extends Component {
                             <i className="fas fa-user"></i>
                         </div>
                         <div className="user-details">
-                            <h3>User Information</h3>
+                            <h3>
+                                <FormattedMessage id="dashboard.user-info" />
+                            </h3>
                             <div className="user-item">
-                                <span className="label">Email:</span>
+                                <span className="label">
+                                    <FormattedMessage id="dashboard.email" />:
+                                </span>
                                 <span className="value">
                                     {userInfo?.email || "N/A"}
                                 </span>
                             </div>
                             <div className="user-item">
-                                <span className="label">Username:</span>
+                                <span className="label">
+                                    <FormattedMessage id="dashboard.user-name" />
+                                    :
+                                </span>
                                 <span className="value">
                                     {userInfo &&
                                     userInfo.firstName &&
@@ -174,7 +293,9 @@ class Dashboard extends Component {
                                 </span>
                             </div>
                             <div className="user-item">
-                                <span className="label">Role:</span>
+                                <span className="label">
+                                    <FormattedMessage id="dashboard.role" />:
+                                </span>
                                 <span className="value role-badge">
                                     {userInfo?.positionId
                                         ? userInfo.positionId
@@ -182,7 +303,9 @@ class Dashboard extends Component {
                                 </span>
                             </div>
                             <div className="user-item">
-                                <span className="label">Status:</span>
+                                <span className="label">
+                                    <FormattedMessage id="dashboard.status" />:
+                                </span>
                                 <span className="value status-active">
                                     Active
                                 </span>
@@ -203,12 +326,14 @@ class Dashboard extends Component {
                                     {this.state.countUavs}
                                 </div>
                                 <div className="stat-label">
-                                    Registered UAVs
+                                    <FormattedMessage id="dashboard.registered-uavs" />
                                 </div>
                             </div>
                         </div>
 
-                        <div className="stat-card">
+                        <div
+                            className="stat-card"
+                            onClick={() => this.handleToLinkFlightPaths()}>
                             <div className="stat-icon">
                                 <i className="fas fa-route"></i>
                             </div>
@@ -216,7 +341,9 @@ class Dashboard extends Component {
                                 <div className="stat-number">
                                     {this.state.countFlightPaths}
                                 </div>
-                                <div className="stat-label">Flight Paths</div>
+                                <div className="stat-label">
+                                    <FormattedMessage id="dashboard.flight-completed" />
+                                </div>
                             </div>
                         </div>
 
@@ -230,7 +357,9 @@ class Dashboard extends Component {
                                 <div className="stat-number">
                                     {this.state.countActiveUavs}
                                 </div>
-                                <div className="stat-label">Active Flights</div>
+                                <div className="stat-label">
+                                    <FormattedMessage id="dashboard.flight-active" />
+                                </div>
                             </div>
                         </div>
 
@@ -244,62 +373,226 @@ class Dashboard extends Component {
                                 <div className="stat-number">
                                     {this.state.sumTotalHours.toFixed(2)}
                                 </div>
-                                <div className="stat-label">Total Hours</div>
+                                <div className="stat-label">
+                                    <FormattedMessage id="dashboard.flight-hours" />
+                                </div>
                             </div>
                         </div>
                     </div>
 
                     {/* Recent Activity */}
                     <div className="recent-activity">
-                        <h3>Recent Activity</h3>
+                        <h3>
+                            <FormattedMessage id="dashboard.recent-activity" />
+                        </h3>
                         <div className="activity-list">
-                            <div className="activity-item">
+                            <div
+                                className="activity-item"
+                                onClick={this.handleToggleRecentUavs}
+                                style={{ cursor: "pointer" }}>
                                 <div className="activity-icon">
                                     <i className="fas fa-plus-circle"></i>
                                 </div>
                                 <div className="activity-content">
                                     <div className="activity-title">
-                                        New UAV Registered
-                                    </div>
-                                    <div className="activity-time">
-                                        2 hours ago
+                                        <FormattedMessage id="dashboard.new-registered-uav" />
+                                        <i
+                                            className={`fas fa-chevron-${
+                                                this.state.showRecentUavs
+                                                    ? "up"
+                                                    : "down"
+                                            }`}
+                                            style={{
+                                                marginLeft: "10px",
+                                                fontSize: "12px",
+                                            }}></i>
                                     </div>
                                 </div>
                             </div>
 
-                            <div className="activity-item">
+                            {/* Recent UAVs List */}
+                            {this.state.showRecentUavs && (
+                                <div className="recent-uavs-list">
+                                    {this.state.recentUavs.length > 0 ? (
+                                        this.state.recentUavs.map(
+                                            (uav, index) => (
+                                                <div
+                                                    key={index}
+                                                    className="recent-uav-item">
+                                                    <div className="uav-info">
+                                                        <div className="uav-name">
+                                                            {uav.name ||
+                                                                `UAV-${uav.droneId}`}
+                                                        </div>
+                                                        <div className="uav-details">
+                                                            <span>
+                                                                ID:{" "}
+                                                                {uav.droneId}
+                                                            </span>
+                                                            <span>
+                                                                Status:{" "}
+                                                                {uav.status}
+                                                            </span>
+                                                            <span>
+                                                                Created:{" "}
+                                                                {new Date(
+                                                                    uav.createdAt
+                                                                ).toLocaleDateString()}
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            )
+                                        )
+                                    ) : (
+                                        <div className="no-recent-uavs">
+                                            <p>No recent UAVs registered</p>
+                                        </div>
+                                    )}
+                                </div>
+                            )}
+
+                            <div
+                                className="activity-item"
+                                onClick={this.handleToggleUpdatedUavs}
+                                style={{ cursor: "pointer" }}>
                                 <div className="activity-icon">
                                     <i className="fas fa-map"></i>
                                 </div>
                                 <div className="activity-content">
                                     <div className="activity-title">
-                                        Flight Path Updated
-                                    </div>
-                                    <div className="activity-time">
-                                        5 hours ago
+                                        <FormattedMessage id="dashboard.recently-updated-uav" />
+                                        <i
+                                            className={`fas fa-chevron-${
+                                                this.state.showUpdatedUavs
+                                                    ? "up"
+                                                    : "down"
+                                            }`}
+                                            style={{
+                                                marginLeft: "10px",
+                                                fontSize: "12px",
+                                            }}></i>
                                     </div>
                                 </div>
                             </div>
 
-                            <div className="activity-item">
+                            {/* Updated UAVs List */}
+                            {this.state.showUpdatedUavs && (
+                                <div className="recent-uavs-list">
+                                    {this.state.updatedUavs.length > 0 ? (
+                                        this.state.updatedUavs.map(
+                                            (uav, index) => (
+                                                <div
+                                                    key={index}
+                                                    className="recent-uav-item">
+                                                    <div className="uav-info">
+                                                        <div className="uav-name">
+                                                            {uav.name ||
+                                                                `UAV-${uav.droneId}`}
+                                                        </div>
+                                                        <div className="uav-details">
+                                                            <span>
+                                                                ID:{" "}
+                                                                {uav.droneId}
+                                                            </span>
+                                                            <span>
+                                                                Status:{" "}
+                                                                {uav.status}
+                                                            </span>
+                                                            <span>
+                                                                Updated:{" "}
+                                                                {new Date(
+                                                                    uav.updatedAt
+                                                                ).toLocaleDateString()}
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            )
+                                        )
+                                    ) : (
+                                        <div className="no-recent-uavs">
+                                            <p>
+                                                <FormattedMessage id="dashboard.not-found" />
+                                            </p>
+                                        </div>
+                                    )}
+                                </div>
+                            )}
+
+                            <div
+                                className="activity-item"
+                                onClick={this.handleToggleCompletedUavs}
+                                style={{ cursor: "pointer" }}>
                                 <div className="activity-icon">
                                     <i className="fas fa-check-circle"></i>
                                 </div>
                                 <div className="activity-content">
                                     <div className="activity-title">
-                                        Flight Completed
-                                    </div>
-                                    <div className="activity-time">
-                                        1 day ago
+                                        <FormattedMessage id="dashboard.recently-completed-uav" />
+                                        <i
+                                            className={`fas fa-chevron-${
+                                                this.state.showCompletedUavs
+                                                    ? "up"
+                                                    : "down"
+                                            }`}
+                                            style={{
+                                                marginLeft: "10px",
+                                                fontSize: "12px",
+                                            }}></i>
                                     </div>
                                 </div>
                             </div>
+
+                            {/* Completed UAVs List */}
+                            {this.state.showCompletedUavs && (
+                                <div className="recent-uavs-list">
+                                    {this.state.completedUavs.length > 0 ? (
+                                        this.state.completedUavs.map(
+                                            (uav, index) => (
+                                                <div
+                                                    key={index}
+                                                    className="recent-uav-item">
+                                                    <div className="uav-info">
+                                                        <div className="uav-name">
+                                                            {uav.name ||
+                                                                `UAV-${uav.droneId}`}
+                                                        </div>
+                                                        <div className="uav-details">
+                                                            <span>
+                                                                ID:{" "}
+                                                                {uav.droneId}
+                                                            </span>
+                                                            <span>
+                                                                Status:{" "}
+                                                                {uav.status}
+                                                            </span>
+                                                            <span>
+                                                                Completed:{" "}
+                                                                {new Date(
+                                                                    uav.updatedAt
+                                                                ).toLocaleDateString()}
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            )
+                                        )
+                                    ) : (
+                                        <div className="no-recent-uavs">
+                                            <p>No recent UAVs completed</p>
+                                        </div>
+                                    )}
+                                </div>
+                            )}
                         </div>
                     </div>
 
                     {/* Quick Actions */}
                     <div className="quick-actions">
-                        <h3>Quick Actions</h3>
+                        <h3>
+                            <FormattedMessage id="dashboard.quick-actions" />
+                        </h3>
                         <div className="actions-grid">
                             <button
                                 className="action-btn"
@@ -307,19 +600,27 @@ class Dashboard extends Component {
                                     this.handleRegisterUAV("registration")
                                 }>
                                 <i className="fas fa-plus"></i>
-                                <span>Register New UAV</span>
+                                <span>
+                                    <FormattedMessage id="dashboard.register-new-uav" />
+                                </span>
                             </button>
                             <button className="action-btn">
                                 <i className="fas fa-route"></i>
-                                <span>Plan Flight Path</span>
+                                <span>
+                                    <FormattedMessage id="dashboard.flight-path" />
+                                </span>
                             </button>
                             <button className="action-btn">
                                 <i className="fas fa-eye"></i>
-                                <span>View Live Tracking</span>
+                                <span>
+                                    <FormattedMessage id="dashboard.live-tracking" />
+                                </span>
                             </button>
                             <button className="action-btn">
                                 <i className="fas fa-download"></i>
-                                <span>Export Data</span>
+                                <span>
+                                    <FormattedMessage id="dashboard.export-data" />
+                                </span>
                             </button>
                         </div>
                     </div>

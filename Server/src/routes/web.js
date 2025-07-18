@@ -11,6 +11,7 @@ let initWebRouters = (app) => {
     router.put("/api/edit-user", userController.handleEditUser);
     router.delete("/api/delete-user", userController.handleDeleteUser);
     router.get("/api/allcode", userController.getAllCode);
+    router.get("/api/get-user-by-id", userController.getUserById);
 
     // API UAV REGISTER
     router.post("/api/register-new-uav", registerUavController.handleRegisterNewUav);
@@ -21,6 +22,9 @@ let initWebRouters = (app) => {
     router.post("/api/change-uav-status", registerUavController.handleChangeUavStatus);
     router.get("/api/get-uav-by-status", registerUavController.handleGetUavByStatus);
     router.delete("/api/delete-uav", registerUavController.handleDeleteUav);
+    router.get("/api/get-uavs-registered-recently", registerUavController.getUavsRegiteredRecently);
+    router.get("/api/get-uavs-updated-recently", registerUavController.getUavsUpdatedRecently);
+    router.get("/api/get-uav-completed-recently", registerUavController.getUavCompletedRecently);
 
     return app.use("/", router);
 };

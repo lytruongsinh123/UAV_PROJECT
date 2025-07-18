@@ -213,6 +213,7 @@ let updateUserData = (data) => {
             resolve({
                 errCode: 0,
                 message: "Update User succeed!",
+                user: user,
             });
         } catch (e) {
             reject(e);
@@ -243,12 +244,37 @@ let getAllCodeService = (typeInput) => {
         }
     });
 };
-
+let getUserById = (userId) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let user = await db.User.findOne({
+                where: { id: userId },
+                attributes: {
+                    exclude: ["password"],
+                },
+            });
+            if (user) {
+                resolve({
+                    errCode: 0,
+                    data: user,
+                });
+            } else {
+                resolve({
+                    errCode: 1,
+                    message: "User not found",
+                });
+            }
+        } catch (e) {
+            reject(e);
+        }
+    });
+};
 
 module.exports = {
     handleUserLogin: handleUserLogin,
     getAllUser: getAllUser,
     creatNewUser: creatNewUser,
+    getUserById: getUserById,
     deleteUser: deleteUser,
     updateUserData: updateUserData,
     getAllCodeService: getAllCodeService,

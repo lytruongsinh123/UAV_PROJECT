@@ -1,12 +1,13 @@
 import actionTypes from "./actionTypes";
 import { toast } from "react-toastify";
-
+import { statusFlightPath } from "../../utils/constants";
+import notificationService from "../../services/notificationService";
 import {
     registerNewUav,
     getAllUavsRegisterByOwner,
     updateUav,
     handleChangeStatus,
-    getUavByStatusAndOwner
+    getUavByStatusAndOwner,
 } from "../../service/uavRegisterService";
 
 export const ActionUavRegister = (action) => {
@@ -27,8 +28,7 @@ export const ActionUavRegister = (action) => {
                     type: actionTypes.CHANGE_ACTION_SUCCESS,
                     actiont: "DELETE",
                 });
-            }
-            else if (action === "LAUNCH") {
+            } else if (action === "LAUNCH") {
                 dispatch({
                     type: actionTypes.CHANGE_ACTION_SUCCESS,
                     actiont: "LAUNCH",
@@ -50,13 +50,38 @@ export const registerUav = (data) => {
             let res = await registerNewUav(data);
             if (res && res.errCode === 0) {
                 dispatch(registerUavSuccess(res));
+
+                // 🎉 Thông báo đăng ký thành công
+                notificationService.uavAction(
+                    "REGISTER",
+                    data.droneId || "New UAV",
+                    "has been registered successfully",
+                    { duration: 4000 }
+                );
+
                 toast.success("UAV registered successfully!");
             } else {
                 dispatch(registerUavFail(res));
+
+                // 🚨 Thông báo lỗi đăng ký
+                notificationService.error(
+                    "Registration Failed",
+                    `Failed to register UAV: ${res.message}`,
+                    { duration: 6000 }
+                );
+
                 toast.error("Failed to register UAV: " + res.message);
             }
         } catch (error) {
             dispatch(registerUavFail(error));
+
+            // 🚨 Thông báo lỗi
+            notificationService.error(
+                "Registration Error",
+                `Error registering UAV: ${error.message}`,
+                { duration: 6000 }
+            );
+
             toast.error("Error registering UAV: " + error.message);
         }
     };
@@ -105,13 +130,38 @@ export const updateUavRedux = (data) => {
             let res = await updateUav(data);
             if (res && res.errCode === 0) {
                 dispatch(updateUavSuccess(res));
+
+                // 🎉 Thông báo cập nhật thành công
+                notificationService.uavAction(
+                    "EDIT",
+                    data.droneId || "UAV",
+                    "has been updated successfully",
+                    { duration: 4000 }
+                );
+
                 toast.success("UAV updated successfully!");
             } else {
                 dispatch(updateUavFail(res));
+
+                // 🚨 Thông báo lỗi cập nhật
+                notificationService.error(
+                    "Update Failed",
+                    `Failed to update UAV: ${res.message}`,
+                    { duration: 6000 }
+                );
+
                 toast.error("Failed to update UAV: " + res.message);
             }
         } catch (error) {
             dispatch(updateUavFail(error));
+
+            // 🚨 Thông báo lỗi
+            notificationService.error(
+                "Update Error",
+                `Error updating UAV: ${error.message}`,
+                { duration: 6000 }
+            );
+
             toast.error("Error updating UAV: " + error.message);
         }
     };
@@ -125,22 +175,57 @@ export const updateUavFail = (error) => ({
     payload: error,
 });
 
-
-
 // Change UAV status action
-export const changeUavStatus = (droneId, newStatus) => {
+export const changeUavStatus = (droneId, newStatus, oldStatus = null) => {
     return async (dispatch, getState) => {
         try {
             let res = await handleChangeStatus(droneId, newStatus);
             if (res && res.errCode === 0) {
                 dispatch(changeStatusUavSuccess(res));
-                toast.success("UAV status changed successfully!");
+
+                // 🎉 Hiển thị thông báo thành công
+                const statusNames = {
+                    S0: "Pending",
+                    S1: "Active",
+                    S2: "Maintenance",
+                    S3: "Completed",
+                };
+
+                notificationService.statusChange(
+                    droneId,
+                    oldStatus ? statusNames[oldStatus] : "Unknown",
+                    statusNames[newStatus] || newStatus,
+                    { duration: 4000 }
+                );
+
+                // Giữ lại toast cho backward compatibility
+                toast.success(
+                    "UAV status changed to " +
+                        `${statusFlightPath[newStatus]}` +
+                        " successfully!"
+                );
             } else {
                 dispatch(changeStatusUavFail(res));
+
+                // 🚨 Hiển thị thông báo lỗi
+                notificationService.error(
+                    "Status Change Failed",
+                    `Failed to change UAV ${droneId} status: ${res.message}`,
+                    { duration: 6000 }
+                );
+
                 toast.error("Failed to change UAV status: " + res.message);
             }
         } catch (error) {
             dispatch(changeStatusUavFail(error));
+
+            // 🚨 Hiển thị thông báo lỗi
+            notificationService.error(
+                "Status Change Error",
+                `Error changing UAV ${droneId} status: ${error.message}`,
+                { duration: 6000 }
+            );
+
             toast.error("Error changing UAV status: " + error.message);
         }
     };
@@ -154,9 +239,60 @@ export const changeStatusUavFail = (error) => ({
     payload: error,
 });
 
+// Batch change UAV status action
+export const batchChangeUavStatus = (statusChanges) => {
+    return async (dispatch, getState) => {
+        const results = {
+            success: [],
+            failed: [],
+        };
 
+        // 📢 Thông báo bắt đầu batch update
+        notificationService.info(
+            "Batch Status Update",
+            `Starting batch update for ${statusChanges.length} UAV(s)...`,
+            { duration: 3000 }
+        );
 
+        for (const change of statusChanges) {
+            try {
+                let res = await handleChangeStatus(
+                    change.droneId,
+                    change.newStatus
+                );
+                if (res && res.errCode === 0) {
+                    results.success.push(change);
+                    dispatch(changeStatusUavSuccess(res));
+                } else {
+                    results.failed.push({ ...change, error: res.message });
+                    dispatch(changeStatusUavFail(res));
+                }
+            } catch (error) {
+                results.failed.push({ ...change, error: error.message });
+                dispatch(changeStatusUavFail(error));
+            }
+        }
 
+        // 📊 Thông báo kết quả batch update
+        if (results.success.length > 0) {
+            notificationService.success(
+                "Batch Update Complete",
+                `Successfully updated ${results.success.length} UAV(s) status`,
+                { duration: 5000 }
+            );
+        }
+
+        if (results.failed.length > 0) {
+            notificationService.error(
+                "Batch Update Errors",
+                `Failed to update ${results.failed.length} UAV(s) status`,
+                { duration: 7000 }
+            );
+        }
+
+        return results;
+    };
+};
 
 // Fetach UAVs by status and owner action
 export const fetchUavsByStatusAndOwner = (status, ownerId) => {
@@ -171,7 +307,9 @@ export const fetchUavsByStatusAndOwner = (status, ownerId) => {
             }
         } catch (error) {
             dispatch(fetchUavsByStatusAndOwnerFail(error));
-            toast.error("Error fetching UAVs by status and owner: " + error.message);
+            toast.error(
+                "Error fetching UAVs by status and owner: " + error.message
+            );
         }
     };
 };
@@ -185,4 +323,3 @@ export const fetchUavsByStatusAndOwnerFail = (error) => ({
     payload: error,
     uavsByStatus: [], // Ensure this is an empty array to avoid undefined issues
 });
-

@@ -60,7 +60,9 @@ class Header extends Component {
                                     this.handleLinkTo("registration")
                                 }>
                                 <i className="fa-solid fa-file-alt"></i>
-                                <span>Registration</span>
+                                <span>
+                                    <FormattedMessage id="header.registration" />
+                                </span>
                             </div>
                         </div>
 
@@ -68,7 +70,9 @@ class Header extends Component {
                             <div
                                 onClick={() => this.handleLinkTo("flightpath")}>
                                 <i className="fa-solid fa-route"></i>
-                                <span>Flight Paths</span>
+                                <span>
+                                    <FormattedMessage id="header.flight-path" />
+                                </span>
                             </div>
                         </div>
 
@@ -78,7 +82,9 @@ class Header extends Component {
                                     this.handleLinkTo("live-tracking")
                                 }>
                                 <i className="fa-solid fa-map-marker-alt"></i>
-                                <span>Live Tracking</span>
+                                <span>
+                                    <FormattedMessage id="header.live-tracking" />
+                                </span>
                             </div>
                         </div>
                     </div>
@@ -89,7 +95,9 @@ class Header extends Component {
                             className="btn-logout"
                             onClick={this.props.handleLogoutRedux}>
                             <i className="fa-solid fa-right-from-bracket"></i>
-                            <span>Logout</span>
+                            <span>
+                                <FormattedMessage id="header.logout" />
+                            </span>
                         </button>
                     </div>
                 </div>

@@ -20,6 +20,18 @@ const userReducer = (state = initialState, action) => {
                 userInfo: {},
                 message: action.payload,
             };
+        case actionTypes.EDIT_USER_SUCCESS:
+            return {
+                ...state,
+                userInfo: action.userInfo,
+                message: action.payload,
+            };
+        case actionTypes.EDIT_USER_FAIL:
+            return {
+                ...state,
+                userInfo: {},
+                message: action.payload,
+            };
         case actionTypes.LOGOUT:
             // Return một object mới hoàn toàn, không dùng spread
             return {

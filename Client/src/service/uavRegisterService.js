@@ -27,6 +27,15 @@ const getUavByStatusAndOwner = (status, ownerId) => {
 const deleteUav = (droneId) => {
     return axios.delete(`/api/delete-uav?droneId=${droneId}`);
 };
+const getUavsRegisteredRecently = (ownerId) => {
+    return axios.get(`/api/get-uavs-registered-recently?ownerId=${ownerId}`);
+};
+const getUavsUpdatedRecently = (ownerId) => {
+    return axios.get(`/api/get-uavs-updated-recently?ownerId=${ownerId}`);
+};
+const getUavCompletedRecently = (ownerId) => {
+    return axios.get(`/api/get-uav-completed-recently?ownerId=${ownerId}`);
+};
 export {
     registerNewUav,
     getAllUavs,
@@ -36,4 +45,7 @@ export {
     handleChangeStatus,
     getUavByStatusAndOwner,
     deleteUav,
+    getUavsRegisteredRecently,
+    getUavsUpdatedRecently,
+    getUavCompletedRecently
 };

@@ -1,0 +1,142 @@
+/* LiveTrackingCard hiện đại, responsive */
+.map-livetracking-container {
+    display: flex;
+    flex-direction: row;
+    height: 100vh;
+    background: #f4f6fb;
+}
+
+.map-sidebar {
+    width: 320px;
+    background: #fff;
+    box-shadow: 2px 0 16px rgba(0, 0, 0, 0.07);
+    padding: 32px 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.map-avatar {
+    margin-bottom: 24px;
+}
+
+.map-avatar img {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+    background: #f7f7f7;
+}
+
+.map-main {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.map-main h2 {
+    font-size: 1.6rem;
+    color: #007bff;
+    margin-bottom: 8px;
+}
+
+.map-main div {
+    font-size: 1rem;
+    color: #333;
+    margin-bottom: 4px;
+}
+
+.map-main b {
+    color: #007bff;
+}
+
+.map-tracking {
+    color: #007bff !important;
+}
+
+.map-completed {
+    color: #28a745 !important;
+}
+
+.map-sub {
+    width: 100%;
+    text-align: center;
+}
+
+.map-sub button {
+    padding: 10px 24px;
+    font-size: 1rem;
+    background: linear-gradient(90deg, #007bff, #00c6ff);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.map-sub button:hover {
+    background: linear-gradient(90deg, #0056b3, #00a6d6);
+    transform: translateY(-2px);
+}
+
+.map-sub button.map-stop {
+    background: linear-gradient(90deg, #dc3545, #ff6b7d);
+}
+
+.map-sub button.map-stop:hover {
+    background: linear-gradient(90deg, #c82333, #e74c3c);
+}
+
+.map-area {
+    flex: 1;
+    position: relative;
+    min-width: 0;
+    height: 100vh;
+}
+
+/* Popup UAV */
+.leaflet-popup-content {
+    font-size: 1rem;
+    color: #333;
+    text-align: left;
+    line-height: 1.6;
+}
+
+.leaflet-popup-content b {
+    color: #007bff;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+    .map-livetracking-container {
+        flex-direction: column;
+    }
+
+    .map-sidebar {
+        width: 100%;
+        box-shadow: none;
+        padding: 16px 8px;
+        border-bottom: 1px solid #e9ecef;
+    }
+
+    .map-area {
+        height: 60vh;
+    }
+}
+
+@media (max-width: 600px) {
+    .map-sidebar {
+        padding: 12px 8px;
+    }
+
+    .map-main h2 {
+        font-size: 1.4rem;
+    }
+
+    .map-sub button {
+        padding: 8px 16px;
+        font-size: 0.9rem;
+    }
+}

@@ -1,24 +1,38 @@
 {
-    "common": {
-        "welcome": "Welcome",
-        "hello": "Hello",
-        "save": "Save",
-        "cancel": "Cancel",
-        "edit": "Edit",
-        "delete": "Delete",
-        "confirm": "Confirm",
-        "loading": "Loading..."
-    },
-    "user": {
-        "login": "Login",
+    "header": {
+        "registration": "Registration",
         "logout": "Logout",
-        "username": "Username",
-        "password": "Password",
-        "email": "Email",
-        "profile": "Profile"
+        "flight-path": "Flight Path",
+        "live-tracking": "Live Tracking"
     },
-    "app": {
-        "title": "UAV Project",
-        "description": "UAV Project Management System"
+    "dashboard": {
+        "welcome-back": "Welcome Back",
+        "text-notice": "Here’s what’s happening with your UAV registration today.",
+        "user-info": "User Information",
+        "user-name": "User Name",
+        "email": "Email",
+        "role": "Role",
+        "status": "Status",
+        "registered-uavs": "Registered UAVs",
+        "flight-completed": "Flight Completed",
+        "flight-active": "Flight Active",
+        "flight-hours": "Flight Hours",
+        "recent-activity": "Recent Activity",
+        "new-registered-uav": "New Registered UAV",
+        "recently-updated-uav": "Recently Updated UAV",
+        "recently-completed-uav": "Recently Completed UAV",
+        "register-new-uav": "Register New UAV",
+        "quick-actions": "Quick Actions",
+        "flight-path": "Flight Path",
+        "live-tracking": "Live Tracking",
+        "export-data": "Export Data",
+        "not-found": "No Data Found"
+    },
+    "flight-path": {
+        "title": "Flight Path",
+        "start-point": "Start Point   ",
+        "end-point": "End Point",
+        "from": "From",
+        "to": "To"
     }
 }

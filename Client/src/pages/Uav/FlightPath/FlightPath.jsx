@@ -1,95 +1,52 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import geocodeAddress from "../../../utils/getCoordinate";
-import { MapContainer, TileLayer, Marker } from "react-leaflet";
-import "leaflet/dist/leaflet.css";
-
-import L from "leaflet";
-import "leaflet-routing-machine";
-import "leaflet-routing-machine/dist/leaflet-routing-machine.css";
-
-import markerIcon2x from "leaflet/dist/images/marker-icon-2x.png";
-import markerIcon from "leaflet/dist/images/marker-icon.png";
-import markerShadow from "leaflet/dist/images/marker-shadow.png";
-
-delete L.Icon.Default.prototype._getIconUrl;
-L.Icon.Default.mergeOptions({
-    iconRetinaUrl: markerIcon2x,
-    iconUrl: markerIcon,
-    shadowUrl: markerShadow,
-});
+import CardFlyPath from "../../../components/CardFlyPath/CardFlyPath";
+import * as actions from "../../../store/actions/uavRegisterActions";
 
 class FlightPath extends Component {
     constructor(props) {
         super(props);
         this.map = null;
+        this.routingControl = null; // Thêm biến này
         this.state = {
-            position1: null,
-            position2: null,
+            listuavs: [],
         };
     }
-
-    async componentDidMount() {
-        try {
-            const raw1 = await geocodeAddress("Hà Nội");
-            const raw2 = await geocodeAddress("Hải Phòng");
-
-            const position1 = { lat: raw1.lat, lng: raw1.lng };
-            const position2 = { lat: raw2.lat, lng: raw2.lng };
-
-            this.setState({ position1, position2 });
-
-            const pointA = L.latLng(position1.lat, position1.lng);
-            const pointB = L.latLng(position2.lat, position2.lng);
-            const distance = pointA.distanceTo(pointB);
-            console.log(`Khoảng cách chim bay: ${distance.toFixed(2)} mét`);
-
-            setTimeout(() => {
-                if (this.map && L.Routing) {
-                    L.Routing.control({
-                        waypoints: [pointA, pointB],
-                        lineOptions: {
-                            styles: [{ color: "blue", weight: 5 }],
-                        },
-                        show: false,
-                        addWaypoints: false,
-                        draggableWaypoints: false,
-                        fitSelectedRoutes: true,
-                        routeWhileDragging: false,
-                        createMarker: () => null,
-                    }).addTo(this.map);
-                }
-            }, 300);
-        } catch (err) {
-            console.error("Lỗi khi lấy tọa độ:", err);
+    async componentDidUpdate(prevProps, prevState, snapshot) {
+        if (prevProps.uavs !== this.props.uavs) {
+            this.setState({
+                listuavs: this.props.uavs,
+            });
         }
     }
+    async componentDidMount() {
+        await this.props.fetchUavsRegisteredByOwner(this.props.userInfo.id);
+        this.setState({
+            listuavs: this.props.uavs,
+        });
+    }
+
+    componentWillUnmount() {}
 
     render() {
-        const { position1, position2 } = this.state;
-
-        if (!position1 || !position2) {
-            return <div>Đang tải bản đồ...</div>;
-        }
-
+        console.log("list uavs", this.state.listuavs);
         return (
             <div style={{ height: "100vh", width: "100%" }}>
-                <MapContainer
-                    center={position1}
-                    zoom={10}
-                    style={{ height: "100%", width: "100%" }}
-                    whenCreated={(mapInstance) => {
-                        this.map = mapInstance;
-                    }}
-                >
-                    <TileLayer
-                        attribution="&copy; OpenStreetMap contributors"
-                        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                    />
-                    <Marker position={position1} />
-                    <Marker position={position2} />
-                </MapContainer>
+                {this.state.listuavs.length > 0 ? (
+                    this.state.listuavs.map((uav, index) => {
+                        return (
+                            <CardFlyPath
+                                key={index}
+                                position1={uav.startPoint}
+                                position2={uav.endPoint}
+                                navigate={this.props.navigate}
+                            />
+                        );
+                    })
+                ) : (
+                    <div>Không có UAV nào để hiển thị</div>
+                )}
             </div>
         );
     }
@@ -104,12 +61,16 @@ const withNavigate = (Component) => {
 
 const mapStateToProps = (state) => {
     return {
+        userInfo: state.user.userInfo,
         uavs: state.uavRegister.uavs,
     };
 };
 
 const mapDispatchToProps = (dispatch) => {
-    return {};
+    return {
+        fetchUavsRegisteredByOwner: (ownerId) =>
+            dispatch(actions.fetchAllUavsByOwner(ownerId)),
+    };
 };
 
 export default withNavigate(

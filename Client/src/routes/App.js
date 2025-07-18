@@ -18,7 +18,11 @@ import Homeuav from "../containers/Homeuav/Homeuav";
 import Registration from "../pages/Uav/Registration/Registration";
 import RouteActionResetter from "../utils/RouterActionResetter";
 import FlightPath from "../pages/Uav/FlightPath/FlightPath";
+import LiveTracking from "../pages/Uav/LiveTracking/LiveTracking";
+import EditUser from "../containers/EditUser/EditUser";
 import Login from "../pages/User/Login/Login";
+import Notification from "../components/Notification/Notification";
+import Settings from "../components/Settings/Settings";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 
 class App extends Component {
@@ -68,8 +72,7 @@ class App extends Component {
                                     path={"/home"}
                                     Component={userIsAuthenticated(
                                         HomePage
-                                    )}>
-                                </Route>
+                                    )}></Route>
 
                                 {/* Dashboard standalone route cũng có header + sidebar */}
                                 <Route
@@ -93,6 +96,21 @@ class App extends Component {
                                     <Route index element={<FlightPath />} />
                                 </Route>
                                 <Route
+                                    path={"/edit-user"}
+                                    Component={userIsAuthenticated(HomePage)}>
+                                    <Route index element={<EditUser />} />
+                                </Route>
+                                <Route
+                                    path={"/live-tracking"}
+                                    Component={userIsAuthenticated(HomePage)}>
+                                    <Route index element={<LiveTracking />} />
+                                </Route>
+                                 <Route
+                                    path={"/settings"}
+                                    Component={userIsAuthenticated(HomePage)}>
+                                    <Route index element={<Settings />} />
+                                </Route>
+                                <Route
                                     path="/"
                                     element={<Navigate to="/login" replace />}
                                 />
@@ -109,6 +127,8 @@ class App extends Component {
                             draggable
                             pauseOnHover
                         />
+                        {/* 📢 Thêm Notification component */}
+                        <Notification />
                     </div>
                 </Router>
             </Fragment>

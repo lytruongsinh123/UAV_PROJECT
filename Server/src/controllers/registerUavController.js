@@ -104,7 +104,7 @@ let handleGetUavByStatus = async (req, res) => {
         });
     }
 };
-let handleDeleteUav = async (req, res) => { 
+let handleDeleteUav = async (req, res) => {
     try {
         let droneId = req.query.droneId;
         let result = await registerUavService.handleDeleteUav(droneId);
@@ -116,7 +116,44 @@ let handleDeleteUav = async (req, res) => {
             message: "Error from server...",
         });
     }
-}
+};
+
+let getUavsRegiteredRecently = async (req, res) => {
+    try {
+        let ownerId = req.query.ownerId;
+        let data = await registerUavService.getUavsRegiteredRecently(ownerId);
+        return res.status(200).json(data);
+    } catch (e) {
+        return res.status(200).json({
+            errCode: -1,
+            errMessage: "Error from server",
+        });
+    }
+};
+let getUavsUpdatedRecently = async (req, res) => {
+    try {
+        let ownerId = req.query.ownerId;
+        let data = await registerUavService.getUavsUpdatedRecently(ownerId);
+        return res.status(200).json(data);
+    } catch (e) {
+        return res.status(200).json({
+            errCode: -1,
+            errMessage: "Error from server",
+        });
+    }
+};
+let getUavCompletedRecently = async (req, res) => {
+    try {
+        let ownerId = req.query.ownerId;
+        let data = await registerUavService.getUavCompletedRecently(ownerId);
+        return res.status(200).json(data);
+    } catch (e) {
+        return res.status(200).json({
+            errCode: -1,
+            errMessage: "Error from server",
+        });
+    }
+};
 module.exports = {
     handleRegisterNewUav,
     handleGetAllUavs,
@@ -126,4 +163,7 @@ module.exports = {
     handleChangeUavStatus,
     handleGetUavByStatus,
     handleDeleteUav,
+    getUavsRegiteredRecently,
+    getUavsUpdatedRecently,
+    getUavCompletedRecently
 };

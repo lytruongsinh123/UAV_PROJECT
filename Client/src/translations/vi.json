@@ -1,24 +1,38 @@
 {
-    "common": {
-        "welcome": "Chào mừng",
-        "hello": "Xin chào",
-        "save": "Lưu",
-        "cancel": "Hủy",
-        "edit": "Sửa",
-        "delete": "Xóa",
-        "confirm": "Xác nhận",
-        "loading": "Đang tải..."
+    "header": {
+        "registration": "Đăng ký",
+        "flight-path": "Lộ trình bay",
+        "live-tracking": "Theo dõi trực tiếp",
+        "logout": "Đăng xuất"
     },
-    "user": {
-        "login": "Đăng nhập",
-        "logout": "Đăng xuất",
-        "username": "Tên đăng nhập",
-        "password": "Mật khẩu",
+    "dashboard": {
+        "welcome-back": "Chào mừng trở lại",
+        "text-notice": "Đây là những gì đang xảy ra với sổ đăng ký UAV của bạn ngày hôm nay.",
+        "user-info": "Thông tin người dùng",
+        "user-name": "Tên người dùng",
         "email": "Email",
-        "profile": "Hồ sơ"
+        "role": "Vai trò",
+        "status": "Trạng thái",
+        "registered-uavs": "UAV đã đăng ký",
+        "flight-completed": "Chuyến bay đã hoàn thành",
+        "flight-active": "Chuyến bay đang hoạt động",
+        "flight-hours": "Tổng giờ bay",
+        "recent-activity": "Hoạt động gần đây",
+        "new-registered-uav": "UAV đăng ký gần đây",
+        "recently-updated-uav": "UAV đã cập nhật gần đây",
+        "recently-completed-uav": "UAV đã hoàn thành gần đây",
+        "register-new-uav": "Đăng ký UAV mới",
+        "quick-actions": "Hành động nhanh",
+        "flight-path": "Lộ trình bay",
+        "live-tracking": "Theo dõi trực tiếp",
+        "export-data": "Xuất dữ liệu",
+        "not-found": "Không tìm thấy dữ liệu"
     },
-    "app": {
-        "title": "Dự án UAV",
-        "description": "Hệ thống quản lý dự án UAV"
+    "flight-path": {
+        "titile": "Lộ trình bay",
+        "start-point": "Điểm bắt đầu   ",
+        "end-point": "Điểm kết thúc",
+        "from": "Từ",
+        "to": "Đến"
     }
 }

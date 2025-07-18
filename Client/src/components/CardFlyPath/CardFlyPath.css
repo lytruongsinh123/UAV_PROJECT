@@ -1,0 +1,101 @@
+.flightpath-card {
+    background: linear-gradient(120deg, #f8fafc 0%, #e0e7ff 100%);
+    border-radius: 20px;
+    box-shadow: 0 8px 32px rgba(78, 84, 200, 0.18),
+        0 1.5px 8px rgba(0, 0, 0, 0.07);
+    padding: 40px 36px 36px 36px; /* tăng padding */
+    margin: 32px auto;
+    max-width: 1200px; /* tăng rộng hơn */
+    width: 100%; /* cho phép full chiều ngang nếu cần */
+    transition: box-shadow 0.25s, transform 0.18s;
+    border: 1.5px solid #8f94fb;
+    position: relative;
+}
+.flightpath-card:hover {
+    box-shadow: 0 16px 48px rgba(78, 84, 200, 0.25),
+        0 2px 16px rgba(0, 0, 0, 0.1);
+    transform: translateY(-4px) scale(1.02);
+}
+.flightpath-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 22px;
+    gap: 18px;
+}
+.flightpath-icon {
+    background: linear-gradient(135deg, #4e54c8 60%, #8f94fb 100%);
+    color: #fff;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 34px;
+    margin-right: 0;
+    box-shadow: 0 4px 16px rgba(78, 84, 200, 0.18);
+    border: 2px solid #fff;
+}
+.flightpath-title h2 {
+    margin: 0;
+    font-size: 2rem;
+    color: #4e54c8;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+.flightpath-title span {
+    font-size: 1.05rem;
+    color: #555;
+    margin-top: 4px;
+    display: block;
+}
+.flightpath-info {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 22px;
+    gap: 18px;
+}
+.info-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.08rem;
+    color: #333;
+    background: #eef2ff;
+    border-radius: 10px;
+    padding: 10px 18px;
+    box-shadow: 0 1px 6px rgba(78, 84, 200, 0.08);
+}
+.info-item i {
+    color: #4e54c8;
+    font-size: 1.2em;
+}
+.flightpath-map {
+    margin-top: 14px;
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 2px 16px rgba(78, 84, 200, 0.1);
+    animation: fadeInMap 0.7s;
+}
+@keyframes fadeInMap {
+    from {
+        opacity: 0;
+        transform: scale(0.98);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+.loading-card {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    justify-content: center;
+    padding: 40px;
+    font-size: 1.3rem;
+    color: #4e54c8;
+    background: linear-gradient(120deg, #f8fafc 0%, #e0e7ff 100%);
+    border-radius: 18px;
+    box-shadow: 0 4px 24px rgba(78, 84, 200, 0.1);
+}

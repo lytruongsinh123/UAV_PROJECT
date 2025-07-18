@@ -8,6 +8,7 @@ import * as actions from "../../store/actions";
 import emitter from "../../utils/eventBus";
 import CardUavItem from "../Card/CardUavItem";
 import { deleteUav } from "../../service/uavRegisterService";
+import notificationService from "../../services/notificationService";
 
 import "./Modal.css";
 
@@ -65,19 +66,53 @@ class ModalUav extends Component {
         }
     };
 
+    // handleActivate = async (uav) => {
+    //     let copyUavStates = { ...this.state.uavStates };
+    //     copyUavStates[uav.droneId] = statusUav.ACTIVE;
+    //     this.setState({ uavStates: copyUavStates });
+    //     try {
+    //         await this.props.HandleChangeStatus(uav.droneId, statusUav.ACTIVE);
+    //         await this.props.fetchUavsByStatusAndOwner(
+    //             statusUav.ACTIVE,
+    //             this.props.userInfo.id
+    //         );
+    //     } catch (error) {
+    //         let rollbackUavStates = { ...this.state.uavStates };
+    //         rollbackUavStates[uav.droneId] = uav.status; // Restore original status
+    //         this.setState({ uavStates: rollbackUavStates });
+    //     }
+    // };
     handleActivate = async (uav) => {
         let copyUavStates = { ...this.state.uavStates };
         copyUavStates[uav.droneId] = statusUav.ACTIVE;
         this.setState({ uavStates: copyUavStates });
+
         try {
             await this.props.HandleChangeStatus(uav.droneId, statusUav.ACTIVE);
             await this.props.fetchUavsByStatusAndOwner(
                 statusUav.ACTIVE,
                 this.props.userInfo.id
             );
+
+            // ⏳ Sau 10 giây, chuyển UAV sang trạng thái COMPLETED
+            setTimeout(async () => {
+                let updatedStates = { ...this.state.uavStates };
+                updatedStates[uav.droneId] = statusUav.COMPLETED;
+                this.setState({ uavStates: updatedStates });
+
+                await this.props.HandleChangeStatus(
+                    uav.droneId,
+                    statusUav.COMPLETED
+                );
+
+                await this.props.fetchUavsByStatusAndOwner(
+                    statusUav.ACTIVE,
+                    this.props.userInfo.id
+                );
+            }, 10000); // 10,000 ms = 10 giây
         } catch (error) {
             let rollbackUavStates = { ...this.state.uavStates };
-            rollbackUavStates[uav.droneId] = uav.status; // Restore original status
+            rollbackUavStates[uav.droneId] = uav.status;
             this.setState({ uavStates: rollbackUavStates });
         }
     };
@@ -130,7 +165,10 @@ class ModalUav extends Component {
                                         />
                                         {isOpenTypeModal === "completed" && (
                                             <span>
-                                                Hour of Flight: {(uav.distance / uav.speed).toFixed(2)}{" "}
+                                                Hour of Flight:{" "}
+                                                {(
+                                                    uav.distance / uav.speed
+                                                ).toFixed(2)}{" "}
                                             </span>
                                         )}
                                     </>
@@ -178,10 +216,12 @@ const mapDispatchToProps = (dispatch) => {
             dispatch(actions.fetchAllUavsByOwner(ownerId)),
         HandleChangeAction: (action) =>
             dispatch(actions.ActionUavRegister(action)),
-        HandleChangeStatus: (droneId, status) =>
-            dispatch(actions.changeUavStatus(droneId, status)),
+        HandleChangeStatus: (droneId, status, oldStatus) =>
+            dispatch(actions.changeUavStatus(droneId, status, oldStatus)),
         fetchUavsByStatusAndOwner: (status, ownerId) =>
             dispatch(actions.fetchUavsByStatusAndOwner(status, ownerId)),
+        batchChangeUavStatus: (statusChanges) =>
+            dispatch(actions.batchChangeUavStatus(statusChanges)),
     };
 };
 

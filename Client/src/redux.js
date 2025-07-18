@@ -4,10 +4,11 @@ import storage from "redux-persist/lib/storage"; // lưu vào localStorage
 import { combineReducers } from "redux";
 import userReducer from "./store/reducers/userReducer";
 import uavRegisterReducer from "./store/reducers/uavRegisterReducer";
+import appReducer from "./store/reducers/appReducer"; 
 const persistConfig = {
     key: "root", // khóa gốc trong localStorage
     storage, // dùng localStorage
-    whitelist: ["user"], // chỉ lưu phần state `user` (nếu muốn)
+    whitelist: ["user", "uavRegister", "app"], // chỉ lưu phần state `user` (nếu muốn)
 };
 
 
@@ -15,6 +16,7 @@ const persistConfig = {
 const rootReducer = combineReducers({
     user: userReducer,
     uavRegister: uavRegisterReducer,
+    app: appReducer
 });
 
 // Tạo reducer đã được persist

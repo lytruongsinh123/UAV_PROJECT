@@ -12,12 +12,38 @@ const Directions = new Openrouteservice.Directions({
 
 // Hàm lấy khoảng cách đường đi
 async function getDistance(startCoords, endCoords) {
+    // Kiểm tra đầu vào
+    if (
+        !Array.isArray(startCoords) ||
+        !Array.isArray(endCoords) ||
+        startCoords.length !== 2 ||
+        endCoords.length !== 2
+    ) {
+        console.error("Tọa độ không hợp lệ:", startCoords, endCoords);
+        return null;
+    }
     try {
         const res = await Directions.calculate({
             coordinates: [startCoords, endCoords],
-            profile: "driving-car", // hoặc "foot-walking", "cycling-regular"
+            profile: "driving-car", // đường bộ thực tế cho UAV
             format: "geojson",
         });
+
+        // Kiểm tra kết quả trả về
+        if (
+            !res.features ||
+            !res.features[0] ||
+            !res.features[0].properties ||
+            !res.features[0].properties.summary ||
+            typeof res.features[0].properties.summary.distance !== "number"
+        ) {
+            console.error(
+                "Không tìm thấy đường đi giữa hai điểm:",
+                startCoords,
+                endCoords
+            );
+            return null;
+        }
 
         const meters = res.features[0].properties.summary.distance;
         const km = meters / 1000;

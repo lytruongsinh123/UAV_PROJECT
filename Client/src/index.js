@@ -4,7 +4,12 @@ import * as serviceWorker from "./serviceWorker";
 import { Provider } from "react-redux";
 import reduxStore, { persistor } from "./redux";
 import IntlProviderWrapper from "./hoc/IntlProviderWrapper";
+import themeUtils from "./utils/ThemeUtils";
 import "bootstrap/dist/css/bootstrap.min.css";
+import "./style/theme.css";
+
+// Initialize theme system before rendering
+themeUtils.init();
 
 const renderApp = () => {
     ReactDOM.render(
