@@ -24,7 +24,8 @@
 }
 
 /* Dark Theme Variables */
-body.dark-theme {
+body.dark-theme,
+[data-theme="dark"] {
     --bg-primary: #0f172a;
     --bg-secondary: #1e293b;
     --bg-tertiary: #334155;
@@ -80,7 +81,44 @@ body.light-theme {
     color: var(--text-primary);
     min-height: 100vh;
     font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Disable complex transitions, keep simple hover effects only */
+.settings-container *,
+.settings-container *::before,
+.settings-container *::after {
+    transition: none !important;
+    animation: none !important;
+}
+
+/* Allow simple hover effects only */
+.tab-button:hover,
+.btn-reset:hover,
+.btn-save:hover,
+.setting-group:hover {
+    transition: background-color 0.1s ease !important;
+}
+
+/* Special transitions for theme toggle button */
+.theme-toggle-btn,
+.theme-toggle-btn:hover,
+.theme-toggle-btn:active {
+    transition: all 0.3s ease !important;
+}
+
+/* Force theme styles for settings container */
+body.light-theme .settings-container,
+html.light-theme .settings-container,
+[data-theme="light"] .settings-container {
+    background: #f8fafc !important;
+    color: #1e293b !important;
+}
+
+body.dark-theme .settings-container,
+html.dark-theme .settings-container,
+[data-theme="dark"] .settings-container {
+    background: #0f172a !important;
+    color: #e2e8f0 !important;
 }
 
 /* Settings Header */
@@ -191,13 +229,29 @@ body.light-theme {
 
 /* Settings Sidebar */
 .settings-sidebar {
-    background: white;
+    background: var(--bg-secondary);
     border-radius: 16px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 4px 20px var(--shadow-light);
     padding: 20px;
     height: fit-content;
     position: sticky;
     top: 20px;
+    transition: background-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+/* Force theme styles for sidebar */
+body.light-theme .settings-sidebar,
+html.light-theme .settings-sidebar,
+[data-theme="light"] .settings-sidebar {
+    background: #ffffff !important;
+    color: #1e293b !important;
+}
+
+body.dark-theme .settings-sidebar,
+html.dark-theme .settings-sidebar,
+[data-theme="dark"] .settings-sidebar {
+    background: #1e293b !important;
+    color: #e2e8f0 !important;
 }
 
 .settings-tabs {
@@ -213,25 +267,63 @@ body.light-theme {
     text-align: left;
     border-radius: 12px;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: background-color 0.15s ease, color 0.15s ease,
+        transform 0.15s ease;
     font-size: 14px;
     font-weight: 500;
-    color: #64748b;
+    color: var(--text-secondary);
     display: flex;
     align-items: center;
     gap: 12px;
 }
 
 .tab-button:hover {
-    background: #f1f5f9;
-    color: #334155;
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
     transform: translateX(4px);
 }
 
-.tab-button.active {
-    background: linear-gradient(135deg, #3b82f6, #1d4ed8);
-    color: white;
-    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+/* Force theme styles for sidebar buttons */
+body.light-theme .tab-button,
+html.light-theme .tab-button,
+[data-theme="light"] .tab-button {
+    color: #64748b !important;
+    background: transparent !important;
+}
+
+body.light-theme .tab-button:hover,
+html.light-theme .tab-button:hover,
+[data-theme="light"] .tab-button:hover {
+    background: #f1f5f9 !important;
+    color: #1e293b !important;
+}
+
+body.light-theme .tab-button.active,
+html.light-theme .tab-button.active,
+[data-theme="light"] .tab-button.active {
+    background: linear-gradient(135deg, #3b82f6, #1d4ed8) !important;
+    color: white !important;
+}
+
+body.dark-theme .tab-button,
+html.dark-theme .tab-button,
+[data-theme="dark"] .tab-button {
+    color: #cbd5e1 !important;
+    background: transparent !important;
+}
+
+body.dark-theme .tab-button:hover,
+html.dark-theme .tab-button:hover,
+[data-theme="dark"] .tab-button:hover {
+    background: #334155 !important;
+    color: #e2e8f0 !important;
+}
+
+body.dark-theme .tab-button.active,
+html.dark-theme .tab-button.active,
+[data-theme="dark"] .tab-button.active {
+    background: linear-gradient(135deg, #3b82f6, #1d4ed8) !important;
+    color: white !important;
 }
 
 .tab-button i {
@@ -242,38 +334,111 @@ body.light-theme {
 
 /* Settings Main */
 .settings-main {
-    background: white;
+    background: var(--bg-secondary);
     border-radius: 16px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 4px 20px var(--shadow-light);
     padding: 30px;
     min-height: 600px;
+    transition: background-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+/* Force theme styles for main content */
+body.light-theme .settings-main,
+html.light-theme .settings-main,
+[data-theme="light"] .settings-main {
+    background: #ffffff !important;
+    color: #1e293b !important;
+}
+
+body.dark-theme .settings-main,
+html.dark-theme .settings-main,
+[data-theme="dark"] .settings-main {
+    background: #1e293b !important;
+    color: #e2e8f0 !important;
 }
 
 /* Settings Section */
 .settings-section h3 {
     font-size: 1.5rem;
     font-weight: 600;
-    color: #1e293b;
+    color: var(--text-primary);
     margin: 0 0 30px 0;
     padding-bottom: 15px;
-    border-bottom: 2px solid #e2e8f0;
+    border-bottom: 2px solid var(--border-primary);
+}
+
+/* Force theme styles for section headers */
+body.light-theme .settings-section h3,
+html.light-theme .settings-section h3,
+[data-theme="light"] .settings-section h3 {
+    color: #1e293b !important;
+    border-bottom-color: #e2e8f0 !important;
+}
+
+body.dark-theme .settings-section h3,
+html.dark-theme .settings-section h3,
+[data-theme="dark"] .settings-section h3 {
+    color: #e2e8f0 !important;
+    border-bottom-color: #475569 !important;
 }
 
 /* Setting Group */
 .setting-group {
     margin-bottom: 25px;
     padding: 20px;
-    background: #f8fafc;
+    background: var(--bg-tertiary);
     border-radius: 12px;
-    border: 1px solid #e2e8f0;
-    transition: all 0.3s ease;
+    border: 1px solid var(--border-primary);
+    transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+/* Force theme styles for setting groups */
+body.light-theme .setting-group,
+html.light-theme .setting-group,
+[data-theme="light"] .setting-group {
+    background: #f1f5f9 !important;
+    border-color: #e2e8f0 !important;
+    color: #1e293b !important;
+}
+
+body.dark-theme .setting-group,
+html.dark-theme .setting-group,
+[data-theme="dark"] .setting-group {
+    background: #334155 !important;
+    border-color: #475569 !important;
+    color: #e2e8f0 !important;
+}
+
+/* Force text colors for labels and descriptions */
+body.light-theme .setting-label,
+html.light-theme .setting-label,
+[data-theme="light"] .setting-label {
+    color: #1e293b !important;
+}
+
+body.dark-theme .setting-label,
+html.dark-theme .setting-label,
+[data-theme="dark"] .setting-label {
+    color: #e2e8f0 !important;
+}
+
+body.light-theme .setting-description,
+html.light-theme .setting-description,
+[data-theme="light"] .setting-description {
+    color: #64748b !important;
+}
+
+body.dark-theme .setting-description,
+html.dark-theme .setting-description,
+[data-theme="dark"] .setting-description {
+    color: #94a3b8 !important;
 }
 
 .setting-group:hover {
-    background: #f1f5f9;
-    border-color: #cbd5e1;
+    background: var(--bg-quaternary);
+    border-color: var(--border-secondary);
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 4px 12px var(--shadow-light);
 }
 
 .setting-label {
@@ -282,23 +447,25 @@ body.light-theme {
     gap: 12px;
     font-size: 14px;
     font-weight: 600;
-    color: #374151;
+    color: var(--text-primary);
     margin-bottom: 12px;
+    transition: color 0.15s ease;
 }
 
 .setting-label i {
     font-size: 16px;
     width: 20px;
     text-align: center;
-    color: #6366f1;
+    color: var(--accent-primary);
 }
 
 .setting-description {
     display: block;
     font-size: 12px;
-    color: #64748b;
+    color: var(--text-secondary);
     margin-top: 8px;
     line-height: 1.4;
+    transition: color 0.15s ease;
 }
 
 /* Form Controls */
@@ -306,24 +473,48 @@ body.light-theme {
 .setting-select {
     width: 100%;
     padding: 12px 16px;
-    border: 2px solid #e2e8f0;
+    border: 2px solid var(--border-primary);
     border-radius: 8px;
     font-size: 14px;
-    transition: all 0.3s ease;
-    background: white;
-    color: #374151;
+    transition: border-color 0.15s ease, background-color 0.15s ease,
+        color 0.15s ease;
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+}
+
+/* Force theme styles for form controls */
+body.light-theme .setting-input,
+body.light-theme .setting-select,
+html.light-theme .setting-input,
+html.light-theme .setting-select,
+[data-theme="light"] .setting-input,
+[data-theme="light"] .setting-select {
+    background: #ffffff !important;
+    color: #1e293b !important;
+    border-color: #e2e8f0 !important;
+}
+
+body.dark-theme .setting-input,
+body.dark-theme .setting-select,
+html.dark-theme .setting-input,
+html.dark-theme .setting-select,
+[data-theme="dark"] .setting-input,
+[data-theme="dark"] .setting-select {
+    background: #334155 !important;
+    color: #e2e8f0 !important;
+    border-color: #475569 !important;
 }
 
 .setting-input:focus,
 .setting-select:focus {
     outline: none;
-    border-color: #6366f1;
+    border-color: var(--accent-primary);
     box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
 }
 
 .setting-input:hover,
 .setting-select:hover {
-    border-color: #cbd5e1;
+    border-color: var(--border-secondary);
 }
 
 /* Range Slider */
@@ -427,9 +618,23 @@ body.light-theme {
     justify-content: space-between;
     align-items: center;
     padding: 20px 30px;
-    background: white;
+    background: var(--bg-secondary);
     border-radius: 16px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 4px 20px var(--shadow-light);
+    transition: background-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+/* Force theme styles for footer */
+body.light-theme .settings-footer,
+html.light-theme .settings-footer,
+[data-theme="light"] .settings-footer {
+    background: #ffffff !important;
+}
+
+body.dark-theme .settings-footer,
+html.dark-theme .settings-footer,
+[data-theme="dark"] .settings-footer {
+    background: #1e293b !important;
 }
 
 .btn-reset,
@@ -447,16 +652,48 @@ body.light-theme {
 }
 
 .btn-reset {
-    background: #f1f5f9;
-    color: #64748b;
-    border: 2px solid #e2e8f0;
+    background: var(--bg-tertiary);
+    color: var(--text-secondary);
+    border: 2px solid var(--border-primary);
+}
+
+/* Force theme styles for reset button */
+body.light-theme .btn-reset,
+html.light-theme .btn-reset,
+[data-theme="light"] .btn-reset {
+    background: #f1f5f9 !important;
+    color: #64748b !important;
+    border-color: #e2e8f0 !important;
+}
+
+body.dark-theme .btn-reset,
+html.dark-theme .btn-reset,
+[data-theme="dark"] .btn-reset {
+    background: #334155 !important;
+    color: #e2e8f0 !important;
+    border-color: #475569 !important;
 }
 
 .btn-reset:hover {
-    background: #e2e8f0;
-    color: #475569;
+    background: var(--bg-quaternary);
+    color: var(--text-primary);
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 12px var(--shadow-light);
+}
+
+/* Force theme styles for reset button hover */
+body.light-theme .btn-reset:hover,
+html.light-theme .btn-reset:hover,
+[data-theme="light"] .btn-reset:hover {
+    background: #e2e8f0 !important;
+    color: #1e293b !important;
+}
+
+body.dark-theme .btn-reset:hover,
+html.dark-theme .btn-reset:hover,
+[data-theme="dark"] .btn-reset:hover {
+    background: #475569 !important;
+    color: #f1f5f9 !important;
 }
 
 .btn-save {
@@ -629,20 +866,10 @@ body.light-theme {
     }
 }
 
-/* Animation */
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
+/* Animation removed for performance optimization */
 
 .settings-section {
-    animation: fadeIn 0.5s ease-out;
+    /* Remove animation for instant display */
 }
 
 /* Scrollbar Styling */

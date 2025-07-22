@@ -2,17 +2,19 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import themeUtils from "../../utils/ThemeUtils";
+import { FormattedMessage } from "react-intl";
 import "./Settings.css";
 
 class Settings extends Component {
     constructor(props) {
         super(props);
-        
+
         // Load theme from localStorage or default to light
         const savedTheme = themeUtils.getStoredTheme();
-        
+
         this.state = {
             activeTab: "general",
+            currentTheme: savedTheme, // Add currentTheme to state
             settings: {
                 // General Settings
                 language: "en",
@@ -50,24 +52,69 @@ class Settings extends Component {
     componentDidMount() {
         // Initialize theme system
         themeUtils.init();
-        
+
+        // Apply initial theme to body classes and data-theme
+        const currentTheme = themeUtils.getCurrentTheme();
+        this.applyThemeToDocument(currentTheme);
+
         // Add theme change listener
+        this.handleThemeChange = () => {
+            const newTheme = themeUtils.getCurrentTheme();
+            this.applyThemeToDocument(newTheme);
+
+            this.setState({
+                currentTheme: newTheme,
+                settings: {
+                    ...this.state.settings,
+                    theme: newTheme,
+                },
+            });
+        };
+
         themeUtils.addListener(this.handleThemeChange);
     }
 
+    applyThemeToDocument = (theme) => {
+        // Use requestAnimationFrame for instant DOM updates
+        requestAnimationFrame(() => {
+            const body = document.body;
+            const html = document.documentElement;
+
+            // Remove existing theme classes and attributes instantly
+            body.className = body.className
+                .replace(/light-theme|dark-theme/g, "")
+                .trim();
+            html.className = html.className
+                .replace(/light-theme|dark-theme/g, "")
+                .trim();
+
+            body.removeAttribute("data-theme");
+            html.removeAttribute("data-theme");
+
+            // Apply new theme instantly
+            if (theme === "dark") {
+                body.classList.add("dark-theme");
+                body.setAttribute("data-theme", "dark");
+                html.classList.add("dark-theme");
+                html.setAttribute("data-theme", "dark");
+            } else {
+                body.classList.add("light-theme");
+                body.setAttribute("data-theme", "light");
+                html.classList.add("light-theme");
+                html.setAttribute("data-theme", "light");
+            }
+        });
+    };
+
     componentWillUnmount() {
         // Remove theme change listener
-        themeUtils.removeListener(this.handleThemeChange);
+        if (themeUtils.removeListener) {
+            themeUtils.removeListener(this.handleThemeChange);
+        }
     }
 
     handleThemeChange = (theme) => {
-        // Update state when theme changes
-        this.setState(prevState => ({
-            settings: {
-                ...prevState.settings,
-                theme: theme
-            }
-        }));
+        // This method is no longer needed since we handle it in componentDidMount
     };
 
     handleTabChange = (tab) => {
@@ -75,17 +122,19 @@ class Settings extends Component {
     };
 
     handleSettingChange = (key, value) => {
+        // Apply theme immediately when theme setting changes - before setState
+        if (key === "theme") {
+            this.applyThemeToDocument(value);
+            themeUtils.applyTheme(value);
+        }
+
         this.setState((prevState) => ({
+            currentTheme: key === "theme" ? value : prevState.currentTheme,
             settings: {
                 ...prevState.settings,
                 [key]: value,
             },
         }));
-        
-        // Apply theme immediately when theme setting changes
-        if (key === 'theme') {
-            themeUtils.applyTheme(value);
-        }
     };
 
     handleSave = () => {
@@ -134,12 +183,14 @@ class Settings extends Component {
 
         return (
             <div className="settings-section">
-                <h3>General Settings</h3>
+                <h3>
+                    <FormattedMessage id="settings.general.title" />
+                </h3>
 
                 <div className="setting-group">
                     <label className="setting-label">
                         <i className="fas fa-language"></i>
-                        Language
+                        <FormattedMessage id="settings.general.language" />
                     </label>
                     <select
                         value={settings.language}
@@ -157,9 +208,12 @@ class Settings extends Component {
                 <div className="setting-group">
                     <label className="setting-label">
                         <i className="fas fa-palette"></i>
-                        Theme
+                        <FormattedMessage id="settings.general.theme" />
                         <span className="theme-preview">
-                            <i className={themeUtils.getThemeIcon(settings.theme)}></i>
+                            <i
+                                className={themeUtils.getThemeIcon(
+                                    settings.theme
+                                )}></i>
                         </span>
                     </label>
                     <select
@@ -168,21 +222,21 @@ class Settings extends Component {
                             this.handleSettingChange("theme", e.target.value)
                         }
                         className="setting-select">
-                        {themeUtils.getAvailableThemes().map(theme => (
+                        {themeUtils.getAvailableThemes().map((theme) => (
                             <option key={theme.value} value={theme.value}>
                                 {theme.label}
                             </option>
                         ))}
                     </select>
                     <small className="setting-description">
-                        Choose your preferred theme. Auto will match your system settings.
+                        <FormattedMessage id="settings.general.theme-description" />
                     </small>
                 </div>
 
                 <div className="setting-group">
                     <label className="setting-label">
                         <i className="fas fa-clock"></i>
-                        Timezone
+                        <FormattedMessage id="settings.general.timezone" />
                     </label>
                     <select
                         value={settings.timezone}
@@ -200,7 +254,7 @@ class Settings extends Component {
                 <div className="setting-group">
                     <label className="setting-label">
                         <i className="fas fa-bell"></i>
-                        Enable Notifications
+                        <FormattedMessage id="settings.general.enable-notifications" />
                     </label>
                     <div className="toggle-switch">
                         <input
@@ -223,7 +277,7 @@ class Settings extends Component {
                 <div className="setting-group">
                     <label className="setting-label">
                         <i className="fas fa-save"></i>
-                        Auto Save
+                        <FormattedMessage id="settings.general.auto-save" />
                     </label>
                     <div className="toggle-switch">
                         <input
@@ -245,206 +299,19 @@ class Settings extends Component {
             </div>
         );
     };
-
-    renderUAVSettings = () => {
-        const { settings } = this.state;
-
-        return (
-            <div className="settings-section">
-                <h3>UAV Settings</h3>
-
-                <div className="setting-group">
-                    <label className="setting-label">
-                        <i className="fas fa-stopwatch"></i>
-                        Max Flight Time (minutes)
-                    </label>
-                    <input
-                        type="number"
-                        value={settings.maxFlightTime}
-                        onChange={(e) =>
-                            this.handleSettingChange(
-                                "maxFlightTime",
-                                parseInt(e.target.value)
-                            )
-                        }
-                        className="setting-input"
-                        min="1"
-                        max="120"
-                    />
-                </div>
-
-                <div className="setting-group">
-                    <label className="setting-label">
-                        <i className="fas fa-tachometer-alt"></i>
-                        Max Speed (km/h)
-                    </label>
-                    <input
-                        type="number"
-                        value={settings.maxSpeed}
-                        onChange={(e) =>
-                            this.handleSettingChange(
-                                "maxSpeed",
-                                parseInt(e.target.value)
-                            )
-                        }
-                        className="setting-input"
-                        min="1"
-                        max="200"
-                    />
-                </div>
-
-                <div className="setting-group">
-                    <label className="setting-label">
-                        <i className="fas fa-mountain"></i>
-                        Max Altitude (meters)
-                    </label>
-                    <input
-                        type="number"
-                        value={settings.maxAltitude}
-                        onChange={(e) =>
-                            this.handleSettingChange(
-                                "maxAltitude",
-                                parseInt(e.target.value)
-                            )
-                        }
-                        className="setting-input"
-                        min="1"
-                        max="500"
-                    />
-                </div>
-
-                <div className="setting-group">
-                    <label className="setting-label">
-                        <i className="fas fa-battery-quarter"></i>
-                        Low Battery Warning (%)
-                    </label>
-                    <input
-                        type="number"
-                        value={settings.lowBatteryWarning}
-                        onChange={(e) =>
-                            this.handleSettingChange(
-                                "lowBatteryWarning",
-                                parseInt(e.target.value)
-                            )
-                        }
-                        className="setting-input"
-                        min="5"
-                        max="50"
-                    />
-                </div>
-            </div>
-        );
-    };
-
-    renderMapSettings = () => {
-        const { settings } = this.state;
-
-        return (
-            <div className="settings-section">
-                <h3>Map Settings</h3>
-
-                <div className="setting-group">
-                    <label className="setting-label">
-                        <i className="fas fa-map"></i>
-                        Map Provider
-                    </label>
-                    <select
-                        value={settings.mapProvider}
-                        onChange={(e) =>
-                            this.handleSettingChange(
-                                "mapProvider",
-                                e.target.value
-                            )
-                        }
-                        className="setting-select">
-                        <option value="openstreetmap">OpenStreetMap</option>
-                        <option value="google">Google Maps</option>
-                        <option value="mapbox">Mapbox</option>
-                        <option value="bing">Bing Maps</option>
-                    </select>
-                </div>
-
-                <div className="setting-group">
-                    <label className="setting-label">
-                        <i className="fas fa-search-plus"></i>
-                        Default Zoom Level
-                    </label>
-                    <input
-                        type="range"
-                        value={settings.defaultZoom}
-                        onChange={(e) =>
-                            this.handleSettingChange(
-                                "defaultZoom",
-                                parseInt(e.target.value)
-                            )
-                        }
-                        className="setting-range"
-                        min="1"
-                        max="20"
-                    />
-                    <span className="range-value">{settings.defaultZoom}</span>
-                </div>
-
-                <div className="setting-group">
-                    <label className="setting-label">
-                        <i className="fas fa-traffic-light"></i>
-                        Show Traffic
-                    </label>
-                    <div className="toggle-switch">
-                        <input
-                            type="checkbox"
-                            id="showTraffic"
-                            checked={settings.showTraffic}
-                            onChange={(e) =>
-                                this.handleSettingChange(
-                                    "showTraffic",
-                                    e.target.checked
-                                )
-                            }
-                        />
-                        <label
-                            htmlFor="showTraffic"
-                            className="toggle-label"></label>
-                    </div>
-                </div>
-
-                <div className="setting-group">
-                    <label className="setting-label">
-                        <i className="fas fa-cloud-sun"></i>
-                        Show Weather
-                    </label>
-                    <div className="toggle-switch">
-                        <input
-                            type="checkbox"
-                            id="showWeather"
-                            checked={settings.showWeather}
-                            onChange={(e) =>
-                                this.handleSettingChange(
-                                    "showWeather",
-                                    e.target.checked
-                                )
-                            }
-                        />
-                        <label
-                            htmlFor="showWeather"
-                            className="toggle-label"></label>
-                    </div>
-                </div>
-            </div>
-        );
-    };
-
     renderPrivacySettings = () => {
         const { settings } = this.state;
 
         return (
             <div className="settings-section">
-                <h3>Privacy & Security</h3>
+                <h3>
+                    <FormattedMessage id="settings.privacy.title" />
+                </h3>
 
                 <div className="setting-group">
                     <label className="setting-label">
                         <i className="fas fa-share-alt"></i>
-                        Data Sharing
+                        <FormattedMessage id="settings.privacy.data-sharing" />
                     </label>
                     <div className="toggle-switch">
                         <input
@@ -463,14 +330,14 @@ class Settings extends Component {
                             className="toggle-label"></label>
                     </div>
                     <small className="setting-description">
-                        Share anonymous usage data to help improve the service
+                        <FormattedMessage id="settings.privacy.data-sharing-description" />
                     </small>
                 </div>
 
                 <div className="setting-group">
                     <label className="setting-label">
                         <i className="fas fa-chart-line"></i>
-                        Analytics Tracking
+                        <FormattedMessage id="settings.privacy.analytics-tracking" />
                     </label>
                     <div className="toggle-switch">
                         <input
@@ -489,15 +356,14 @@ class Settings extends Component {
                             className="toggle-label"></label>
                     </div>
                     <small className="setting-description">
-                        Enable analytics to help us understand how you use the
-                        app
+                        <FormattedMessage id="settings.privacy.analytics-tracking-description" />
                     </small>
                 </div>
 
                 <div className="setting-group">
                     <label className="setting-label">
                         <i className="fas fa-bug"></i>
-                        Crash Reporting
+                        <FormattedMessage id="settings.privacy.crash-reporting" />
                     </label>
                     <div className="toggle-switch">
                         <input
@@ -516,24 +382,25 @@ class Settings extends Component {
                             className="toggle-label"></label>
                     </div>
                     <small className="setting-description">
-                        Automatically send crash reports to help us fix issues
+                        <FormattedMessage id="settings.privacy.crash-reporting-description" />
                     </small>
                 </div>
             </div>
         );
     };
-
     renderAdvancedSettings = () => {
         const { settings } = this.state;
 
         return (
             <div className="settings-section">
-                <h3>Advanced Settings</h3>
+                <h3>
+                    <FormattedMessage id="settings.advanced.title" />
+                </h3>
 
                 <div className="setting-group">
                     <label className="setting-label">
                         <i className="fas fa-code"></i>
-                        Debug Mode
+                        <FormattedMessage id="settings.advanced.debug-mode" />
                     </label>
                     <div className="toggle-switch">
                         <input
@@ -552,14 +419,14 @@ class Settings extends Component {
                             className="toggle-label"></label>
                     </div>
                     <small className="setting-description">
-                        Enable debug mode for development purposes
+                        <FormattedMessage id="settings.advanced.debug-mode-description" />
                     </small>
                 </div>
 
                 <div className="setting-group">
                     <label className="setting-label">
                         <i className="fas fa-list"></i>
-                        Log Level
+                        <FormattedMessage id="settings.advanced.debug-mode-description" />
                     </label>
                     <select
                         value={settings.logLevel}
@@ -577,7 +444,7 @@ class Settings extends Component {
                 <div className="setting-group">
                     <label className="setting-label">
                         <i className="fas fa-hdd"></i>
-                        Cache Size (MB)
+                        <FormattedMessage id="settings.advanced.cache-size" />
                     </label>
                     <input
                         type="number"
@@ -597,7 +464,7 @@ class Settings extends Component {
                 <div className="setting-group">
                     <label className="setting-label">
                         <i className="fas fa-sync-alt"></i>
-                        Auto Update
+                        <FormattedMessage id="settings.advanced.auto-update" />
                     </label>
                     <div className="toggle-switch">
                         <input
@@ -621,33 +488,45 @@ class Settings extends Component {
     };
 
     render() {
-        const { activeTab, settings } = this.state;
+        const { activeTab, settings, currentTheme } = this.state;
 
         return (
-            <div className="settings-container">
+            <div className={`settings-container`}>
                 <div className="settings-header">
                     <div className="header-content">
                         <h1>
                             <i className="fas fa-cog"></i>
-                            Settings
+                            <FormattedMessage id="settings.title" />
                         </h1>
-                        <p>Customize your UAV management experience</p>
+                        <p>
+                            <FormattedMessage id="settings.text-notice" />
+                        </p>
                     </div>
                     <div className="header-actions">
-                        <button 
+                        {/* Test Theme Button */}
+
+                        <button
                             className="theme-toggle-btn"
                             onClick={() => {
                                 const newTheme = themeUtils.toggleTheme();
-                                this.setState(prevState => ({
+                                // Apply theme with our method
+                                this.applyThemeToDocument(newTheme);
+
+                                this.setState((prevState) => ({
+                                    currentTheme: newTheme,
                                     settings: {
                                         ...prevState.settings,
-                                        theme: newTheme
-                                    }
+                                        theme: newTheme,
+                                    },
                                 }));
                             }}
-                            title={`Switch to ${settings.theme === 'light' ? 'dark' : 'light'} theme`}
-                        >
-                            <i className={themeUtils.getThemeIcon(settings.theme)}></i>
+                            title={`Switch to ${
+                                settings.theme === "light" ? "dark" : "light"
+                            } theme`}>
+                            <i
+                                className={themeUtils.getThemeIcon(
+                                    settings.theme
+                                )}></i>
                         </button>
                     </div>
                 </div>
@@ -661,23 +540,7 @@ class Settings extends Component {
                                 }`}
                                 onClick={() => this.handleTabChange("general")}>
                                 <i className="fas fa-sliders-h"></i>
-                                General
-                            </button>
-                            <button
-                                className={`tab-button ${
-                                    activeTab === "uav" ? "active" : ""
-                                }`}
-                                onClick={() => this.handleTabChange("uav")}>
-                                <i className="fas fa-drone"></i>
-                                UAV
-                            </button>
-                            <button
-                                className={`tab-button ${
-                                    activeTab === "map" ? "active" : ""
-                                }`}
-                                onClick={() => this.handleTabChange("map")}>
-                                <i className="fas fa-map"></i>
-                                Map
+                                <FormattedMessage id="settings.general-sidebar" />
                             </button>
                             <button
                                 className={`tab-button ${
@@ -685,7 +548,7 @@ class Settings extends Component {
                                 }`}
                                 onClick={() => this.handleTabChange("privacy")}>
                                 <i className="fas fa-shield-alt"></i>
-                                Privacy
+                                <FormattedMessage id="settings.privacy-sidebar" />
                             </button>
                             <button
                                 className={`tab-button ${
@@ -695,7 +558,7 @@ class Settings extends Component {
                                     this.handleTabChange("advanced")
                                 }>
                                 <i className="fas fa-code"></i>
-                                Advanced
+                                <FormattedMessage id="settings.advanced-sidebar" />
                             </button>
                         </div>
                     </div>
@@ -703,8 +566,6 @@ class Settings extends Component {
                     <div className="settings-main">
                         {activeTab === "general" &&
                             this.renderGeneralSettings()}
-                        {activeTab === "uav" && this.renderUAVSettings()}
-                        {activeTab === "map" && this.renderMapSettings()}
                         {activeTab === "privacy" &&
                             this.renderPrivacySettings()}
                         {activeTab === "advanced" &&
@@ -715,11 +576,11 @@ class Settings extends Component {
                 <div className="settings-footer">
                     <button className="btn-reset" onClick={this.handleReset}>
                         <i className="fas fa-undo"></i>
-                        Reset to Default
+                        <FormattedMessage id="settings.reset-to-defaults" />
                     </button>
                     <button className="btn-save" onClick={this.handleSave}>
                         <i className="fas fa-save"></i>
-                        Save Settings
+                        <FormattedMessage id="settings.save-changes" />
                     </button>
                 </div>
             </div>

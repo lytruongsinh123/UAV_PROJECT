@@ -173,10 +173,10 @@
     transition: all 0.3s ease;
 }
 
-.stat-number {
+.dashboard-stat-number {
     font-size: 24px;
     font-weight: 700;
-    color: var(--text-primary);
+    color: var(--accent-primary);
     margin-bottom: 4px;
     transition: color 0.3s ease;
 }

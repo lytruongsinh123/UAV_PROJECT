@@ -29,10 +29,227 @@
         "not-found": "No Data Found"
     },
     "flight-path": {
+        "loading-map": "Loading map...",
         "title": "Flight Path",
         "start-point": "Start Point   ",
         "end-point": "End Point",
         "from": "From",
         "to": "To"
+    },
+    "sidebar": {
+        "home": "Home",
+        "dashboard": "Dashboard",
+        "settings": "Settings",
+        "notifications": "Notifications",
+        "not-notifications": "No notifications yet",
+        "test-notifications": "Test Notifications",
+        "help": "Help",
+        "dark-mode": "Dark Mode",
+        "light-mode": "Light Mode",
+        "feedback": "Feedback",
+        "logout": "Logout"
+    },
+    "live-tracking": {
+        "title": "Live Tracking",
+        "uavs-active": "Active UAVs",
+        "active": "Active",
+        "track": "Track",
+        "card": {
+            "live-tracking": "Live Tracking",
+            "back": "Back",
+            "status": "Status"
+        }
+    },
+    "modal": {
+        "all-uavs": "All UAVs",
+        "active-uavs": "Active UAVs",
+        "completed-uavs": "Completed UAVs",
+        "name-uav": "Name:",
+        "endpoint": "End Point:",
+        "start-point": "Start Point:",
+        "end-point": "End Point:",
+        "speed": "Speed:",
+        "height-fly": "Height Fly:",
+        "altitude": "Altitude:",
+        "active": "Active",
+        "edit": "Edit",
+        "delete": "Delete",
+        "maintenance": "Maintenance",
+        "drone-is-active": "UAV is Active",
+        "drone-is-maintenance": "UAV is Under Maintenance",
+        "completed": "Completed",
+        "register-new-uav": "Register New UAV",
+        "close": "Close"
+    },
+    "settings": {
+        "title": "Settings",
+        "text-notice": "Customize your UAV management experience.",
+        "general-sidebar": "General",
+        "privacy-sidebar": "Privacy",
+        "advanced-sidebar": "Advanced",
+        "reset-to-defaults": "Reset to Defaults",
+        "save-changes": "Save Changes",
+        "general": {
+            "title": "General Settings",
+            "language": "Language",
+            "theme": "Theme",
+            "theme-description": "Choose your preferred theme. Auto will match your system settings.",
+            "timezone": "Timezone",
+            "enable-notifications": "Enable Notifications",
+            "auto-save": "Auto Save"
+        },
+        "privacy": {
+            "title": "Privacy and Security",
+            "data-sharing": "Data Sharing",
+            "data-sharing-description": "Share anonymous usage data to help improve the service.",
+            "analytics-tracking": "Analytics Tracking",
+            "analytics-tracking-description": "Allow analytics to help us understand how you use the app",
+            "crash-reporting": "Crash Reporting",
+            "crash-reporting-description": "Automatically send crash reports to help us fix issues"
+        },
+        "advanced": {
+            "title": "Advanced Settings",
+            "debug-mode": "Debug Mode",
+            "debug-mode-description": "Enable debug mode for development purposes",
+            "log-level": "Log Level",
+            "cache-size": "Cache Size (MB)",
+            "auto-update": "Auto Update"
+        }
+    },
+    "help": {
+        "title": "Help & Support",
+        "subtitle": "Find answers to your questions and learn how to use the UAV Registry System",
+        "search-placeholder": "Search for help...",
+        "quick-navigation": "Quick Navigation",
+        "quick-links": "Quick Links",
+        "getting-started": "Getting Started",
+        "user-guide": "User Guide",
+        "faq": "FAQ",
+        "contact-support": "Contact Support",
+        "register-uav": "Register UAV",
+        "live-tracking": "Live Tracking",
+        "dashboard": "Dashboard",
+        "steps": {
+            "step1": {
+                "title": "Create Your Account",
+                "description": "Sign up for an account with your email and create a secure password."
+            },
+            "step2": {
+                "title": "Register Your UAV",
+                "description": "Add your UAV to the system with all required specifications and documentation."
+            },
+            "step3": {
+                "title": "Plan Flight Paths",
+                "description": "Create and manage flight routes for your UAV operations."
+            },
+            "step4": {
+                "title": "Monitor Operations",
+                "description": "Use real-time tracking and dashboard to monitor your UAV activities."
+            }
+        },
+        "guide": {
+            "uav-management": {
+                "title": "UAV Management",
+                "item1": "How to register a new UAV",
+                "item2": "Updating UAV information",
+                "item3": "Managing UAV status",
+                "item4": "Deleting UAV records"
+            },
+            "flight-planning": {
+                "title": "Flight Planning",
+                "item1": "Creating flight paths",
+                "item2": "Setting waypoints",
+                "item3": "Flight safety checks",
+                "item4": "Weather considerations"
+            },
+            "monitoring": {
+                "title": "Monitoring & Analytics",
+                "item1": "Real-time tracking",
+                "item2": "Flight data analysis",
+                "item3": "Performance metrics",
+                "item4": "Report generation"
+            }
+        },
+        "faq-items": {
+            "q1": "How do I register a new UAV?",
+            "a1": "To register a new UAV, go to the Registration page, fill out the required information including drone ID, specifications, and owner details, then submit the form.",
+            "q2": "What are the different UAV statuses?",
+            "a2": "UAV statuses include: Active (currently in use), Inactive (not in use), Under Maintenance (being serviced), and Completed (mission finished).",
+            "q3": "How can I track my UAV in real-time?",
+            "a3": "Use the Live Tracking feature from the main navigation. This shows real-time location, altitude, speed, and battery status of your active UAVs.",
+            "q4": "Can I export flight data?",
+            "a4": "Yes, you can export flight data from the Dashboard. Click on 'Export Data' button to download flight logs, statistics, and reports in various formats.",
+            "q5": "How do I update UAV information?",
+            "a5": "Go to the UAV management section, find your UAV in the list, and click the edit button. You can update specifications, status, and other details."
+        },
+        "contact": {
+            "email-support": "Email Support",
+            "email-description": "Get help via email within 24 hours",
+            "send-email": "Send Email",
+            "phone-support": "Phone Support",
+            "phone-description": "Talk to our support team directly",
+            "call-now": "Call Now",
+            "live-chat": "Live Chat",
+            "chat-description": "Chat with support in real-time",
+            "start-chat": "Start Chat",
+            "support-hours": "Support Hours",
+            "monday-friday": "Monday - Friday",
+            "saturday": "Saturday",
+            "sunday": "Sunday",
+            "closed": "Closed"
+        }
+    },
+    "feedback": {
+        "title": "Feedback & Reviews",
+        "subtitle": "Share your thoughts to help us improve the UAV Registration System",
+        "average-rating": "Average Rating",
+        "total-feedback": "Total Feedback",
+        "personal-info": "Personal Information",
+        "feedback-details": "Feedback Details",
+        "name": "Full Name",
+        "name-placeholder": "Enter your full name",
+        "email": "Email",
+        "email-placeholder": "Enter your email address",
+        "category-label": "Category",
+        "rating": "Rating",
+        "subject": "Subject",
+        "subject-placeholder": "Brief summary of your feedback",
+        "message": "Message",
+        "message-placeholder": "Describe your feedback in detail...",
+        "submit": "Submit Feedback",
+        "submitting": "Submitting...",
+        "reset": "Reset",
+        "category": {
+            "general": "General Feedback",
+            "bug-report": "Bug Report",
+            "feature-request": "Feature Request",
+            "ui-ux": "UI/UX Experience",
+            "performance": "Performance"
+        },
+        "success": {
+            "title": "Sent Successfully!",
+            "message": "Thank you for your feedback. We will review and respond as soon as possible."
+        },
+        "error": {
+            "title": "Send Failed!",
+            "message": "An error occurred while sending feedback. Please try again later."
+        },
+        "validation": {
+            "name-required": "Full name is required",
+            "email-required": "Email is required",
+            "email-invalid": "Invalid email format",
+            "subject-required": "Subject is required",
+            "message-required": "Message is required",
+            "message-too-short": "Message must be at least 10 characters"
+        },
+        "tips": {
+            "title": "Helpful Tips",
+            "tip1": "Describe your issue or suggestion in detail",
+            "tip2": "Include steps to reproduce bugs if applicable",
+            "tip3": "Attach screenshots if necessary",
+            "tip4": "Provide browser/device information"
+        },
+        "alternative-contact": "Alternative Contact",
+        "alternative-description": "You can also contact us directly:"
     }
 }

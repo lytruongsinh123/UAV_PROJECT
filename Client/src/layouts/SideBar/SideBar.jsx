@@ -25,10 +25,10 @@ class SlideBar extends Component {
             user: user.data,
         });
 
-        // 🔔 Lắng nghe thông báo mới
+        //  Lắng nghe thông báo mới
         window.addEventListener("showNotification", this.handleNewNotification);
 
-        // 🎨 Lắng nghe thay đổi theme
+        //  Lắng nghe thay đổi theme
         themeUtils.addListener(this.handleThemeChange);
     };
 
@@ -43,18 +43,16 @@ class SlideBar extends Component {
         themeUtils.removeListener(this.handleThemeChange);
     }
 
-    // 🎨 Xử lý thay đổi theme
+    //  Xử lý thay đổi theme
     handleThemeChange = (theme) => {
         this.setState({ currentTheme: theme });
     };
-
-    // 🎨 Toggle theme
     toggleTheme = () => {
         const newTheme = themeUtils.toggleTheme();
         this.setState({ currentTheme: newTheme });
     };
 
-    // 🔔 Xử lý thông báo mới
+    //  Xử lý thông báo mới
     handleNewNotification = (event) => {
         const notification = {
             ...event.detail,
@@ -74,20 +72,20 @@ class SlideBar extends Component {
         }
     };
 
-    // 🔔 Kiểm tra xem thông báo có nên hiển thị trong sidebar không
+    //  Kiểm tra xem thông báo có nên hiển thị trong sidebar không
     shouldShowInSidebar = (notification) => {
         const sidebarTypes = ["status-change", "success", "error", "warning"];
         return sidebarTypes.includes(notification.type);
     };
 
-    // 🔔 Toggle notification panel
+    //  Toggle notification panel
     toggleNotificationPanel = () => {
         this.setState((prevState) => ({
             isNotificationPanelOpen: !prevState.isNotificationPanelOpen,
         }));
     };
 
-    // 🔔 Đánh dấu tất cả thông báo đã đọc
+    //  Đánh dấu tất cả thông báo đã đọc
     markAllAsRead = () => {
         this.setState((prevState) => ({
             notifications: prevState.notifications.map((n) => ({
@@ -98,7 +96,7 @@ class SlideBar extends Component {
         }));
     };
 
-    // 🔔 Xóa thông báo
+    //  Xóa thông báo
     removeNotification = (id) => {
         this.setState((prevState) => ({
             notifications: prevState.notifications.filter((n) => n.id !== id),
@@ -110,7 +108,7 @@ class SlideBar extends Component {
         }));
     };
 
-    // 🔔 Định dạng thời gian
+    //  Định dạng thời gian
     formatNotificationTime = (timestamp) => {
         const now = new Date();
         const notificationTime = new Date(timestamp);
@@ -125,7 +123,7 @@ class SlideBar extends Component {
         return `${Math.floor(diffInMinutes / 1440)}d ago`;
     };
 
-    // 🔔 Lấy icon cho thông báo
+    //  Lấy icon cho thông báo
     getNotificationIcon = (type) => {
         switch (type) {
             case "success":
@@ -158,7 +156,7 @@ class SlideBar extends Component {
         }
     };
 
-    // 🧪 Test function để tạo thông báo demo
+    //  Test function để tạo thông báo demo
     testNotifications = () => {
         // Test notification mới
         notificationService.statusChange("UAV001", "Pending", "Active");
@@ -223,19 +221,37 @@ class SlideBar extends Component {
                         className="home"
                         onClick={() => this.handleNavigate("homeuav")}>
                         <i className="fas fa-home"></i>
-                        {isOpenSidebar ? <span>Home</span> : ""}
+                        {isOpenSidebar ? (
+                            <span>
+                                <FormattedMessage id="sidebar.home" />
+                            </span>
+                        ) : (
+                            ""
+                        )}
                     </div>
                     <div
                         className="dsashboard"
                         onClick={() => this.handleNavigate("dashboard")}>
                         <i className="fas fa-tachometer-alt"></i>
-                        {isOpenSidebar ? <span>Dashboard</span> : ""}
+                        {isOpenSidebar ? (
+                            <span>
+                                <FormattedMessage id="sidebar.dashboard" />
+                            </span>
+                        ) : (
+                            ""
+                        )}
                     </div>
                     <div
                         className="settings"
                         onClick={() => this.handleNavigate("settings")}>
                         <i className="fas fa-cog"></i>
-                        {isOpenSidebar ? <span>Settings</span> : ""}
+                        {isOpenSidebar ? (
+                            <span>
+                                <FormattedMessage id="sidebar.settings" />
+                            </span>
+                        ) : (
+                            ""
+                        )}
                     </div>
 
                     {/* 🧪 Test button for notifications - Remove in production */}
@@ -250,7 +266,13 @@ class SlideBar extends Component {
                             borderTop: "1px solid rgba(255,255,255,0.1)",
                         }}>
                         <i className="fas fa-vial"></i>
-                        {isOpenSidebar ? <span>Test Notifications</span> : ""}
+                        {isOpenSidebar ? (
+                            <span>
+                                <FormattedMessage id="sidebar.test-notifications" />
+                            </span>
+                        ) : (
+                            ""
+                        )}
                     </div>
                     <div
                         className="notifications"
@@ -263,14 +285,22 @@ class SlideBar extends Component {
                                     : this.state.unreadCount}
                             </span>
                         )}
-                        {isOpenSidebar ? <span>Notifications</span> : ""}
+                        {isOpenSidebar ? (
+                            <span>
+                                <FormattedMessage id="sidebar.notifications" />
+                            </span>
+                        ) : (
+                            ""
+                        )}
                     </div>
 
                     {/* 🔔 Notification Panel */}
                     {this.state.isNotificationPanelOpen && (
                         <div className="notification-panel">
                             <div className="notification-header">
-                                <h4>Notifications</h4>
+                                <h4>
+                                    <FormattedMessage id="sidebar.notifications" />
+                                </h4>
                                 <div className="notification-actions">
                                     {this.state.unreadCount > 0 && (
                                         <button
@@ -334,7 +364,9 @@ class SlideBar extends Component {
                                 ) : (
                                     <div className="no-notifications">
                                         <i className="fas fa-bell-slash"></i>
-                                        <p>No notifications yet</p>
+                                        <p>
+                                            <FormattedMessage id="sidebar.not-notifications" />
+                                        </p>
                                     </div>
                                 )}
                             </div>
@@ -349,23 +381,25 @@ class SlideBar extends Component {
                             )}></i>
                         <span className="title">
                             {this.state.currentTheme === "light"
-                                ? "Dark Mode"
+                                ? <FormattedMessage id="sidebar.light-mode" />
                                 : this.state.currentTheme === "dark"
-                                ? "Light Mode"
-                                : "Auto Mode"}
+                                ? <FormattedMessage id="sidebar.dark-mode" />
+                                : <FormattedMessage id="sidebar.auto-mode" />}
                         </span>
                     </div>
-                    <div className="help">
+                    <div className="help" onClick={() => this.handleNavigate("help")}>
                         <i className="fas fa-question-circle"></i>
-                        <span className="title">Help</span>
+                        <span className="title"><FormattedMessage id="sidebar.help" /></span>
                     </div>
-                    <div className="feedback">
+                    <div className="feedback" onClick={() => this.handleNavigate("feedback")}>
                         <i className="fas fa-comment-dots"></i>
-                        <span className="title">Feedback</span>
+                        <span className="title"><FormattedMessage id="sidebar.feedback" /></span>
                     </div>
-                    <div className="logout" onClick={this.props.handleLogoutRedux}>
+                    <div
+                        className="logout"
+                        onClick={this.props.handleLogoutRedux}>
                         <i className="fas fa-sign-out-alt"></i>
-                        <span className="title">Logout</span>
+                        <span className="title"><FormattedMessage id="sidebar.logout" /></span>
                     </div>
                 </div>
             </div>

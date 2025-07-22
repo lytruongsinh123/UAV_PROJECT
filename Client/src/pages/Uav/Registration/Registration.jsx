@@ -6,6 +6,7 @@ import * as actions from "../../../store/actions";
 import { crud_actions } from "../../../utils/constants.js";
 import { getUavsByDroneId } from "../../../service/uavRegisterService";
 import emitter from "../../../utils/eventBus.js";
+import themeUtils from "../../../utils/ThemeUtils";
 import "./Registration.css";
 
 class RegisterUav extends Component {
@@ -21,6 +22,7 @@ class RegisterUav extends Component {
             heightFly: null,
             speed: null,
             status: "pending",
+            currentTheme: themeUtils.getCurrentTheme(),
         };
     }
 
@@ -47,11 +49,46 @@ class RegisterUav extends Component {
     };
 
     async componentDidMount() {
+        // Initialize theme detection
+        themeUtils.init();
+
+        // Add theme change listener
+        this.handleThemeChange = () => {
+            const newTheme = themeUtils.getCurrentTheme();
+            if (newTheme !== this.state.currentTheme) {
+                this.setState({ currentTheme: newTheme });
+            }
+        };
+
+        themeUtils.addListener(this.handleThemeChange);
+
+        // Also listen for manual class changes on document
+        this.observer = new MutationObserver(() => {
+            this.handleThemeChange();
+        });
+
+        this.observer.observe(document.documentElement, {
+            attributes: true,
+            attributeFilter: ["class", "data-theme"],
+        });
+
         this.setState({
             ownerId: this.props.userInfo.id,
         });
         if (this.props.actions === crud_actions.EDIT) {
             emitter.on("sendId", (id) => this.handleReceiveId(id));
+        }
+    }
+
+    componentWillUnmount() {
+        // Remove theme listener
+        if (themeUtils.removeListener) {
+            themeUtils.removeListener(this.handleThemeChange);
+        }
+
+        // Disconnect mutation observer
+        if (this.observer) {
+            this.observer.disconnect();
         }
     }
     handleInputChange = (event) => {
@@ -146,11 +183,14 @@ class RegisterUav extends Component {
             heightFly,
             speed,
             status,
+            currentTheme,
         } = this.state;
         const { userInfo } = this.props;
         console.log("State in render:", this.state);
         return (
-            <div className="registration-uav-container">
+            <div
+                className={`registration-uav-container ${currentTheme}`}
+                data-theme={currentTheme}>
                 <div className="registration-header">
                     <div className="header-icon">
                         <i className="fas fa-helicopter"></i>

@@ -86,7 +86,9 @@ class CardFlightPath extends Component {
             return (
                 <div className="flightpath-card loading-card">
                     <i className="fas fa-spinner fa-spin fa-2x"></i>
-                    <span>Đang tải bản đồ...</span>
+                    <span>
+                        <FormattedMessage id="flight-path.loading-map" />
+                    </span>
                 </div>
             );
         }
@@ -98,12 +100,16 @@ class CardFlightPath extends Component {
                         <i className="fas fa-route"></i>
                     </div>
                     <div className="flightpath-title">
-                        <h2>Flight Path</h2>
+                        <h2>
+                            <FormattedMessage id="flight-path.title" />
+                        </h2>
                         <span>
-                            <i className="fas fa-plane-departure"></i> Start:{" "}
+                            <i className="fas fa-plane-departure"></i>
+                            <FormattedMessage id="flight-path.start-point" />:{" "}
                             {this.props.position1}
                             {"  "}
-                            <i className="fas fa-plane-arrival"></i> End:{" "}
+                            <i className="fas fa-plane-arrival"></i>
+                            <FormattedMessage id="flight-path.end-point" />:{" "}
                             {this.props.position2}
                         </span>
                     </div>
@@ -112,7 +118,7 @@ class CardFlightPath extends Component {
                     <div className="info-item">
                         <i className="fas fa-map-marker-alt"></i>
                         <span>
-                            From:{" "}
+                            <FormattedMessage id="flight-path.from" />:{" "}
                             <b>
                                 {position1.lat.toFixed(4)},{" "}
                                 {position1.lng.toFixed(4)}
@@ -122,7 +128,7 @@ class CardFlightPath extends Component {
                     <div className="info-item">
                         <i className="fas fa-map-marker-alt"></i>
                         <span>
-                            To:{" "}
+                            <FormattedMessage id="flight-path.to" />:{" "}
                             <b>
                                 {position2.lat.toFixed(4)},{" "}
                                 {position2.lng.toFixed(4)}

@@ -109,7 +109,7 @@ class ModalUav extends Component {
                     statusUav.ACTIVE,
                     this.props.userInfo.id
                 );
-            }, 10000); // 10,000 ms = 10 giây
+            }, 10000000); 
         } catch (error) {
             let rollbackUavStates = { ...this.state.uavStates };
             rollbackUavStates[uav.droneId] = uav.status;
@@ -136,12 +136,22 @@ class ModalUav extends Component {
                 listUav = this.props.listUavCompleted;
             }
         }
-
+        
+        // "all-uavs": "Tất cả UAV",
+        // "active-uavs": "UAV đang hoạt động",
+        // "completed-uavs": "UAV đã hoàn thành",
         return (
             <Modal isOpen={this.props.isOpen} size="xl">
                 <ModalHeader toggle={this.props.toggleModal}>
                     <i className="fas fa-helicopter"></i>{" "}
-                    {isOpenTypeModal === "active" ? "Active UAVs" : "All UAVs"}
+                    
+                    {isOpenTypeModal === "all" ? (
+                        <FormattedMessage id="modal.all-uavs" />
+                    ) : isOpenTypeModal === "active" ? (
+                        <FormattedMessage id="modal.active-uavs" />
+                    ) : (
+                        <FormattedMessage id="modal.completed-uavs" />
+                    )}
                 </ModalHeader>
                 <ModalBody>
                     <div className="uav-list">
@@ -183,12 +193,13 @@ class ModalUav extends Component {
                         )}
                     </div>
                 </ModalBody>
+
                 <ModalFooter>
                     <Button color="primary" onClick={this.handleRegisterUAV}>
-                        <i className="fas fa-plus"></i> Register New UAV
+                        <i className="fas fa-plus"></i> <FormattedMessage id="modal.register-new-uav" />
                     </Button>
                     <Button color="secondary" onClick={this.props.toggleModal}>
-                        <i className="fas fa-times"></i> Close
+                        <i className="fas fa-times"></i> <FormattedMessage id="modal.close" />
                     </Button>
                 </ModalFooter>
             </Modal>

@@ -6,7 +6,7 @@ import LiveTrackingCard from "../../../components/LiveTrackingCard/LiveTrackingC
 import * as actions from "../../../store/actions/uavRegisterActions";
 import "./LiveTracking.css";
 
-class DefaultClass extends Component {
+class LiveTracking extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -19,7 +19,10 @@ class DefaultClass extends Component {
     componentDidMount = async () => {
         // Fetch UAVs có status S1 (đang hoạt động)
         if (this.props.userInfo && this.props.userInfo.id) {
-            await this.props.fetchUavsByStatusAndOwner("S1", this.props.userInfo.id);
+            await this.props.fetchUavsByStatusAndOwner(
+                "S1",
+                this.props.userInfo.id
+            );
         }
     };
 
@@ -51,9 +54,13 @@ class DefaultClass extends Component {
                         <button
                             onClick={this.handleBackToList}
                             className="back-btn">
-                            <i className="fas fa-arrow-left"></i> Quay lại
+                            <i className="fas fa-arrow-left"></i>
+                            <FormattedMessage id="live-tracking.card.back" />
                         </button>
-                        <h2>Live Tracking - {selectedUAV.droneName}</h2>
+                        <h2>
+                            <FormattedMessage id="live-tracking.card.live-tracking" />{" "}
+                            - {selectedUAV.droneName}
+                        </h2>
                     </div>
                     <LiveTrackingCard
                         uav={selectedUAV}
@@ -69,15 +76,15 @@ class DefaultClass extends Component {
                 <div className="dashboard-header">
                     <h1>
                         <i className="fas fa-satellite-dish"></i>
-                        Live Tracking Dashboard
+                        <FormattedMessage id="live-tracking.title" />
                     </h1>
                     <div className="stats">
                         <div className="stat-item">
-                            <span className="stat-number">
+                            <span className="tracking-stat-number">
                                 {activeUAVs.length}
                             </span>
                             <span className="stat-label">
-                                UAVs Đang Hoạt Động
+                                <FormattedMessage id="live-tracking.uavs-active" />
                             </span>
                         </div>
                     </div>
@@ -100,7 +107,9 @@ class DefaultClass extends Component {
                                     </div>
                                     <div className="uav-status">
                                         <span className="status-indicator active"></span>
-                                        <span>Hoạt động</span>
+                                        <span>
+                                            <FormattedMessage id="live-tracking.active" />
+                                        </span>
                                     </div>
                                 </div>
                                 <div className="uav-card-body">
@@ -141,7 +150,7 @@ class DefaultClass extends Component {
                                 <div className="uav-card-footer">
                                     <button className="track-btn">
                                         <i className="fas fa-eye"></i>
-                                        Theo dõi
+                                        <FormattedMessage id="live-tracking.track" />
                                     </button>
                                 </div>
                             </div>
@@ -184,5 +193,5 @@ const mapDispatchToProps = (dispatch) => {
 };
 
 export default withNavigate(
-    connect(mapStateToProps, mapDispatchToProps)(DefaultClass)
+    connect(mapStateToProps, mapDispatchToProps)(LiveTracking)
 );

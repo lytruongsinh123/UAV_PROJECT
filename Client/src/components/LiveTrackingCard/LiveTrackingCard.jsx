@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { FormattedMessage } from "react-intl";
 import { useNavigate } from "react-router-dom";
+import geocodeAddress from "../../utils/getCoordinate";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
@@ -23,8 +24,17 @@ class LiveTrackingCard extends Component {
     }
     componentDidMount = async () => {
         // Giả lập UAV di chuyển từ Hà Nội đến Hải Phòng
-        const start = { lat: 21.0285, lng: 105.8542 };
-        const end = { lat: 20.8449, lng: 106.6823 };
+        const raw1 = await geocodeAddress(this.props.position1);
+        const raw2 = await geocodeAddress(this.props.position2);
+        const start = { lat: raw1.lat, lng: raw1.lng };
+        const end = { lat: raw2.lat, lng: raw2.lng };
+        this.setState({
+            uavInfo: {
+                id: this.props.uav.droneId,
+                name: this.props.uav.droneName,
+                status: "Đang hoạt động",
+            }
+        })
         let step = 0;
         this.trackingInterval = setInterval(() => {
             if (!this.state.tracking) return;
@@ -58,7 +68,7 @@ class LiveTrackingCard extends Component {
                         <h2>{uavInfo.name}</h2>
                         <div>ID: {uavInfo.id}</div>
                         <div>
-                            Trạng thái:{" "}
+                            <FormattedMessage id="live-tracking.card.status" />:{" "}
                             <b
                                 className={
                                     tracking ? "map-tracking" : "map-completed"

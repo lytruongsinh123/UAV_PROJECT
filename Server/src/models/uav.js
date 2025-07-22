@@ -9,7 +9,6 @@ module.exports = (sequelize, DataTypes) => {
          */
         static associate(models) {
             // define association here
-           
         }
     }
     Uav.init(
@@ -19,6 +18,7 @@ module.exports = (sequelize, DataTypes) => {
             speedMax: DataTypes.INTEGER,
             hightMax: DataTypes.INTEGER,
             performance: DataTypes.STRING,
+            image: DataTypes.TEXT,
         },
         {
             sequelize,

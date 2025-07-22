@@ -322,7 +322,7 @@ class Dashboard extends Component {
                                 <i className="fas fa-plane"></i>
                             </div>
                             <div className="stat-content">
-                                <div className="stat-number">
+                                <div className="dashboard-stat-number">
                                     {this.state.countUavs}
                                 </div>
                                 <div className="stat-label">
@@ -338,7 +338,7 @@ class Dashboard extends Component {
                                 <i className="fas fa-route"></i>
                             </div>
                             <div className="stat-content">
-                                <div className="stat-number">
+                                <div className="dashboard-stat-number">
                                     {this.state.countFlightPaths}
                                 </div>
                                 <div className="stat-label">
@@ -354,7 +354,7 @@ class Dashboard extends Component {
                                 <i className="fas fa-map-marker-alt"></i>
                             </div>
                             <div className="stat-content">
-                                <div className="stat-number">
+                                <div className="dashboard-stat-number">
                                     {this.state.countActiveUavs}
                                 </div>
                                 <div className="stat-label">
@@ -370,7 +370,7 @@ class Dashboard extends Component {
                                 <i className="fas fa-clock"></i>
                             </div>
                             <div className="stat-content">
-                                <div className="stat-number">
+                                <div className="dashboard-stat-number">
                                     {this.state.sumTotalHours.toFixed(2)}
                                 </div>
                                 <div className="stat-label">

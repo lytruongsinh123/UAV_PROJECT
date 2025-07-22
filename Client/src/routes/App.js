@@ -23,6 +23,9 @@ import EditUser from "../containers/EditUser/EditUser";
 import Login from "../pages/User/Login/Login";
 import Notification from "../components/Notification/Notification";
 import Settings from "../components/Settings/Settings";
+import Feedback from "../containers/FeetBack/Feedback";
+import Help from "../containers/Help/Help";
+import CreateNewUav from "../pages/Uav/CreateNewUav/CreateNewUav";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 
 class App extends Component {
@@ -105,10 +108,25 @@ class App extends Component {
                                     Component={userIsAuthenticated(HomePage)}>
                                     <Route index element={<LiveTracking />} />
                                 </Route>
-                                 <Route
+                                <Route
                                     path={"/settings"}
                                     Component={userIsAuthenticated(HomePage)}>
                                     <Route index element={<Settings />} />
+                                </Route>
+                                <Route
+                                    path={"/help"}
+                                    Component={userIsAuthenticated(HomePage)}>
+                                    <Route index element={<Help />} />
+                                </Route>
+                                <Route
+                                    path={"/feedback"}
+                                    Component={userIsAuthenticated(HomePage)}>
+                                    <Route index element={<Feedback />} />
+                                </Route>
+                                <Route
+                                    path={"/create-uav"}
+                                    Component={userIsAuthenticated(HomePage)}>
+                                    <Route index element={<CreateNewUav />} />
                                 </Route>
                                 <Route
                                     path="/"

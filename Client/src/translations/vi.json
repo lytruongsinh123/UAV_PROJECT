@@ -29,10 +29,226 @@
         "not-found": "Không tìm thấy dữ liệu"
     },
     "flight-path": {
-        "titile": "Lộ trình bay",
+        "loading-map": "Đang tải bản đồ...",
+        "title": "Lộ trình bay",
         "start-point": "Điểm bắt đầu   ",
         "end-point": "Điểm kết thúc",
         "from": "Từ",
         "to": "Đến"
+    },
+    "sidebar": {
+        "home": "Trang chủ",
+        "dashboard": "Bảng điều khiển",
+        "settings": "Cài đặt",
+        "notifications": "Thông báo",
+        "not-notifications": "Chưa có thông báo nào",
+        "test-notifications": "Thông báo thử nghiệm",
+        "help": "Trợ giúp",
+        "dark-mode": "Chế độ tối",
+        "light-mode": "Chế độ sáng",
+        "feedback": "Phản hồi",
+        "logout": "Đăng xuất"
+    },
+    "live-tracking": {
+        "title": "Theo dõi trực tiếp",
+        "uavs-active": "UAV đang hoạt động",
+        "active": "Đang hoạt động",
+        "track": "Theo dõi",
+        "card": {
+            "live-tracking": "Theo dõi trực tiếp",
+            "back": "Quay lại",
+            "status": "Trạng thái"
+        }
+    },
+    "modal": {
+        "all-uavs": "Tất cả UAV",
+        "active-uavs": "UAV đang hoạt động",
+        "completed-uavs": "UAV đã hoàn thành",
+        "name-uav": "Tên UAV:",
+        "endpoint": "Điểm kết thúc:",
+        "start-point": "Điểm bắt đầu:",
+        "end-point": "Điểm kết thúc:",
+        "speed": "Tốc độ:",
+        "height-fly": "Độ cao:",
+        "active": "Hoạt động",
+        "edit": "Chỉnh sửa",
+        "delete": "Xóa",
+        "maintenance": "Bảo trì",
+        "drone-is-active": "UAV đang hoạt động",
+        "drone-is-maintenance": "UAV đang bảo trì",
+        "completed": "Đã hoàn thành",
+        "register-new-uav": "Đăng ký UAV mới",
+        "close": "Đóng"
+    },
+    "settings": {
+        "title": "Cài đặt",
+        "text-notice": "Tùy chỉnh trải nghiệm quản lý UAV của bạn.",
+        "general-sidebar": "Cài đặt chung",
+        "privacy-sidebar": "Riêng tư",
+        "advanced-sidebar": "Nâng cao",
+        "reset-to-defaults": "Đặt lại về mặc định",
+        "save-changes": "Lưu thay đổi",
+        "general": {
+            "title": "Cài đặt chung",
+            "language": "Ngôn ngữ",
+            "theme": "Chủ đề",
+            "theme-description": "Chọn chủ đề ưa thích của bạn. Tự động sẽ khớp với cài đặt hệ thống của bạn.",
+            "timezone": "Múi giờ",
+            "enable-notifications": "Bật thông báo",
+            "auto-save": "Lưu tự động"
+        },
+        "privacy": {
+            "title": "Quyền riêng tư và Bảo mật",
+            "data-sharing": "Chia sẻ dữ liệu",
+            "data-sharing-description": "Chia sẻ dữ liệu sử dụng ẩn danh để giúp cải thiện dịch vụ.",
+            "analytics-tracking": "Theo dõi phân tích",
+            "analytics-tracking-description": "Cho phép phân tích để giúp chúng tôi hiểu cách bạn sử dụng ứng dụng",
+            "crash-reporting-description": "Tự động gửi báo cáo sự cố để giúp chúng tôi khắc phục sự cố",
+            "crash-reporting": "Báo cáo sự cố"
+        },
+        "advanced": {
+            "title": "Cài đặt nâng cao",
+            "debug-mode": "Chế độ gỡ lỗi",
+            "debug-mode-description": "Bật chế độ gỡ lỗi cho mục đích phát triển",
+            "log-level": "Mức độ ghi log",
+            "cache-size": "Kích thước bộ nhớ đệm (MB)",
+            "auto-update": "Cập nhật tự động"
+        }
+    },
+    "help": {
+        "title": "Trợ giúp & Hỗ trợ",
+        "subtitle": "Tìm câu trả lời cho câu hỏi của bạn và học cách sử dụng Hệ thống Đăng ký UAV",
+        "search-placeholder": "Tìm kiếm trợ giúp...",
+        "quick-navigation": "Điều hướng nhanh",
+        "quick-links": "Liên kết nhanh",
+        "getting-started": "Bắt đầu",
+        "user-guide": "Hướng dẫn người dùng",
+        "faq": "Câu hỏi thường gặp",
+        "contact-support": "Liên hệ hỗ trợ",
+        "register-uav": "Đăng ký UAV",
+        "live-tracking": "Theo dõi trực tiếp",
+        "dashboard": "Bảng điều khiển",
+        "steps": {
+            "step1": {
+                "title": "Tạo tài khoản của bạn",
+                "description": "Đăng ký tài khoản bằng email và tạo mật khẩu an toàn."
+            },
+            "step2": {
+                "title": "Đăng ký UAV của bạn",
+                "description": "Thêm UAV của bạn vào hệ thống với tất cả thông số kỹ thuật và tài liệu cần thiết."
+            },
+            "step3": {
+                "title": "Lập kế hoạch đường bay",
+                "description": "Tạo và quản lý tuyến đường bay cho hoạt động UAV của bạn."
+            },
+            "step4": {
+                "title": "Giám sát hoạt động",
+                "description": "Sử dụng theo dõi thời gian thực và bảng điều khiển để giám sát hoạt động UAV của bạn."
+            }
+        },
+        "guide": {
+            "uav-management": {
+                "title": "Quản lý UAV",
+                "item1": "Cách đăng ký UAV mới",
+                "item2": "Cập nhật thông tin UAV",
+                "item3": "Quản lý trạng thái UAV",
+                "item4": "Xóa hồ sơ UAV"
+            },
+            "flight-planning": {
+                "title": "Lập kế hoạch bay",
+                "item1": "Tạo đường bay",
+                "item2": "Đặt điểm dẫn đường",
+                "item3": "Kiểm tra an toàn bay",
+                "item4": "Xem xét thời tiết"
+            },
+            "monitoring": {
+                "title": "Giám sát & Phân tích",
+                "item1": "Theo dõi thời gian thực",
+                "item2": "Phân tích dữ liệu bay",
+                "item3": "Chỉ số hiệu suất",
+                "item4": "Tạo báo cáo"
+            }
+        },
+        "faq-items": {
+            "q1": "Làm thế nào để đăng ký UAV mới?",
+            "a1": "Để đăng ký UAV mới, đi đến trang Đăng ký, điền thông tin cần thiết bao gồm ID drone, thông số kỹ thuật và chi tiết chủ sở hữu, sau đó gửi biểu mẫu.",
+            "q2": "Các trạng thái UAV khác nhau là gì?",
+            "a2": "Trạng thái UAV bao gồm: Hoạt động (đang sử dụng), Không hoạt động (không sử dụng), Đang bảo trì (đang được bảo dưỡng), và Hoàn thành (nhiệm vụ đã kết thúc).",
+            "q3": "Làm thế nào tôi có thể theo dõi UAV theo thời gian thực?",
+            "a3": "Sử dụng tính năng Theo dõi Trực tiếp từ menu điều hướng chính. Điều này hiển thị vị trí thời gian thực, độ cao, tốc độ và trạng thái pin của các UAV đang hoạt động.",
+            "q4": "Tôi có thể xuất dữ liệu bay không?",
+            "a4": "Có, bạn có thể xuất dữ liệu bay từ Bảng điều khiển. Nhấp vào nút 'Xuất dữ liệu' để tải xuống nhật ký bay, thống kê và báo cáo ở nhiều định dạng khác nhau.",
+            "q5": "Làm thế nào để cập nhật thông tin UAV?",
+            "a5": "Đi đến phần quản lý UAV, tìm UAV của bạn trong danh sách và nhấp vào nút chỉnh sửa. Bạn có thể cập nhật thông số kỹ thuật, trạng thái và các chi tiết khác."
+        },
+        "contact": {
+            "email-support": "Hỗ trợ Email",
+            "email-description": "Nhận trợ giúp qua email trong vòng 24 giờ",
+            "send-email": "Gửi Email",
+            "phone-support": "Hỗ trợ Điện thoại",
+            "phone-description": "Nói chuyện trực tiếp với đội ngũ hỗ trợ",
+            "call-now": "Gọi ngay",
+            "live-chat": "Chat Trực tiếp",
+            "chat-description": "Chat với hỗ trợ trong thời gian thực",
+            "start-chat": "Bắt đầu Chat",
+            "support-hours": "Giờ hỗ trợ",
+            "monday-friday": "Thứ Hai - Thứ Sáu",
+            "saturday": "Thứ Bảy",
+            "sunday": "Chủ Nhật",
+            "closed": "Đóng cửa"
+        }
+    },
+    "feedback": {
+        "title": "Phản hồi & Đánh giá",
+        "subtitle": "Chia sẻ ý kiến của bạn để giúp chúng tôi cải thiện Hệ thống Đăng ký UAV",
+        "average-rating": "Đánh giá trung bình",
+        "total-feedback": "Tổng phản hồi",
+        "personal-info": "Thông tin cá nhân",
+        "feedback-details": "Chi tiết phản hồi",
+        "name": "Họ tên",
+        "name-placeholder": "Nhập họ tên của bạn",
+        "email": "Email",
+        "email-placeholder": "Nhập địa chỉ email của bạn",
+        "category-label": "Danh mục",
+        "rating": "Đánh giá",
+        "subject": "Tiêu đề",
+        "subject-placeholder": "Tóm tắt ngắn gọn về phản hồi của bạn",
+        "message": "Tin nhắn",
+        "message-placeholder": "Mô tả chi tiết phản hồi của bạn...",
+        "submit": "Gửi phản hồi",
+        "submitting": "Đang gửi...",
+        "reset": "Đặt lại",
+        "category": {
+            "general": "Phản hồi chung",
+            "bug-report": "Báo cáo lỗi",
+            "feature-request": "Yêu cầu tính năng",
+            "ui-ux": "Giao diện/Trải nghiệm",
+            "performance": "Hiệu suất"
+        },
+        "success": {
+            "title": "Gửi thành công!",
+            "message": "Cảm ơn bạn đã gửi phản hồi. Chúng tôi sẽ xem xét và phản hồi sớm nhất có thể."
+        },
+        "error": {
+            "title": "Gửi thất bại!",
+            "message": "Đã xảy ra lỗi khi gửi phản hồi. Vui lòng thử lại sau."
+        },
+        "validation": {
+            "name-required": "Họ tên là bắt buộc",
+            "email-required": "Email là bắt buộc",
+            "email-invalid": "Định dạng email không hợp lệ",
+            "subject-required": "Tiêu đề là bắt buộc",
+            "message-required": "Tin nhắn là bắt buộc",
+            "message-too-short": "Tin nhắn phải có ít nhất 10 ký tự"
+        },
+        "tips": {
+            "title": "Gợi ý hữu ích",
+            "tip1": "Mô tả chi tiết vấn đề hoặc đề xuất của bạn",
+            "tip2": "Bao gồm các bước để tái tạo lỗi nếu có",
+            "tip3": "Đính kèm ảnh chụp màn hình nếu cần thiết",
+            "tip4": "Cung cấp thông tin về trình duyệt/thiết bị"
+        },
+        "alternative-contact": "Liên hệ khác",
+        "alternative-description": "Bạn cũng có thể liên hệ trực tiếp với chúng tôi:"
     }
 }

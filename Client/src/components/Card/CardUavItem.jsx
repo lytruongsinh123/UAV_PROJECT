@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { crud_actions } from "../../utils/constants";
+import { FormattedMessage } from "react-intl";
 import { connect } from "react-redux";
 import { statusUav } from "../../utils/constants";
 import "./CardUavItem.css"; // Import your CSS file
@@ -55,31 +56,41 @@ class CardUavItem extends Component {
                     <div className="uav-info">
                         <div className="info-item">
                             <i className="fas fa-tag"></i>
-                            <span className="label">Name:</span>
+                            <span className="label">
+                                <FormattedMessage id="modal.name-uav"/>
+                            </span>
                             <span className="value">{uav.droneName}</span>
                         </div>
 
                         <div className="info-item">
                             <i className="fas fa-map-marker-alt"></i>
-                            <span className="label">Start Point:</span>
+                            <span className="label">
+                                <FormattedMessage id="modal.start-point"/>
+                            </span>
                             <span className="value">{uav.startPoint}</span>
                         </div>
 
                         <div className="info-item">
                             <i className="fas fa-flag-checkered"></i>
-                            <span className="label">End Point:</span>
+                            <span className="label">
+                                <FormattedMessage id="modal.end-point"/>
+                            </span>
                             <span className="value">{uav.endPoint}</span>
                         </div>
 
                         <div className="info-item">
                             <i className="fas fa-arrows-alt-v"></i>
-                            <span className="label">Height:</span>
+                            <span className="label">
+                                <FormattedMessage id="modal.height-fly"/>
+                            </span>
                             <span className="value">{uav.heightFly}m</span>
                         </div>
 
                         <div className="info-item">
                             <i className="fas fa-tachometer-alt"></i>
-                            <span className="label">Speed:</span>
+                            <span className="label">
+                                <FormattedMessage id="modal.speed"/>
+                            </span>
                             <span className="value">{uav.speed} km/h</span>
                         </div>
                     </div>
@@ -97,19 +108,19 @@ class CardUavItem extends Component {
                                     className="btn-delete"
                                     onClick={() => onDelete(uav)}>
                                     <i className="fas fa-trash"></i>
-                                    Delete
+                                    <FormattedMessage id="modal.delete"/>
                                 </button>
                                 <button
                                     className="btn-launch"
                                     onClick={() => onActivate(uav)}>
                                     <i className="fas fa-rocket"></i>
-                                    Active
+                                    <FormattedMessage id="modal.active"/>
                                 </button>
                                 <button
                                     className="maintenance-notice"
                                     onClick={() => onMaintenance(uav)}>
                                     <i className="fas fa-tools"></i>
-                                    Maintenance
+                                    <FormattedMessage id="modal.maintenance"/>
                                 </button>
                             </>
                         )}
@@ -117,7 +128,7 @@ class CardUavItem extends Component {
                             <>
                                 <span className="not-allowed">
                                     <i className="fas fa-ban"></i>
-                                    Drone is active
+                                    <FormattedMessage id="modal.drone-is-active"/>
                                 </span>
                             </>
                         )}
@@ -125,7 +136,7 @@ class CardUavItem extends Component {
                             <>
                                 <span className="maintenance-notice">
                                     <i className="fas fa-tools"></i>
-                                    Maintenance
+                                    <FormattedMessage id="modal.drone-is-maintenance"/>
                                 </span>
                             </>
                         )}
@@ -133,7 +144,7 @@ class CardUavItem extends Component {
                             <>
                                 <span className="completed-notice">
                                     <i className="fas fa-check-circle"></i>
-                                    Completed
+                                    <FormattedMessage id="modal.completed"/>
                                 </span>
                             </>
                         )}

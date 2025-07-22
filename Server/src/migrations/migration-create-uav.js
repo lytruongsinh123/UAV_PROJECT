@@ -7,6 +7,7 @@ module.exports = {
             // speedMax: DataTypes.INTEGER,
             // hightMax: DataTypes.INTEGER,
             // performance: DataTypes.STRING,
+            // image: DataTypes.TEXT,
             id: {
                 allowNull: false,
                 autoIncrement: true,
@@ -33,7 +34,9 @@ module.exports = {
                 type: Sequelize.STRING,
                 allowNull: false,
             },
-            
+            image: {
+                type: Sequelize.BLOB("long"),
+            },
             createdAt: {
                 allowNull: false,
                 type: Sequelize.DATE,

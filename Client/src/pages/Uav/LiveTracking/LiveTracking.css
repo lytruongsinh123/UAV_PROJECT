@@ -1,86 +1,72 @@
-/* Live Tracking Dashboard with Theme Support */
-.live-tracking-dashboard {
-    padding: 32px;
-    background: var(--bg-primary);
+/* LiveTracking Theme Support */
+.live-tracking-dashboard,
+.live-tracking-fullscreen {
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
     min-height: 100vh;
-    transition: background-color 0.3s ease;
+    padding: 24px;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .dashboard-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 32px;
-    padding: 24px;
     background: var(--bg-secondary);
-    border-radius: 16px;
-    box-shadow: 0 2px 16px var(--shadow-light);
     border: 1px solid var(--border-primary);
-    transition: all 0.3s ease;
+    border-radius: 16px;
+    padding: 24px;
+    margin-bottom: 24px;
+    box-shadow: 0 2px 8px var(--shadow-light);
 }
 
 .dashboard-header h1 {
-    font-size: 2rem;
     color: var(--text-primary);
+    font-size: 28px;
     margin: 0;
     display: flex;
     align-items: center;
     gap: 12px;
-    transition: color 0.3s ease;
 }
 
 .dashboard-header h1 i {
     color: var(--accent-primary);
-    transition: color 0.3s ease;
 }
 
 .stats {
-    display: flex;
-    gap: 24px;
+    margin-top: 16px;
 }
 
 .stat-item {
-    text-align: center;
-    padding: 16px 24px;
-    background: linear-gradient(
-        135deg,
-        var(--accent-primary),
-        var(--accent-secondary)
-    );
-    border-radius: 12px;
-    color: #fff;
-    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
-    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
 }
 
-.stat-number {
-    display: block;
-    font-size: 2.5rem;
-    font-weight: bold;
-    line-height: 1;
+.tracking-stat-number {
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--accent-primary);
 }
 
 .stat-label {
-    font-size: 0.9rem;
-    opacity: 0.9;
+    font-size: 14px;
+    color: var(--text-secondary);
+    font-weight: 500;
 }
 
-/* UAV Grid */
 .uav-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
-    gap: 24px;
-    margin-bottom: 32px;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 20px;
 }
 
 .uav-card {
     background: var(--bg-secondary);
-    border-radius: 16px;
-    box-shadow: 0 4px 16px var(--shadow-light);
-    padding: 24px;
+    border: 1px solid var(--border-primary);
+    border-radius: 12px;
+    padding: 20px;
     cursor: pointer;
     transition: all 0.3s ease;
-    border: 2px solid var(--border-primary);
+    box-shadow: 0 2px 8px var(--shadow-light);
 }
 
 .uav-card:hover {
@@ -92,77 +78,54 @@
 .uav-card-header {
     display: flex;
     align-items: center;
-    margin-bottom: 20px;
+    gap: 12px;
+    margin-bottom: 16px;
 }
 
 .uav-avatar {
-    width: 60px;
-    height: 60px;
+    width: 48px;
+    height: 48px;
     background: linear-gradient(
         135deg,
         var(--accent-primary),
         var(--accent-secondary)
     );
-    border-radius: 50%;
+    border-radius: 12px;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-right: 16px;
-    color: #fff;
-    font-size: 1.5rem;
-    transition: background 0.3s ease;
-}
-
-.uav-info {
-    flex: 1;
+    color: white;
+    font-size: 20px;
 }
 
 .uav-info h3 {
-    font-size: 1.4rem;
     color: var(--text-primary);
-    margin: 0 0 4px 0;
-    transition: color 0.3s ease;
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
 }
 
 .uav-info p {
     color: var(--text-secondary);
-    margin: 0;
-    font-size: 0.9rem;
-    transition: color 0.3s ease;
+    margin: 4px 0 0 0;
+    font-size: 14px;
 }
 
 .uav-status {
+    margin-left: auto;
     display: flex;
     align-items: center;
     gap: 8px;
-    font-size: 0.9rem;
     color: var(--success-primary);
+    font-size: 14px;
     font-weight: 500;
-    transition: color 0.3s ease;
 }
 
 .status-indicator {
-    width: 12px;
-    height: 12px;
+    width: 8px;
+    height: 8px;
     border-radius: 50%;
     background: var(--success-primary);
-    animation: pulse 2s infinite;
-}
-
-@keyframes pulse {
-    0% {
-        opacity: 1;
-    }
-    50% {
-        opacity: 0.5;
-    }
-    100% {
-        opacity: 1;
-    }
-}
-
-.uav-card-body {
-    margin-bottom: 20px;
 }
 
 .route-info {
@@ -170,11 +133,9 @@
     align-items: center;
     gap: 12px;
     margin-bottom: 16px;
-    padding: 16px;
+    padding: 12px;
     background: var(--bg-tertiary);
-    border-radius: 12px;
-    border: 1px solid var(--border-primary);
-    transition: all 0.3s ease;
+    border-radius: 8px;
 }
 
 .route-point {
@@ -182,176 +143,294 @@
     align-items: center;
     gap: 8px;
     flex: 1;
-    font-size: 0.9rem;
-    color: var(--text-primary);
-    transition: color 0.3s ease;
+    color: var(--text-secondary);
+    font-size: 14px;
 }
 
-.route-point i.start {
+.route-point .fa-map-marker-alt.start {
     color: var(--success-primary);
 }
 
-.route-point i.end {
+.route-point .fa-map-marker-alt.end {
     color: var(--danger-primary);
 }
 
 .route-arrow {
-    color: var(--accent-primary);
-    font-size: 1.2rem;
-    transition: color 0.3s ease;
+    color: var(--text-tertiary);
 }
 
 .flight-stats {
     display: flex;
     justify-content: space-between;
     gap: 16px;
+    margin-bottom: 16px;
 }
 
-.stat {
+.flight-stats .stat {
     display: flex;
     align-items: center;
     gap: 8px;
-    padding: 12px 16px;
-    background: var(--bg-tertiary);
-    border-radius: 8px;
-    font-size: 0.9rem;
-    color: var(--text-primary);
-    flex: 1;
-    justify-content: center;
-    border: 1px solid var(--border-primary);
-    transition: all 0.3s ease;
+    color: var(--text-secondary);
+    font-size: 14px;
 }
 
-.stat i {
+.flight-stats .stat i {
     color: var(--accent-primary);
-    transition: color 0.3s ease;
-}
-
-.uav-card-footer {
-    text-align: center;
+    width: 16px;
 }
 
 .track-btn {
-    background: linear-gradient(
-        135deg,
-        var(--accent-primary),
-        var(--accent-secondary)
-    );
-    color: #fff;
+    width: 100%;
+    padding: 12px;
+    background: var(--accent-primary);
+    color: white;
     border: none;
-    padding: 12px 24px;
     border-radius: 8px;
-    font-size: 0.9rem;
+    font-size: 14px;
+    font-weight: 600;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: background 0.3s ease;
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 8px;
-    margin: 0 auto;
 }
 
 .track-btn:hover {
-    background: linear-gradient(135deg, var(--accent-secondary), #1e40af);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+    background: var(--accent-secondary);
 }
 
-/* No Active UAVs */
 .no-active-uavs {
     text-align: center;
-    padding: 80px 32px;
-    background: var(--bg-secondary);
-    border-radius: 16px;
-    box-shadow: 0 2px 16px var(--shadow-light);
-    border: 1px solid var(--border-primary);
-    transition: all 0.3s ease;
+    padding: 60px 20px;
+    color: var(--text-secondary);
 }
 
 .no-data-icon {
-    font-size: 4rem;
+    font-size: 64px;
     color: var(--text-tertiary);
-    transition: color 0.3s ease;
     margin-bottom: 24px;
 }
 
 .no-active-uavs h3 {
-    font-size: 1.5rem;
     color: var(--text-primary);
-    margin-bottom: 8px;
-    transition: color 0.3s ease;
+    margin: 0 0 12px 0;
+    font-size: 24px;
 }
 
 .no-active-uavs p {
     color: var(--text-secondary);
-    font-size: 1rem;
-    transition: color 0.3s ease;
+    margin: 0;
+    font-size: 16px;
 }
 
-/* Fullscreen Mode */
-.live-tracking-fullscreen {
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-}
-
+/* Fullscreen view */
 .fullscreen-header {
     display: flex;
     align-items: center;
     gap: 16px;
-    padding: 16px 24px;
+    margin-bottom: 24px;
+    padding: 20px;
     background: var(--bg-secondary);
-    border-bottom: 1px solid var(--border-primary);
+    border: 1px solid var(--border-primary);
+    border-radius: 12px;
     box-shadow: 0 2px 8px var(--shadow-light);
-    transition: all 0.3s ease;
 }
 
 .back-btn {
-    background: var(--text-secondary);
-    color: #fff;
-    border: none;
-    padding: 8px 16px;
-    border-radius: 6px;
+    padding: 12px 16px;
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+    border: 1px solid var(--border-primary);
+    border-radius: 8px;
     cursor: pointer;
+    transition: all 0.3s ease;
     display: flex;
     align-items: center;
     gap: 8px;
-    transition: all 0.3s ease;
+    font-size: 14px;
 }
 
 .back-btn:hover {
-    background: var(--text-primary);
-    transform: translateY(-1px);
+    background: var(--accent-primary);
+    color: white;
+    border-color: var(--accent-primary);
 }
 
 .fullscreen-header h2 {
     color: var(--text-primary);
     margin: 0;
-    font-size: 1.4rem;
-    transition: color 0.3s ease;
+    font-size: 24px;
+}
+
+/* Force Light Theme Styles */
+[data-theme="light"] .live-tracking-dashboard,
+[data-theme="light"] .live-tracking-fullscreen,
+body.light-theme .live-tracking-dashboard,
+body.light-theme .live-tracking-fullscreen {
+    background-color: #f8fafc !important;
+    color: #1e293b !important;
+}
+
+[data-theme="light"] .dashboard-header,
+body.light-theme .dashboard-header {
+    background: #ffffff !important;
+    border-color: #e2e8f0 !important;
+    color: #1e293b !important;
+}
+
+[data-theme="light"] .dashboard-header h1,
+body.light-theme .dashboard-header h1 {
+    color: #1e293b !important;
+}
+
+[data-theme="light"] .dashboard-header h1 i,
+body.light-theme .dashboard-header h1 i {
+    color: #6366f1 !important;
+}
+
+[data-theme="light"] .tracking-stat-number,
+body.light-theme .tracking-stat-number {
+    color: #6366f1 !important;
+}
+
+[data-theme="light"] .stat-label,
+body.light-theme .stat-label {
+    color: #64748b !important;
+}
+
+[data-theme="light"] .uav-card,
+body.light-theme .uav-card {
+    background: #ffffff !important;
+    border-color: #e2e8f0 !important;
+    color: #1e293b !important;
+}
+
+[data-theme="light"] .uav-info h3,
+body.light-theme .uav-info h3 {
+    color: #1e293b !important;
+}
+
+[data-theme="light"] .uav-info p,
+body.light-theme .uav-info p {
+    color: #64748b !important;
+}
+
+[data-theme="light"] .route-info,
+body.light-theme .route-info {
+    background: #f1f5f9 !important;
+}
+
+[data-theme="light"] .route-point,
+body.light-theme .route-point {
+    color: #64748b !important;
+}
+
+[data-theme="light"] .flight-stats .stat,
+body.light-theme .flight-stats .stat {
+    color: #64748b !important;
+}
+
+[data-theme="light"] .flight-stats .stat i,
+body.light-theme .flight-stats .stat i {
+    color: #6366f1 !important;
+}
+
+[data-theme="light"] .no-active-uavs,
+body.light-theme .no-active-uavs {
+    color: #64748b !important;
+}
+
+[data-theme="light"] .no-data-icon,
+body.light-theme .no-data-icon {
+    color: #94a3b8 !important;
+}
+
+[data-theme="light"] .no-active-uavs h3,
+body.light-theme .no-active-uavs h3 {
+    color: #1e293b !important;
+}
+
+[data-theme="light"] .fullscreen-header,
+body.light-theme .fullscreen-header {
+    background: #ffffff !important;
+    border-color: #e2e8f0 !important;
+}
+
+[data-theme="light"] .fullscreen-header h2,
+body.light-theme .fullscreen-header h2 {
+    color: #1e293b !important;
+}
+
+[data-theme="light"] .back-btn,
+body.light-theme .back-btn {
+    background: #f1f5f9 !important;
+    color: #1e293b !important;
+    border-color: #e2e8f0 !important;
+}
+
+/* Force Dark Theme Styles */
+[data-theme="dark"] .live-tracking-dashboard,
+[data-theme="dark"] .live-tracking-fullscreen,
+body.dark-theme .live-tracking-dashboard,
+body.dark-theme .live-tracking-fullscreen {
+    background-color: #0f172a !important;
+    color: #e2e8f0 !important;
+}
+
+[data-theme="dark"] .dashboard-header,
+body.dark-theme .dashboard-header {
+    background: #1e293b !important;
+    border-color: #475569 !important;
+    color: #e2e8f0 !important;
+}
+
+[data-theme="dark"] .dashboard-header h1,
+body.dark-theme .dashboard-header h1 {
+    color: #e2e8f0 !important;
+}
+
+[data-theme="dark"] .uav-card,
+body.dark-theme .uav-card {
+    background: #1e293b !important;
+    border-color: #475569 !important;
+    color: #e2e8f0 !important;
+}
+
+[data-theme="dark"] .route-info,
+body.dark-theme .route-info {
+    background: #334155 !important;
+}
+
+[data-theme="dark"] .fullscreen-header,
+body.dark-theme .fullscreen-header {
+    background: #1e293b !important;
+    border-color: #475569 !important;
+}
+
+[data-theme="dark"] .back-btn,
+body.dark-theme .back-btn {
+    background: #334155 !important;
+    color: #e2e8f0 !important;
+    border-color: #475569 !important;
 }
 
 /* Responsive */
 @media (max-width: 768px) {
-    .live-tracking-dashboard {
+    .live-tracking-dashboard,
+    .live-tracking-fullscreen {
         padding: 16px;
-    }
-
-    .dashboard-header {
-        flex-direction: column;
-        gap: 16px;
-        text-align: center;
     }
 
     .uav-grid {
         grid-template-columns: 1fr;
     }
 
-    .route-info {
-        flex-direction: column;
-        gap: 8px;
+    .dashboard-header {
+        padding: 20px;
     }
 
-    .flight-stats {
-        flex-direction: column;
+    .tracking-stat-number {
+        font-size: 24px;
     }
 }
