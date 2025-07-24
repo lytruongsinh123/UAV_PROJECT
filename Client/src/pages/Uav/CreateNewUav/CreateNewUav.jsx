@@ -2,15 +2,10 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { FormattedMessage } from "react-intl";
 import { useNavigate } from "react-router-dom";
+import { creatNewUav } from "../../../service/uavsService";
+import { toast } from "react-toastify";
+import CommonUtils from "../../../utils/CommonUtils";
 import "./CreateNewUav.css";
-
-// droneId: DataTypes.STRING,
-// droneName: DataTypes.STRING,
-// speedMax: DataTypes.INTEGER,
-// hightMax: DataTypes.INTEGER,
-// performance: DataTypes.STRING,
-// image: DataTypes.TEXT,
-
 class CreateNewUav extends Component {
     constructor(props) {
         super(props);
@@ -21,36 +16,113 @@ class CreateNewUav extends Component {
             hightMax: "",
             performance: "Good",
             image: null,
+            previewImgUrl: null, // Thêm preview URL
+            isSubmitting: false, // Thêm loading state
         };
     }
 
-    // thực hiện một lần
-    componentDidMount = async () => {};
+    componentDidMount = async () => {
+        // Không cần theme listener, CSS sẽ tự động handle
+    };
 
-    // thực hiện mỗi khi props hoặc state thay đổi
-    componentDidUpdate = async (prevProps, prevState, snapshot) => {};
-
-    handleInputChange = (e) => {
+    handleOnChangeInput = (event, id) => {
+        let value = event.target.value;
+        let stateCopy = { ...this.state };
+        stateCopy[id] = value;
         this.setState({
-            [e.target.name]: e.target.value,
+            ...stateCopy,
         });
     };
 
-    handleFileChange = (e) => {
-        this.setState({
-            image: e.target.files[0],
-        });
+    handleOnchangeImg = async (event) => {
+        let data = event.target.files; // lấy ra file ảnh
+        let file = data[0]; // lấy ra file đầu tiên
+        let objectUrl = URL.createObjectURL(file); // tạo ra đường dẫn tạm thời
+        if (file) {
+            let base64 = await CommonUtils.toBase64(file); // chuyển đổi file sang base64
+            this.setState({
+                previewImgUrl: objectUrl,
+                image: base64, // gán giá trị base64 vào state
+            });
+        }
     };
 
-    handleSubmit = (e) => {
+    handleSubmit = async (e) => {
         e.preventDefault();
-        // TODO: Xử lý logic lưu drone ở đây
-        console.log("Form data:", this.state);
+
+        // Validation
+        if (
+            !this.state.droneId ||
+            !this.state.droneName ||
+            !this.state.speedMax ||
+            !this.state.hightMax
+        ) {
+            toast.error("Vui lòng điền đầy đủ thông tin bắt buộc!");
+            return;
+        }
+
+        this.setState({ isSubmitting: true });
+
+        try {
+            let res = await creatNewUav({
+                droneId: this.state.droneId,
+                droneName: this.state.droneName,
+                speedMax: parseInt(this.state.speedMax),
+                hightMax: parseInt(this.state.hightMax),
+                performance: this.state.performance,
+                image: this.state.image,
+            });
+
+            if (res && res.errCode === 0) {
+                toast.success("Tạo drone thành công!");
+                // Reset form
+                this.setState({
+                    droneId: "",
+                    droneName: "",
+                    speedMax: "",
+                    hightMax: "",
+                    performance: "Good",
+                    image: null,
+                    previewImgUrl: null,
+                });
+            } else {
+                toast.error(
+                    "Tạo drone thất bại: " +
+                        (res.errMessage || "Lỗi không xác định")
+                );
+            }
+        } catch (error) {
+            console.error("Error creating drone:", error);
+            toast.error("Có lỗi xảy ra khi tạo drone!");
+        } finally {
+            this.setState({ isSubmitting: false });
+        }
+    };
+
+    handleCancel = () => {
+        // Reset form
+        this.setState({
+            droneId: "",
+            droneName: "",
+            speedMax: "",
+            hightMax: "",
+            performance: "Good",
+            image: null,
+            previewImgUrl: null,
+        });
+        toast.info("Đã hủy tạo drone!");
     };
 
     render() {
-        const { droneId, droneName, speedMax, hightMax, performance } =
-            this.state;
+        const {
+            droneId,
+            droneName,
+            speedMax,
+            hightMax,
+            performance,
+            previewImgUrl,
+            isSubmitting,
+        } = this.state;
 
         return (
             <div className="create-drone-container">
@@ -73,7 +145,9 @@ class CreateNewUav extends Component {
                                 type="text"
                                 name="droneId"
                                 value={droneId}
-                                onChange={this.handleInputChange}
+                                onChange={(event) =>
+                                    this.handleOnChangeInput(event, "droneId")
+                                }
                                 placeholder="Nhập ID drone (VD: DRN-001)"
                                 required
                             />
@@ -89,7 +163,9 @@ class CreateNewUav extends Component {
                                 type="text"
                                 name="droneName"
                                 value={droneName}
-                                onChange={this.handleInputChange}
+                                onChange={(event) =>
+                                    this.handleOnChangeInput(event, "droneName")
+                                }
                                 placeholder="Nhập tên drone"
                                 required
                             />
@@ -105,7 +181,9 @@ class CreateNewUav extends Component {
                                 type="number"
                                 name="speedMax"
                                 value={speedMax}
-                                onChange={this.handleInputChange}
+                                onChange={(event) =>
+                                    this.handleOnChangeInput(event, "speedMax")
+                                }
                                 placeholder="Nhập tốc độ tối đa"
                                 min="1"
                                 required
@@ -122,7 +200,9 @@ class CreateNewUav extends Component {
                                 type="number"
                                 name="hightMax"
                                 value={hightMax}
-                                onChange={this.handleInputChange}
+                                onChange={(event) =>
+                                    this.handleOnChangeInput(event, "hightMax")
+                                }
                                 placeholder="Nhập độ cao tối đa"
                                 min="1"
                                 required
@@ -138,7 +218,12 @@ class CreateNewUav extends Component {
                             <select
                                 name="performance"
                                 value={performance}
-                                onChange={this.handleInputChange}>
+                                onChange={(event) =>
+                                    this.handleOnChangeInput(
+                                        event,
+                                        "performance"
+                                    )
+                                }>
                                 <option value="Excellent">Xuất sắc</option>
                                 <option value="Good">Tốt</option>
                                 <option value="Average">Trung bình</option>
@@ -146,7 +231,7 @@ class CreateNewUav extends Component {
                             </select>
                         </div>
 
-                        {/* Image Upload */}
+                        {/* Image Upload with Preview */}
                         <div className="form-group">
                             <label>
                                 <i className="fas fa-image"></i>
@@ -155,22 +240,54 @@ class CreateNewUav extends Component {
                             <input
                                 type="file"
                                 name="image"
-                                onChange={this.handleFileChange}
+                                onChange={this.handleOnchangeImg}
                                 accept="image/*"
                                 className="file-input"
                             />
+                            {previewImgUrl && (
+                                <div className="image-preview">
+                                    <img src={previewImgUrl} alt="Preview" />
+                                    <button
+                                        type="button"
+                                        className="remove-image"
+                                        onClick={() =>
+                                            this.setState({
+                                                image: null,
+                                                previewImgUrl: null,
+                                            })
+                                        }>
+                                        <i className="fas fa-times"></i>
+                                    </button>
+                                </div>
+                            )}
                         </div>
                     </div>
 
                     {/* Form Actions */}
                     <div className="form-actions">
-                        <button type="button" className="btn-cancel">
+                        <button
+                            type="button"
+                            className="btn-cancel"
+                            onClick={this.handleCancel}
+                            disabled={isSubmitting}>
                             <i className="fas fa-times"></i>
                             Hủy
                         </button>
-                        <button type="submit" className="btn-submit">
-                            <i className="fas fa-save"></i>
-                            Tạo Drone
+                        <button
+                            type="submit"
+                            className="btn-submit"
+                            disabled={isSubmitting}>
+                            {isSubmitting ? (
+                                <>
+                                    <i className="fas fa-spinner fa-spin"></i>
+                                    Đang tạo...
+                                </>
+                            ) : (
+                                <>
+                                    <i className="fas fa-save"></i>
+                                    Tạo Drone
+                                </>
+                            )}
                         </button>
                     </div>
                 </form>
@@ -178,12 +295,14 @@ class CreateNewUav extends Component {
         );
     }
 }
+
 const withNavigate = (Component) => {
     return (props) => {
         const navigate = useNavigate();
         return <Component {...props} navigate={navigate} />;
     };
 };
+
 const mapStateToProps = (state) => {
     return {
         // language: state.app.language,

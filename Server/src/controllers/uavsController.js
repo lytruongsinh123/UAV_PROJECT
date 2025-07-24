@@ -23,7 +23,7 @@ let handleGetAllUavs = async (req, res) => {
         });
     }
 };
-export default {
+module.exports = {
     handleCreateNewUav,
     handleGetAllUavs,
-};
+}

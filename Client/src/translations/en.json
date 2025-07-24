@@ -3,7 +3,8 @@
         "registration": "Registration",
         "logout": "Logout",
         "flight-path": "Flight Path",
-        "live-tracking": "Live Tracking"
+        "live-tracking": "Live Tracking",
+        "create-uav": "Create UAV"
     },
     "dashboard": {
         "welcome-back": "Welcome Back",
@@ -40,6 +41,7 @@
         "home": "Home",
         "dashboard": "Dashboard",
         "settings": "Settings",
+        "uav": "List UAVs",
         "notifications": "Notifications",
         "not-notifications": "No notifications yet",
         "test-notifications": "Test Notifications",

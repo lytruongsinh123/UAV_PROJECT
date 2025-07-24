@@ -79,9 +79,9 @@ class Header extends Component {
                         <div className="nav-item">
                             <div
                                 onClick={() => this.handleLinkTo("create-uav")}>
-                                <i className="fa-solid fa-route"></i>
+                                <i className="fa-solid fa-helicopter"></i>
                                 <span>
-                                    <FormattedMessage id="header.flight-path" />
+                                    <FormattedMessage id="header.create-uav" />
                                 </span>
                             </div>
                         </div>

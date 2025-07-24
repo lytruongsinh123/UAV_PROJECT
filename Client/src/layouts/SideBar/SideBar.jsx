@@ -254,6 +254,19 @@ class SlideBar extends Component {
                         )}
                     </div>
 
+                    <div
+                        className="settings"
+                        onClick={() => this.handleNavigate("show-list-uavs")}>
+                        <i className="fa-solid fa-helicopter"></i>
+                        {isOpenSidebar ? (
+                            <span>
+                                <FormattedMessage id="sidebar.uav" />
+                            </span>
+                        ) : (
+                            ""
+                        )}
+                    </div>
+
                     {/* 🧪 Test button for notifications - Remove in production */}
                     <div
                         className="test-notifications"
@@ -380,26 +393,38 @@ class SlideBar extends Component {
                                 this.state.currentTheme
                             )}></i>
                         <span className="title">
-                            {this.state.currentTheme === "light"
-                                ? <FormattedMessage id="sidebar.light-mode" />
-                                : this.state.currentTheme === "dark"
-                                ? <FormattedMessage id="sidebar.dark-mode" />
-                                : <FormattedMessage id="sidebar.auto-mode" />}
+                            {this.state.currentTheme === "light" ? (
+                                <FormattedMessage id="sidebar.light-mode" />
+                            ) : this.state.currentTheme === "dark" ? (
+                                <FormattedMessage id="sidebar.dark-mode" />
+                            ) : (
+                                <FormattedMessage id="sidebar.auto-mode" />
+                            )}
                         </span>
                     </div>
-                    <div className="help" onClick={() => this.handleNavigate("help")}>
+                    <div
+                        className="help"
+                        onClick={() => this.handleNavigate("help")}>
                         <i className="fas fa-question-circle"></i>
-                        <span className="title"><FormattedMessage id="sidebar.help" /></span>
+                        <span className="title">
+                            <FormattedMessage id="sidebar.help" />
+                        </span>
                     </div>
-                    <div className="feedback" onClick={() => this.handleNavigate("feedback")}>
+                    <div
+                        className="feedback"
+                        onClick={() => this.handleNavigate("feedback")}>
                         <i className="fas fa-comment-dots"></i>
-                        <span className="title"><FormattedMessage id="sidebar.feedback" /></span>
+                        <span className="title">
+                            <FormattedMessage id="sidebar.feedback" />
+                        </span>
                     </div>
                     <div
                         className="logout"
                         onClick={this.props.handleLogoutRedux}>
                         <i className="fas fa-sign-out-alt"></i>
-                        <span className="title"><FormattedMessage id="sidebar.logout" /></span>
+                        <span className="title">
+                            <FormattedMessage id="sidebar.logout" />
+                        </span>
                     </div>
                 </div>
             </div>

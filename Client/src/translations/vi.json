@@ -3,7 +3,8 @@
         "registration": "Đăng ký",
         "flight-path": "Lộ trình bay",
         "live-tracking": "Theo dõi trực tiếp",
-        "logout": "Đăng xuất"
+        "logout": "Đăng xuất",
+        "create-uav": "Tạo UAV"
     },
     "dashboard": {
         "welcome-back": "Chào mừng trở lại",
@@ -40,6 +41,7 @@
         "home": "Trang chủ",
         "dashboard": "Bảng điều khiển",
         "settings": "Cài đặt",
+        "uav": "Danh sách UAV",
         "notifications": "Thông báo",
         "not-notifications": "Chưa có thông báo nào",
         "test-notifications": "Thông báo thử nghiệm",
