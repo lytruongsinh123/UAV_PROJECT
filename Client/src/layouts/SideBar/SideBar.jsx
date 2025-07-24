@@ -185,6 +185,7 @@ class SlideBar extends Component {
     };
     render() {
         const isOpenSidebar = this.props.isOpenSidebar;
+        const defaultAvatar = "https://via.placeholder.com/150"; // Default avatar URL
         return (
             <div className="sidebar">
                 <div
@@ -193,7 +194,7 @@ class SlideBar extends Component {
                     <div
                         className="image-avatar"
                         style={{
-                            backgroundImage: `url(${this.state.user.image ? Buffer.from(this.state.user.image, "base64").toString("binary") : ""})`,
+                            backgroundImage: `url(${this.state.user.image ? Buffer.from(this.state.user.image, "base64").toString("binary") : defaultAvatar})`,
                         }}></div>
                     {isOpenSidebar ? (
                         <span>
