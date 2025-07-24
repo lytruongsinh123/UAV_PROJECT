@@ -39,6 +39,11 @@
     flex-direction: column;
     align-items: center;
     gap: 4px;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-primary);
+    border-radius: 12px;
+    padding: 16px;
+    min-width: 120px;
 }
 
 .tracking-stat-number {
@@ -299,6 +304,12 @@ body.light-theme .stat-label {
     color: #64748b !important;
 }
 
+[data-theme="light"] .stat-item,
+body.light-theme .stat-item {
+    background: #ffffff !important;
+    border-color: #e2e8f0 !important;
+}
+
 [data-theme="light"] .uav-card,
 body.light-theme .uav-card {
     background: #ffffff !important;
@@ -388,6 +399,22 @@ body.dark-theme .dashboard-header {
 [data-theme="dark"] .dashboard-header h1,
 body.dark-theme .dashboard-header h1 {
     color: #e2e8f0 !important;
+}
+
+[data-theme="dark"] .stat-item,
+body.dark-theme .stat-item {
+    background: #1e293b !important;
+    border-color: #475569 !important;
+}
+
+[data-theme="dark"] .tracking-stat-number,
+body.dark-theme .tracking-stat-number {
+    color: #818cf8 !important;
+}
+
+[data-theme="dark"] .stat-label,
+body.dark-theme .stat-label {
+    color: #cbd5e1 !important;
 }
 
 [data-theme="dark"] .uav-card,

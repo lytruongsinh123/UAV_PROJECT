@@ -7,6 +7,7 @@ import { crud_actions } from "../../../utils/constants.js";
 import { getUavsByDroneId } from "../../../service/uavRegisterService";
 import emitter from "../../../utils/eventBus.js";
 import themeUtils from "../../../utils/ThemeUtils";
+import { getAllUavs } from "../../../service/uavsService.js";
 import "./Registration.css";
 
 class RegisterUav extends Component {
@@ -22,6 +23,8 @@ class RegisterUav extends Component {
             heightFly: null,
             speed: null,
             status: "pending",
+            listChoicesUavs: [],
+            choicedUav: {},
             currentTheme: themeUtils.getCurrentTheme(),
         };
     }
@@ -49,9 +52,15 @@ class RegisterUav extends Component {
     };
 
     async componentDidMount() {
+        // Fetch all UAVs to populate dropdown choices
+        let uavs = await getAllUavs();
+        if (uavs && uavs.errCode === 0) {
+            this.setState({
+                listChoicesUavs: uavs.uavs,
+            });
+        }
         // Initialize theme detection
         themeUtils.init();
-
         // Add theme change listener
         this.handleThemeChange = () => {
             const newTheme = themeUtils.getCurrentTheme();
@@ -59,19 +68,15 @@ class RegisterUav extends Component {
                 this.setState({ currentTheme: newTheme });
             }
         };
-
         themeUtils.addListener(this.handleThemeChange);
-
         // Also listen for manual class changes on document
         this.observer = new MutationObserver(() => {
             this.handleThemeChange();
         });
-
         this.observer.observe(document.documentElement, {
             attributes: true,
             attributeFilter: ["class", "data-theme"],
         });
-
         this.setState({
             ownerId: this.props.userInfo.id,
         });
@@ -93,6 +98,16 @@ class RegisterUav extends Component {
     }
     handleInputChange = (event) => {
         const { name, value } = event.target;
+        if (name === "droneId") {
+            let choicedUav = this.state.listChoicesUavs.find(
+                (uav) => uav.droneId === value
+            );
+            if (choicedUav) {
+                this.setState({
+                    choicedUav: choicedUav,
+                });
+            }
+        }
         this.setState({
             [name]: value,
         });
@@ -124,6 +139,16 @@ class RegisterUav extends Component {
         } = this.state;
         const { actions } = this.props;
         if (actions === crud_actions.CREATE) {
+            // Kiểm tra speed và heightFly có hợp lệ không
+            if (
+                speed > this.state.choicedUav.speedMax ||
+                heightFly > this.state.choicedUav.hightMax
+            ) {
+                alert(
+                    `Maximum speed is ${this.state.choicedUav.speedMax}km/h and maximum height is ${this.state.choicedUav.hightMax}m`
+                );
+                return;
+            }
             let res = await this.props.RegisterUavStart({
                 ownerId,
                 droneId,
@@ -146,6 +171,16 @@ class RegisterUav extends Component {
                 });
             }
         } else if (actions === crud_actions.EDIT) {
+            // Kiểm tra speed và heightFly có hợp lệ không
+            if (
+                speed > this.state.choicedUav.speedMax ||
+                heightFly > this.state.choicedUav.hightMax
+            ) {
+                alert(
+                    `Maximum speed is ${this.state.choicedUav.speedMax}km/h and maximum height is ${this.state.choicedUav.hightMax}m`
+                );
+                return;
+            }
             let res = await this.props.UpdateUavStart({
                 ownerId,
                 droneId,
@@ -182,11 +217,12 @@ class RegisterUav extends Component {
             endPoint,
             heightFly,
             speed,
-            status,
             currentTheme,
+            listChoicesUavs,
+            choicedUav,
         } = this.state;
+        console.log("check choicedUav:", choicedUav);
         const { userInfo } = this.props;
-        console.log("State in render:", this.state);
         return (
             <div
                 className={`registration-uav-container ${currentTheme}`}
@@ -227,17 +263,18 @@ class RegisterUav extends Component {
                                 <i className="fas fa-barcode"></i>
                                 Drone ID
                             </label>
-                            <input
-                                type="text"
+                            <select
                                 id="droneId"
                                 name="droneId"
                                 value={droneId}
                                 onChange={this.handleInputChange}
-                                placeholder="e.g., DR-001-2024"
-                                required
-                            />
+                                required>
+                                <option value="">Select Drone</option>
+                                {listChoicesUavs.map((uav) => (
+                                    <option key={uav.id}>{uav.droneId}</option>
+                                ))}
+                            </select>
                         </div>
-
                         {/* Start Point */}
                         <div className="form-group full-width">
                             <label htmlFor="startPoint">
@@ -254,7 +291,6 @@ class RegisterUav extends Component {
                                 required
                             />
                         </div>
-
                         {/* End Point */}
                         <div className="form-group full-width">
                             <label htmlFor="endPoint">
@@ -320,7 +356,7 @@ class RegisterUav extends Component {
                                 type="text"
                                 id="droneName"
                                 name="droneName"
-                                value={droneName}
+                                value={choicedUav.droneName || droneName}
                                 onChange={this.handleInputChange}
                                 placeholder="e.g., Sky Falcon X1"
                                 required

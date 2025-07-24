@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import themeUtils from "../../utils/ThemeUtils";
+import * as actions from "../../store/actions/appActions";
 import { FormattedMessage } from "react-intl";
 import "./Settings.css";
 
@@ -127,6 +128,9 @@ class Settings extends Component {
             this.applyThemeToDocument(value);
             themeUtils.applyTheme(value);
         }
+        if (key === "language") {
+            this.props.handleChangeLanguage(value);
+        }
 
         this.setState((prevState) => ({
             currentTheme: key === "theme" ? value : prevState.currentTheme,
@@ -200,8 +204,6 @@ class Settings extends Component {
                         className="setting-select">
                         <option value="en">English</option>
                         <option value="vi">Tiếng Việt</option>
-                        <option value="zh">中文</option>
-                        <option value="ja">日本語</option>
                     </select>
                 </div>
 
@@ -602,7 +604,9 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = (dispatch) => {
-    return {};
+    return {
+        handleChangeLanguage: (language) => dispatch(actions.changeLanguageApp(language)),
+    };
 };
 
 export default withNavigate(

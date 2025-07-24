@@ -3,11 +3,13 @@ import { connect } from "react-redux";
 import { FormattedMessage } from "react-intl";
 import { useNavigate } from "react-router-dom";
 import { handleUpdateUser } from "../../service/userService";
-import { toast } from "react-toastify";
+import { getUserById } from "../../service/userService";
 import * as actions from "../../store/actions/userActions";
 import CommonUtils from "../../utils/CommonUtils";
+import themeUtils from "../../utils/ThemeUtils";
+import { Buffer } from "buffer";
+import { toast } from "react-toastify";
 import "./EditUser.css";
-import { use } from "react";
 
 class EditUser extends Component {
     state = {
@@ -17,8 +19,44 @@ class EditUser extends Component {
         positionId: "",
         gender: "",
         phoneNumber: "",
+        currentTheme: themeUtils.getCurrentTheme(), // Chỉ thêm theme state
     };
-
+    async componentDidMount() {
+        // Chỉ thêm theme handling
+        let res = await getUserById(this.props.userInfo.id);
+        if (res && res.data) {
+            let user = res.data;
+            this.setState({
+                firstName: user.firstName,
+                lastName: user.lastName,
+                address: user.address,
+                positionId: user.positionId,
+                gender: user.gender,
+                phoneNumber: user.phoneNumber,
+                previewImgUrl: user.image
+                    ? new Buffer(user.image, "base64").toString("binary")
+                    : "",
+            });
+        }
+        this.handleThemeChange();
+        if (themeUtils.addListener) {
+            themeUtils.addListener(this.handleThemeChange);
+        }
+    }
+    componentWillUnmount() {
+        // Chỉ thêm cleanup theme listener
+        if (themeUtils.removeListener) {
+            themeUtils.removeListener(this.handleThemeChange);
+        }
+    }
+    // Chỉ thêm theme handler
+    handleThemeChange = () => {
+        const newTheme = themeUtils.getCurrentTheme();
+        this.setState({ currentTheme: newTheme });
+        document.documentElement.setAttribute("data-theme", newTheme);
+        document.body.className = `${newTheme}-theme`;
+    };
+    // Giữ nguyên tất cả hàm existing
     handleOnChangeInput = (event, id) => {
         let value = event.target.value;
         let stateCopy = { ...this.state };
@@ -27,7 +65,6 @@ class EditUser extends Component {
             ...stateCopy,
         });
     };
-
     handleOnchangeImg = async (event) => {
         let data = event.target.files; // lấy ra file ảnh
         let file = data[0]; // lấy ra file đầu tiên
@@ -43,9 +80,7 @@ class EditUser extends Component {
 
     handleSubmit = async (e) => {
         e.preventDefault();
-        // Call API to update user here
-        // Example: this.props.updateUser(this.state);
-        await this.props.handleUpdateUser({
+        let res = await handleUpdateUser({
             id: this.props.userInfo.id,
             firstName: this.state.firstName,
             lastName: this.state.lastName,
@@ -55,13 +90,28 @@ class EditUser extends Component {
             phoneNumber: this.state.phoneNumber,
             image: this.state.image,
         });
+        if (res && res.errCode === 0) {
+            toast.success("Update user successfully!");
+            if (this.props.navigate) {
+                this.props.navigate(`/homeuav`);
+            }
+        } else {
+            toast.error("Update user failed!");
+        }
     };
 
     render() {
+        const { currentTheme } = this.state; // Chỉ thêm theme destructuring
+        const { language } = this.props; // Giữ nguyên language destructuring
         return (
-            <div className="edituser-container">
+            <div
+                className={`edituser-container ${currentTheme}`} // Chỉ thêm theme class
+                data-theme={currentTheme} // Chỉ thêm theme attribute
+            >
                 <form className="edituser-card" onSubmit={this.handleSubmit}>
-                    <h2 className="edituser-title">Update User Information</h2>
+                    <h2 className="edituser-title">
+                        <FormattedMessage id="edit-user.title" />
+                    </h2>
                     <div className="preview-img-container">
                         <img
                             src={this.state.previewImgUrl}
@@ -70,7 +120,9 @@ class EditUser extends Component {
                         />
                     </div>
                     <div className="form-group">
-                        <label htmlFor="firstName">First Name</label>
+                        <label htmlFor="firstName">
+                            <FormattedMessage id="edit-user.first-name" />
+                        </label>
                         <input
                             type="text"
                             id="firstName"
@@ -82,7 +134,9 @@ class EditUser extends Component {
                         />
                     </div>
                     <div className="form-group">
-                        <label htmlFor="lastName">Last Name</label>
+                        <label htmlFor="lastName">
+                            <FormattedMessage id="edit-user.last-name" />
+                        </label>
                         <input
                             type="text"
                             id="lastName"
@@ -94,7 +148,9 @@ class EditUser extends Component {
                         />
                     </div>
                     <div className="form-group">
-                        <label htmlFor="address">Address</label>
+                        <label htmlFor="address">
+                            <FormattedMessage id="edit-user.address" />
+                        </label>
                         <input
                             type="text"
                             id="address"
@@ -106,7 +162,9 @@ class EditUser extends Component {
                         />
                     </div>
                     <div className="form-group">
-                        <label htmlFor="positionId">Position</label>
+                        <label htmlFor="positionId">
+                            <FormattedMessage id="edit-user.position" />
+                        </label>
                         <input
                             type="text"
                             id="positionId"
@@ -118,21 +176,35 @@ class EditUser extends Component {
                         />
                     </div>
                     <div className="form-group">
-                        <label htmlFor="gender">Gender</label>
+                        <label htmlFor="gender">
+                            <FormattedMessage id="edit-user.gender" />
+                        </label>
                         <select
                             id="gender"
                             value={this.state.gender}
                             onChange={(event) =>
                                 this.handleOnChangeInput(event, "gender")
                             }>
-                            <option value="">Select Gender</option>
-                            <option value="male">Male</option>
-                            <option value="female">Female</option>
-                            <option value="other">Other</option>
+                            <option value="">
+                                {language === "en"
+                                    ? "Select Gender"
+                                    : "Chọn giới tính"}
+                            </option>
+                            <option value="male">
+                                {language === "en" ? "Male" : "Nam"}
+                            </option>
+                            <option value="female">
+                                {language === "en" ? "Female" : "Nữ"}
+                            </option>
+                            <option value="other">
+                                {language === "en" ? "Other" : "Khác"}
+                            </option>
                         </select>
                     </div>
                     <div className="form-group">
-                        <label htmlFor="phoneNumber">Phone Number</label>
+                        <label htmlFor="phoneNumber">
+                            <FormattedMessage id="edit-user.phone-number" />
+                        </label>
                         <input
                             type="text"
                             id="phoneNumber"
@@ -144,7 +216,9 @@ class EditUser extends Component {
                         />
                     </div>
                     <div className="form-group">
-                        <label htmlFor="image">Avatar</label>
+                        <label htmlFor="image">
+                            <FormattedMessage id="edit-user.avatar" />
+                        </label>
                         <input
                             type="file"
                             id="image"
@@ -167,21 +241,24 @@ class EditUser extends Component {
                         )}
                     </div>
                     <button className="edituser-btn" type="submit">
-                        Update
+                        <FormattedMessage id="edit-user.update" />
                     </button>
                 </form>
             </div>
         );
     }
 }
+
 const withNavigate = (Component) => {
     return (props) => {
         const navigate = useNavigate();
         return <Component {...props} navigate={navigate} />;
     };
 };
+
 const mapStateToProps = (state) => {
     return {
+        language: state.app.language,
         userInfo: state.user.userInfo,
     };
 };

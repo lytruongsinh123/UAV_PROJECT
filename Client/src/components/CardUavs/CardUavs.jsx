@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { FormattedMessage } from "react-intl";
 import { useNavigate } from "react-router-dom";
+import { Buffer } from 'buffer';
 import "./CardUavs.css";
 
 class CardUavs extends Component {
@@ -46,7 +47,6 @@ class CardUavs extends Component {
 
     render() {
         const { uav } = this.props; // Nhận UAV data từ props
-
         // Default values nếu không có data
         const uavData = uav || {
             droneId: "DRN-001",
@@ -63,7 +63,7 @@ class CardUavs extends Component {
                 <div className="uav-image">
                     {uavData.image ? (
                         <img
-                            src={uavData.image}
+                            src={uavData.image ? Buffer.from(uavData.image, "base64").toString("binary") : ""}
                             alt={uavData.droneName}
                             className="drone-img"
                         />
@@ -73,14 +73,6 @@ class CardUavs extends Component {
                             <span>No Image</span>
                         </div>
                     )}
-                    <div className="image-overlay">
-                        <button className="view-btn">
-                            <i className="fas fa-eye"></i>
-                        </button>
-                        <button className="edit-btn">
-                            <i className="fas fa-edit"></i>
-                        </button>
-                    </div>
                 </div>
 
                 {/* UAV Information */}
@@ -158,17 +150,6 @@ class CardUavs extends Component {
                                 </span>
                             </div>
                         </div>
-                    </div>
-
-                    <div className="uav-actions">
-                        <button className="action-btn primary">
-                            <i className="fas fa-play"></i>
-                            Start Mission
-                        </button>
-                        <button className="action-btn secondary">
-                            <i className="fas fa-cog"></i>
-                            Settings
-                        </button>
                     </div>
                 </div>
             </div>

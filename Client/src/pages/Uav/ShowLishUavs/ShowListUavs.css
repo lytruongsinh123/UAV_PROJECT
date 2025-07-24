@@ -1,0 +1,143 @@
+/* Show List UAVs - Horizontal Grid Layout */
+.list-uavs-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 24px;
+    padding: 24px;
+    background-color: var(--bg-primary);
+    min-height: 100vh;
+}
+
+/* Light theme */
+[data-theme="light"] .list-uavs-container,
+body.light-theme .list-uavs-container {
+    background-color: #f8fafc !important;
+}
+
+/* Dark theme */
+[data-theme="dark"] .list-uavs-container,
+body.dark-theme .list-uavs-container {
+    background-color: #0f172a !important;
+}
+
+/* No UAVs Message */
+.no-uavs-message {
+    grid-column: 1 / -1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 400px;
+    text-align: center;
+    color: var(--text-secondary);
+    background: var(--bg-secondary);
+    border: 2px dashed var(--border-primary);
+    border-radius: 16px;
+    padding: 40px;
+}
+
+[data-theme="light"] .no-uavs-message,
+body.light-theme .no-uavs-message {
+    color: #64748b !important;
+    background: #ffffff !important;
+    border-color: #e2e8f0 !important;
+}
+
+[data-theme="dark"] .no-uavs-message,
+body.dark-theme .no-uavs-message {
+    color: #94a3b8 !important;
+    background: #1e293b !important;
+    border-color: #475569 !important;
+}
+
+.no-uavs-message::before {
+    content: "🚁";
+    font-size: 64px;
+    margin-bottom: 16px;
+    opacity: 0.6;
+}
+
+/* Responsive Breakpoints */
+@media (max-width: 1400px) {
+    .list-uavs-container {
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+        gap: 20px;
+        padding: 20px;
+    }
+}
+
+@media (max-width: 1200px) {
+    .list-uavs-container {
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 18px;
+        padding: 18px;
+    }
+}
+
+@media (max-width: 768px) {
+    .list-uavs-container {
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 16px;
+        padding: 16px;
+    }
+}
+
+@media (max-width: 640px) {
+    .list-uavs-container {
+        grid-template-columns: 1fr;
+        gap: 16px;
+        padding: 16px;
+    }
+}
+
+/* Animation for cards */
+.list-uavs-container > * {
+    animation: slideInUp 0.6s ease-out;
+    animation-fill-mode: both;
+}
+
+.list-uavs-container > *:nth-child(1) {
+    animation-delay: 0.1s;
+}
+.list-uavs-container > *:nth-child(2) {
+    animation-delay: 0.2s;
+}
+.list-uavs-container > *:nth-child(3) {
+    animation-delay: 0.3s;
+}
+.list-uavs-container > *:nth-child(4) {
+    animation-delay: 0.4s;
+}
+.list-uavs-container > *:nth-child(5) {
+    animation-delay: 0.5s;
+}
+.list-uavs-container > *:nth-child(6) {
+    animation-delay: 0.6s;
+}
+
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Hover effect for grid */
+.list-uavs-container:hover > *:not(:hover) {
+    opacity: 0.8;
+    transform: scale(0.98);
+}
+
+.list-uavs-container > * {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Grid auto-sizing */
+.list-uavs-container {
+    grid-auto-rows: max-content;
+    align-items: start;
+}

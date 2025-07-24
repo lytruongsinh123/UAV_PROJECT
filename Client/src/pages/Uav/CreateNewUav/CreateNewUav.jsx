@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { FormattedMessage } from "react-intl";
 import { useNavigate } from "react-router-dom";
-import { creatNewUav } from "../../../service/uavsService";
+import { createNewUav } from "../../../service/uavsService";
 import { toast } from "react-toastify";
 import CommonUtils from "../../../utils/CommonUtils";
 import "./CreateNewUav.css";
@@ -64,7 +64,7 @@ class CreateNewUav extends Component {
         this.setState({ isSubmitting: true });
 
         try {
-            let res = await creatNewUav({
+            let res = await createNewUav({
                 droneId: this.state.droneId,
                 droneName: this.state.droneName,
                 speedMax: parseInt(this.state.speedMax),

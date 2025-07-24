@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { FormattedMessage, injectIntl } from "react-intl";
+import { connect } from "react-redux";
 import { sendEmail } from "../../service/emailService";
 import themeUtils from "../../utils/ThemeUtils";
 import "./Feedback.css";
@@ -19,7 +20,7 @@ class Feedback extends Component {
             isSubmitting: false,
             submitStatus: null, // 'success', 'error', null
             errors: {},
-            currentTheme: themeUtils.getCurrentTheme(),
+            currentTheme: props.currentTheme || themeUtils.getCurrentTheme(),
         };
     }
 
@@ -47,6 +48,24 @@ class Feedback extends Component {
             attributes: true,
             attributeFilter: ["class", "data-theme"],
         });
+    }
+
+    componentDidUpdate(prevProps) {
+        // Cập nhật theme khi props từ Redux thay đổi
+        if (prevProps.currentTheme !== this.props.currentTheme) {
+            this.setState({ currentTheme: this.props.currentTheme });
+        }
+
+        // Cập nhật user info khi user login/logout
+        if (prevProps.userInfo !== this.props.userInfo) {
+            this.setState({
+                feedbackData: {
+                    ...this.state.feedbackData,
+                    name: this.props.userInfo?.firstName || "",
+                    email: this.props.userInfo?.email || "",
+                },
+            });
+        }
     }
 
     componentWillUnmount() {
@@ -131,7 +150,7 @@ class Feedback extends Component {
                 category: this.state.feedbackData.category,
                 subject: this.state.feedbackData.subject,
                 message: this.state.feedbackData.message,
-                language: "vi",
+                language: this.props.language,
             });
             if (response.errCode === 0) {
                 this.setState({
@@ -505,13 +524,13 @@ class Feedback extends Component {
                                     href="mailto:support@uavregistry.com"
                                     className="contact-method">
                                     <i className="fas fa-envelope"></i>
-                                    support@uavregistry.com
+                                    diepduong607@gmail.com
                                 </a>
                                 <a
                                     href="tel:+1234567890"
                                     className="contact-method">
                                     <i className="fas fa-phone"></i>
-                                    +1 (234) 567-890
+                                    +84 396 928 765
                                 </a>
                             </div>
                         </div>
@@ -522,4 +541,21 @@ class Feedback extends Component {
     }
 }
 
-export default injectIntl(Feedback);
+// Map state từ Redux store vào props
+const mapStateToProps = (state) => {
+    return {
+        language: state.app.language,
+    };
+};
+
+// Map dispatch actions vào props
+const mapDispatchToProps = (dispatch) => {
+    return {
+        
+    };
+};
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(injectIntl(Feedback));

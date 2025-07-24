@@ -253,5 +253,16 @@
         },
         "alternative-contact": "Alternative Contact",
         "alternative-description": "You can also contact us directly:"
+    },
+    "edit-user": {
+        "title": "Edit User Information",
+        "first-name": "First Name",
+        "last-name": "Last Name",
+        "address": "Address",
+        "position": "Position",
+        "gender": "Gender",
+        "phone-number": "Phone Number",
+        "avatar": "Avatar",
+        "update": "Update"
     }
 }

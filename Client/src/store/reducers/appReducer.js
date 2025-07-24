@@ -1,6 +1,6 @@
 import actionTypes from "../actions/actionTypes";
 const initialState = {
-    language: "vi",
+    language: "en",
 };
 const appReducer = (state = initialState, action) => {
     switch (action.type) {

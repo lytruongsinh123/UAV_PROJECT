@@ -6,8 +6,8 @@
     overflow: hidden;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     box-shadow: 0 4px 12px var(--shadow-light);
-    max-width: 380px;
-    margin: 0 auto;
+    max-width: 500px;
+    margin: 0 20px;
 }
 
 /* Light theme */
@@ -93,57 +93,6 @@ body.dark-theme .no-image {
     margin-bottom: 8px;
     opacity: 0.6;
 }
-
-/* Image Overlay */
-.image-overlay {
-    position: absolute;
-    top: 12px;
-    right: 12px;
-    display: flex;
-    gap: 8px;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-}
-
-.card-uavs-container:hover .image-overlay {
-    opacity: 1;
-}
-
-.view-btn,
-.edit-btn {
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    border: none;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 14px;
-    transition: all 0.3s ease;
-    backdrop-filter: blur(10px);
-}
-
-.view-btn {
-    background: rgba(59, 130, 246, 0.9);
-    color: white;
-}
-
-.view-btn:hover {
-    background: rgb(59, 130, 246);
-    transform: scale(1.1);
-}
-
-.edit-btn {
-    background: rgba(16, 185, 129, 0.9);
-    color: white;
-}
-
-.edit-btn:hover {
-    background: rgb(16, 185, 129);
-    transform: scale(1.1);
-}
-
 /* UAV Information Section */
 .uav-information {
     padding: 20px;
@@ -172,7 +121,7 @@ body.light-theme .uav-id {
 
 [data-theme="dark"] .uav-id,
 body.dark-theme .uav-id {
-    color: #94a3b8 !important;
+    color: #032f6cff !important;
 }
 
 .uav-id i {
@@ -193,7 +142,6 @@ body.dark-theme .uav-id i {
 .uav-id .value {
     font-family: "Courier New", monospace;
     font-weight: 600;
-    color: var(--text-primary);
 }
 
 [data-theme="light"] .uav-id .value,
@@ -203,7 +151,7 @@ body.light-theme .uav-id .value {
 
 [data-theme="dark"] .uav-id .value,
 body.dark-theme .uav-id .value {
-    color: #e2e8f0 !important;
+    color: #1e293b !important;
 }
 
 .uav-status {
@@ -379,88 +327,6 @@ body.dark-theme .spec-value {
 .spec-item:hover .spec-label,
 .spec-item:hover .spec-value {
     color: white !important;
-}
-
-/* UAV Actions */
-.uav-actions {
-    display: flex;
-    gap: 12px;
-}
-
-.action-btn {
-    flex: 1;
-    padding: 12px 16px;
-    border-radius: 8px;
-    border: none;
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-}
-
-.action-btn.primary {
-    background: var(--accent-primary);
-    color: white;
-}
-
-[data-theme="light"] .action-btn.primary,
-[data-theme="dark"] .action-btn.primary,
-body.light-theme .action-btn.primary,
-body.dark-theme .action-btn.primary {
-    background: #6366f1 !important;
-}
-
-.action-btn.primary:hover {
-    background: var(--accent-secondary);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
-}
-
-[data-theme="light"] .action-btn.primary:hover,
-[data-theme="dark"] .action-btn.primary:hover,
-body.light-theme .action-btn.primary:hover,
-body.dark-theme .action-btn.primary:hover {
-    background: #4f46e5 !important;
-}
-
-.action-btn.secondary {
-    background: var(--bg-tertiary);
-    color: var(--text-secondary);
-    border: 1px solid var(--border-primary);
-}
-
-[data-theme="light"] .action-btn.secondary,
-body.light-theme .action-btn.secondary {
-    background: #f1f5f9 !important;
-    color: #64748b !important;
-    border-color: #e2e8f0 !important;
-}
-
-[data-theme="dark"] .action-btn.secondary,
-body.dark-theme .action-btn.secondary {
-    background: #334155 !important;
-    color: #94a3b8 !important;
-    border-color: #475569 !important;
-}
-
-.action-btn.secondary:hover {
-    background: var(--accent-primary);
-    color: white;
-    border-color: var(--accent-primary);
-    transform: translateY(-2px);
-}
-
-[data-theme="light"] .action-btn.secondary:hover,
-[data-theme="dark"] .action-btn.secondary:hover,
-body.light-theme .action-btn.secondary:hover,
-body.dark-theme .action-btn.secondary:hover {
-    background: #6366f1 !important;
-    color: white !important;
-    border-color: #6366f1 !important;
 }
 
 /* Responsive Design */

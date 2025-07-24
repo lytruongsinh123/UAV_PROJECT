@@ -7,6 +7,8 @@ import notificationService from "../../services/notificationService";
 import * as actions from "../../store/actions";
 import themeUtils from "../../utils/ThemeUtils";
 import "./SideBar.css";
+import { Buffer } from 'buffer';
+
 class SlideBar extends Component {
     constructor(props) {
         super(props);
@@ -24,7 +26,6 @@ class SlideBar extends Component {
         this.setState({
             user: user.data,
         });
-
         //  Lắng nghe thông báo mới
         window.addEventListener("showNotification", this.handleNewNotification);
 
@@ -184,18 +185,6 @@ class SlideBar extends Component {
     };
     render() {
         const isOpenSidebar = this.props.isOpenSidebar;
-        let avatarSrc = "https://via.placeholder.com/150";
-        if (this.state.user.image && this.state.user.image.data) {
-            // Convert Uint8Array to base64 string (browser safe)
-            const uint8Array = new Uint8Array(this.state.user.image.data);
-            const base64String = btoa(
-                uint8Array.reduce(
-                    (data, byte) => data + String.fromCharCode(byte),
-                    ""
-                )
-            );
-            avatarSrc = `data:image/jpeg;base64,${base64String}`;
-        }
         return (
             <div className="sidebar">
                 <div
@@ -204,7 +193,7 @@ class SlideBar extends Component {
                     <div
                         className="image-avatar"
                         style={{
-                            backgroundImage: `url(${avatarSrc})`,
+                            backgroundImage: `url(${this.state.user.image ? Buffer.from(this.state.user.image, "base64").toString("binary") : ""})`,
                         }}></div>
                     {isOpenSidebar ? (
                         <span>

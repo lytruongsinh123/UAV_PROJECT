@@ -252,5 +252,16 @@
         },
         "alternative-contact": "Liên hệ khác",
         "alternative-description": "Bạn cũng có thể liên hệ trực tiếp với chúng tôi:"
+    },
+    "edit-user": {
+        "title": "Chỉnh sửa thông tin người dùng",
+        "first-name": "Tên",
+        "last-name": "Họ",
+        "address": "Địa chỉ",
+        "position": "Chức vụ",
+        "gender": "Giới tính",
+        "phone-number": "Số điện thoại",
+        "avatar": "Ảnh đại diện",
+        "update": "Cập nhật"
     }
 }

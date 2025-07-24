@@ -1,93 +1,291 @@
+/* CSS Variables cho theme */
+:root {
+    --bg-primary: #ffffff;
+    --bg-secondary: #f8fafc;
+    --text-primary: #1e293b;
+    --text-secondary: #64748b;
+    --border-color: #e2e8f0;
+    --input-bg: #ffffff;
+    --shadow: rgba(0, 0, 0, 0.1);
+}
+
+[data-theme="dark"],
+.dark-theme {
+    --bg-primary: #0f172a !important;
+    --bg-secondary: #1e293b !important;
+    --text-primary: #e2e8f0 !important;
+    --text-secondary: #94a3b8 !important;
+    --border-color: #475569 !important;
+    --input-bg: #334155 !important;
+    --shadow: rgba(0, 0, 0, 0.5) !important;
+}
+
 .edituser-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 80vh;
-    background: linear-gradient(120deg, #f8fafc 0%, #e0e7ff 100%);
+    min-height: 100vh;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    padding: 40px;
+    transition: all 0.3s ease;
+    /* Remove flex centering to keep full width */
 }
+
+/* Force dark theme styles */
+.edituser-container.dark,
+[data-theme="dark"] .edituser-container,
+body.dark-theme .edituser-container {
+    background: #0f172a !important;
+    color: #e2e8f0 !important;
+}
+
 .edituser-card {
-    background: #fff;
-    border-radius: 20px;
-    box-shadow: 0 8px 32px rgba(78, 84, 200, 0.18);
-    padding: 40px 36px;
+    background: var(--bg-secondary);
+    border-radius: 16px;
+    padding: 40px;
+    box-shadow: 0 10px 40px var(--shadow);
     width: 100%;
-    max-width: 95vw;
-    text-align: center;
+    /* Remove max-width constraint */
+    border: 1px solid var(--border-color);
+    margin: 0 auto;
 }
+
+/* Force dark theme card */
+.dark .edituser-card,
+[data-theme="dark"] .edituser-card,
+body.dark-theme .edituser-card {
+    background: #1e293b !important;
+    border-color: #475569 !important;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5) !important;
+}
+
 .edituser-title {
-    font-size: 1.6rem;
-    color: #4e54c8;
-    margin-bottom: 28px;
-    font-weight: 700;
-    letter-spacing: 1px;
-}
-.form-group {
-    margin-bottom: 20px;
-    text-align: left;
-}
-.form-group label {
-    font-weight: 500;
-    color: #333;
-    margin-bottom: 6px;
-    display: block;
-}
-.form-group input,
-.form-group select {
-    width: 100%;
-    padding: 10px 14px;
-    border-radius: 10px;
-    border: 1px solid #d1d5db;
-    font-size: 1rem;
-    background: #f8fafc;
-    margin-top: 2px;
-    transition: border 0.2s;
-}
-.form-group input:focus,
-.form-group select:focus {
-    border: 1.5px solid #4e54c8;
-    outline: none;
-}
-.edituser-btn {
-    width: 100%;
-    padding: 14px;
-    background: linear-gradient(135deg, #4e54c8 60%, #8f94fb 100%);
-    color: #fff;
-    border: none;
-    border-radius: 12px;
-    font-size: 1.15rem;
+    text-align: center;
+    color: var(--text-primary);
+    font-size: 28px;
     font-weight: 600;
-    cursor: pointer;
-    margin-top: 10px;
-    transition: background 0.2s;
-    box-shadow: 0 2px 8px rgba(78, 84, 200, 0.1);
+    margin-bottom: 40px;
 }
-.edituser-btn:hover {
-    background: linear-gradient(135deg, #8f94fb 60%, #4e54c8 100%);
+
+/* Force dark theme title */
+.dark .edituser-title,
+[data-theme="dark"] .edituser-title,
+body.dark-theme .edituser-title {
+    color: #e2e8f0 !important;
 }
+
 .preview-img-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-bottom: 18px;
-    background: none; /* bỏ nền tím */
-    border-radius: 0; /* bỏ bo góc nền */
-    padding: 0;
-    box-shadow: none; /* bỏ bóng đổ nền */
-    min-height: unset;
+    text-align: center;
+    margin-bottom: 30px;
+    position: relative;
 }
 
 .preview-img {
-    width: 140px; /* tăng kích thước ảnh */
-    height: 140px;
+    width: 150px;
+    height: 150px;
     border-radius: 50%;
     object-fit: cover;
-    box-shadow: 0 4px 16px rgba(78, 84, 200, 0.15);
-    border: none; /* bỏ viền tím */
-    background: #fff;
-    transition: box-shadow 0.2s, transform 0.2s;
+    border: 4px solid var(--border-color);
+    box-shadow: 0 8px 32px var(--shadow);
+    transition: all 0.3s ease;
+    display: inline-block;
 }
 
 .preview-img:hover {
-    box-shadow: 0 8px 32px rgba(78, 84, 200, 0.22);
     transform: scale(1.05);
+    box-shadow: 0 12px 40px var(--shadow);
+}
+
+/* Force dark theme preview img */
+.dark .preview-img,
+[data-theme="dark"] .preview-img,
+body.dark-theme .preview-img {
+    border-color: #475569 !important;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4) !important;
+}
+
+.dark .preview-img:hover,
+[data-theme="dark"] .preview-img:hover,
+body.dark-theme .preview-img:hover {
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6) !important;
+}
+
+/* Nếu không có preview image, ẩn nó đi */
+.preview-img-container .preview-img[src=""],
+.preview-img-container .preview-img:not([src]) {
+    display: none;
+}
+
+/* Style cho file input */
+.form-group input[type="file"] {
+    padding: 12px;
+    background: var(--bg-primary);
+    border: 2px dashed var(--border-color);
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.form-group input[type="file"]:hover {
+    border-color: #6366f1;
+    background: rgba(99, 102, 241, 0.05);
+}
+
+/* Force dark theme file input */
+.dark .form-group input[type="file"],
+[data-theme="dark"] .form-group input[type="file"],
+body.dark-theme .form-group input[type="file"] {
+    background: #0f172a !important;
+    border-color: #475569 !important;
+    color: #e2e8f0 !important;
+}
+
+.dark .form-group input[type="file"]:hover,
+[data-theme="dark"] .form-group input[type="file"]:hover,
+body.dark-theme .form-group input[type="file"]:hover {
+    border-color: #6366f1 !important;
+    background: rgba(99, 102, 241, 0.1) !important;
+}
+
+/* Better styling cho avatar preview */
+.avatar-preview-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 30px;
+    padding: 30px;
+    background: rgba(99, 102, 241, 0.05);
+    border-radius: 20px;
+    border: 2px dashed rgba(99, 102, 241, 0.2);
+}
+
+/* Dark theme avatar preview section */
+.dark .avatar-preview-section,
+[data-theme="dark"] .avatar-preview-section,
+body.dark-theme .avatar-preview-section {
+    background: rgba(99, 102, 241, 0.1) !important;
+    border-color: rgba(99, 102, 241, 0.3) !important;
+}
+
+.avatar-upload-text {
+    color: var(--text-secondary);
+    font-size: 14px;
+    margin-top: 10px;
+}
+
+.dark .avatar-upload-text,
+[data-theme="dark"] .avatar-upload-text,
+body.dark-theme .avatar-upload-text {
+    color: #94a3b8 !important;
+}
+
+.form-group {
+    margin-bottom: 24px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: 500;
+    color: var(--text-primary);
+    font-size: 16px;
+}
+
+/* Force dark theme labels */
+.dark .form-group label,
+[data-theme="dark"] .form-group label,
+body.dark-theme .form-group label {
+    color: #e2e8f0 !important;
+}
+
+.form-group input,
+.form-group select {
+    width: 100%;
+    padding: 16px 20px;
+    border: 2px solid var(--border-color);
+    border-radius: 12px;
+    font-size: 16px;
+    background: var(--input-bg);
+    color: var(--text-primary);
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+}
+
+/* Force dark theme inputs */
+.dark .form-group input,
+.dark .form-group select,
+[data-theme="dark"] .form-group input,
+[data-theme="dark"] .form-group select,
+body.dark-theme .form-group input,
+body.dark-theme .form-group select {
+    background: #334155 !important;
+    border-color: #475569 !important;
+    color: #e2e8f0 !important;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: #6366f1;
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+}
+
+.form-group input::placeholder {
+    color: var(--text-secondary);
+}
+
+/* Force dark theme placeholders */
+.dark .form-group input::placeholder,
+[data-theme="dark"] .form-group input::placeholder,
+body.dark-theme .form-group input::placeholder {
+    color: #94a3b8 !important;
+}
+
+.edituser-btn {
+    width: 100%;
+    padding: 18px;
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 18px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 30px;
+}
+
+.edituser-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(99, 102, 241, 0.3);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .edituser-container {
+        padding: 20px;
+    }
+
+    .edituser-card {
+        padding: 30px;
+    }
+
+    .form-group input,
+    .form-group select {
+        padding: 14px 16px;
+    }
+
+    .edituser-btn {
+        padding: 16px;
+        font-size: 16px;
+    }
+}
+
+@media (max-width: 480px) {
+    .edituser-container {
+        padding: 16px;
+    }
+
+    .edituser-card {
+        padding: 24px;
+    }
 }
