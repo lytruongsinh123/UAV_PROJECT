@@ -20,8 +20,8 @@ class RegisterUav extends Component {
             droneName: "",
             startPoint: "",
             endPoint: "",
-            heightFly: null,
-            speed: null,
+            heightFly: "", 
+            speed: "", 
             status: "pending",
             listChoicesUavs: [],
             choicedUav: {},
@@ -105,6 +105,7 @@ class RegisterUav extends Component {
             if (choicedUav) {
                 this.setState({
                     choicedUav: choicedUav,
+                    droneName: choicedUav.droneName,
                 });
             }
         }
@@ -204,9 +205,6 @@ class RegisterUav extends Component {
             }
         }
         await this.props.fetchUavsRegisteredByOwner(ownerId); // Gọi fetch trước
-        if (this.props.navigate) {
-            this.props.navigate("/dashboard");
-        }
     };
 
     render() {
@@ -221,8 +219,8 @@ class RegisterUav extends Component {
             listChoicesUavs,
             choicedUav,
         } = this.state;
-        console.log("check choicedUav:", choicedUav);
         const { userInfo } = this.props;
+
         return (
             <div
                 className={`registration-uav-container ${currentTheme}`}
@@ -249,7 +247,7 @@ class RegisterUav extends Component {
                                 type="number"
                                 id="ownerId"
                                 name="ownerId"
-                                value={userInfo.id}
+                                value={userInfo.id || ""}
                                 onChange={this.handleInputChange}
                                 placeholder="Enter owner ID"
                                 required
@@ -266,15 +264,18 @@ class RegisterUav extends Component {
                             <select
                                 id="droneId"
                                 name="droneId"
-                                value={droneId}
+                                value={droneId || ""}
                                 onChange={this.handleInputChange}
                                 required>
                                 <option value="">Select Drone</option>
                                 {listChoicesUavs.map((uav) => (
-                                    <option key={uav.id}>{uav.droneId}</option>
+                                    <option key={uav.id} value={uav.droneId}>
+                                        {uav.droneId}
+                                    </option>
                                 ))}
                             </select>
                         </div>
+
                         {/* Start Point */}
                         <div className="form-group full-width">
                             <label htmlFor="startPoint">
@@ -285,12 +286,13 @@ class RegisterUav extends Component {
                                 type="text"
                                 id="startPoint"
                                 name="startPoint"
-                                value={startPoint}
+                                value={startPoint || ""}
                                 onChange={this.handleInputChange}
                                 placeholder="e.g., Hanoi Airport (21.2187, 105.8040)"
                                 required
                             />
                         </div>
+
                         {/* End Point */}
                         <div className="form-group full-width">
                             <label htmlFor="endPoint">
@@ -301,7 +303,7 @@ class RegisterUav extends Component {
                                 type="text"
                                 id="endPoint"
                                 name="endPoint"
-                                value={endPoint}
+                                value={endPoint || ""}
                                 onChange={this.handleInputChange}
                                 placeholder="e.g., Ho Chi Minh Airport (10.8231, 106.6297)"
                                 required
@@ -318,7 +320,7 @@ class RegisterUav extends Component {
                                 type="number"
                                 id="heightFly"
                                 name="heightFly"
-                                value={heightFly}
+                                value={heightFly || ""}
                                 onChange={this.handleInputChange}
                                 placeholder="e.g., 100"
                                 min="1"
@@ -337,7 +339,7 @@ class RegisterUav extends Component {
                                 type="number"
                                 id="speed"
                                 name="speed"
-                                value={speed}
+                                value={speed || ""}
                                 onChange={this.handleInputChange}
                                 placeholder="e.g., 50"
                                 min="1"
@@ -356,7 +358,7 @@ class RegisterUav extends Component {
                                 type="text"
                                 id="droneName"
                                 name="droneName"
-                                value={choicedUav.droneName || droneName}
+                                value={choicedUav.droneName || droneName || ""}
                                 onChange={this.handleInputChange}
                                 placeholder="e.g., Sky Falcon X1"
                                 required
@@ -368,14 +370,11 @@ class RegisterUav extends Component {
                         <button
                             type="button"
                             className="btn-cancel"
-                            onClick={() => this.handleCancel()}>
+                            onClick={this.handleCancel}>
                             <i className="fas fa-times"></i>
                             Cancel
                         </button>
-                        <button
-                            type="submit"
-                            className="btn-submit"
-                            onClick={this.handleSubmit}>
+                        <button type="submit" className="btn-submit">
                             <i className="fas fa-paper-plane"></i>
                             {this.props.actions === crud_actions.CREATE
                                 ? "Register UAV"

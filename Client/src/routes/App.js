@@ -27,6 +27,7 @@ import Feedback from "../containers/FeetBack/Feedback";
 import Help from "../containers/Help/Help";
 import CreateNewUav from "../pages/Uav/CreateNewUav/CreateNewUav";
 import ShowListUavs from "../pages/Uav/ShowLishUavs/ShowListUavs";
+import Register from "../pages/User/Register/Register";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 
 class App extends Component {
@@ -71,13 +72,16 @@ class App extends Component {
                                     path={"/login"}
                                     Component={userIsNotAuthenticated(Login)}
                                 />
+                                <Route
+                                    path={"/register"}
+                                    Component={userIsNotAuthenticated(Register)}
+                                />
                                 {/* HomePage layout với Header + Sidebar */}
                                 <Route
                                     path={"/home"}
-                                    Component={userIsAuthenticated(
-                                        HomePage
-                                    )}></Route>
-
+                                    Component={userIsAuthenticated(HomePage)}>
+                                    <Route index element={<Homeuav />} />
+                                </Route>
                                 {/* Dashboard standalone route cũng có header + sidebar */}
                                 <Route
                                     path={"/dashboard"}

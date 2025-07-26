@@ -1,0 +1,76 @@
+<svg class="drone-svg" viewBox="0 0 800 512" style="width: 650px; height: auto; animation: floatDrone 4s ease-in-out infinite;" xmlns="http://www.w3.org/2000/svg">
+  <g fill="#00e5ff">
+    <rect x="400" y="225" width="130" height="12" fill="#00bcd4" stroke="#00e5ff" stroke-width="3" rx="6" transform="rotate(-15 400 230)" />
+    <rect x="520" y="170" width="90" height="12" fill="#00bcd4" stroke="#00e5ff" stroke-width="3" rx="6" transform="rotate(-35 520 185)" />
+    <circle cx="515" cy="180" r="10" fill="#008fa1" stroke="#00e5ff" stroke-width="3" />
+    
+    <rect x="270" y="225" width="130" height="12" fill="#00bcd4" stroke="#00e5ff" stroke-width="3" rx="6" transform="rotate(15 400 230)" />
+    <rect x="190" y="170" width="90" height="12" fill="#00bcd4" stroke="#00e5ff" stroke-width="3" rx="6" transform="rotate(35 280 185)" />
+    <circle cx="285" cy="180" r="10" fill="#008fa1" stroke="#00e5ff" stroke-width="3" />
+    
+    <rect x="400" y="225" width="130" height="12" fill="#00bcd4" stroke="#00e5ff" stroke-width="3" rx="6" transform="rotate(15 400 230)" />
+    <rect x="520" y="290" width="90" height="12" fill="#00bcd4" stroke="#00e5ff" stroke-width="3" rx="6" transform="rotate(35 520 275)" />
+    <circle cx="515" cy="280" r="10" fill="#008fa1" stroke="#00e5ff" stroke-width="3" />
+    
+    <rect x="270" y="225" width="130" height="12" fill="#00bcd4" stroke="#00e5ff" stroke-width="3" rx="6" transform="rotate(-15 400 230)" />
+    <rect x="190" y="290" width="90" height="12" fill="#00bcd4" stroke="#00e5ff" stroke-width="3" rx="6" transform="rotate(-35 280 275)" />
+    <circle cx="285" cy="280" r="10" fill="#008fa1" stroke="#00e5ff" stroke-width="3" />
+    
+    <circle cx="400" cy="230" r="18" fill="#008fa1" stroke="#00e5ff" stroke-width="4" />
+    <circle cx="400" cy="230" r="10" fill="#00bcd4" />
+    
+    <ellipse cx="590" cy="140" rx="30" ry="18" fill="#008fa1" stroke="#00e5ff" stroke-width="4" transform="rotate(-35 590 140)" />
+    <circle cx="590" cy="140" r="15" fill="#00bcd4" stroke="#00e5ff" stroke-width="3" />
+    <circle cx="590" cy="140" r="8" fill="#008fa1" />
+    
+    <ellipse cx="210" cy="140" rx="30" ry="18" fill="#008fa1" stroke="#00e5ff" stroke-width="4" transform="rotate(35 210 140)" />
+    <circle cx="210" cy="140" r="15" fill="#00bcd4" stroke="#00e5ff" stroke-width="3" />
+    <circle cx="210" cy="140" r="8" fill="#008fa1" />
+    
+    <ellipse cx="590" cy="320" rx="30" ry="18" fill="#008fa1" stroke="#00e5ff" stroke-width="4" transform="rotate(35 590 320)" />
+    <circle cx="590" cy="320" r="15" fill="#00bcd4" stroke="#00e5ff" stroke-width="3" />
+    <circle cx="590" cy="320" r="8" fill="#008fa1" />
+    
+    <ellipse cx="210" cy="320" rx="30" ry="18" fill="#008fa1" stroke="#00e5ff" stroke-width="4" transform="rotate(-35 210 320)" />
+    <circle cx="210" cy="320" r="15" fill="#00bcd4" stroke="#00e5ff" stroke-width="3" />
+    <circle cx="210" cy="320" r="8" fill="#008fa1" />
+    
+    <ellipse cx="590" cy="140" rx="55" ry="15" fill="#00e5ff" opacity="0.8" style="animation: spinRotor 0.25s linear infinite; transform-origin: 590px 140px;" />
+    <ellipse cx="210" cy="140" rx="55" ry="15" fill="#00e5ff" opacity="0.8" style="animation: spinRotor 0.25s linear infinite; transform-origin: 210px 140px;" />
+    <ellipse cx="590" cy="320" rx="55" ry="15" fill="#00e5ff" opacity="0.8" style="animation: spinRotor 0.25s linear infinite; transform-origin: 590px 320px;" />
+    <ellipse cx="210" cy="320" rx="55" ry="15" fill="#00e5ff" opacity="0.8" style="animation: spinRotor 0.25s linear infinite; transform-origin: 210px 320px;" />
+    
+    <circle cx="400" cy="230" r="90" fill="#00bcd4" stroke="#00e5ff" stroke-width="6" />
+    <circle cx="400" cy="230" r="72" fill="none" stroke="#00e5ff" stroke-width="4" opacity="0.7" />
+    <circle cx="400" cy="230" r="54" fill="none" stroke="#00e5ff" stroke-width="3" opacity="0.5" />
+    <circle cx="400" cy="230" r="36" fill="none" stroke="#00e5ff" stroke-width="3" opacity="0.3" />
+    
+    <polygon points="400,195 425,207 425,233 400,245 375,233 375,207" fill="none" stroke="#00e5ff" stroke-width="3" opacity="0.6" />
+    <polygon points="400,215 415,222 415,238 400,245 385,238 385,222" fill="#00e5ff" opacity="0.4" />
+    <rect x="370" y="200" width="60" height="5" fill="#00e5ff" opacity="0.6" rx="2" />
+    <rect x="370" y="210" width="42" height="4" fill="#00e5ff" opacity="0.5" rx="1" />
+    <rect x="370" y="250" width="50" height="4" fill="#00e5ff" opacity="0.5" rx="1" />
+    
+    <rect x="360" y="320" width="80" height="30" fill="#008fa1" stroke="#00e5ff" stroke-width="4" rx="10" />
+    <circle cx="400" cy="335" r="18" fill="#222" stroke="#00e5ff" stroke-width="4" />
+    <circle cx="400" cy="335" r="10" fill="#00e5ff" />
+    <circle cx="400" cy="335" r="5" fill="#ffffff" opacity="0.8" />
+    
+    <path d="M335,320 Q320,360 335,400 Q345,410 355,400 Q345,370 345,325" fill="none" stroke="#00e5ff" stroke-width="10" opacity="0.9" />
+    <path d="M465,320 Q480,360 465,400 Q455,410 445,400 Q455,370 455,325" fill="none" stroke="#00e5ff" stroke-width="10" opacity="0.9" />
+    <rect x="332" y="360" width="10" height="24" fill="#008fa1" rx="5" />
+    <rect x="458" y="360" width="10" height="24" fill="#008fa1" rx="5" />
+    <ellipse cx="335" cy="400" rx="24" ry="10" fill="#00bcd4" stroke="#00e5ff" stroke-width="3" />
+    <ellipse cx="465" cy="400" rx="24" ry="10" fill="#00bcd4" stroke="#00e5ff" stroke-width="3" />
+    
+    <circle cx="360" cy="185" r="5" fill="#ff4444" opacity="0.9" />
+    <circle cx="380" cy="180" r="5" fill="#ffaa00" opacity="0.9" />
+    <circle cx="400" cy="175" r="5" fill="#44ff44" opacity="0.9" />
+    <circle cx="420" cy="180" r="5" fill="#0099ff" opacity="0.9" />
+    <circle cx="440" cy="185" r="5" fill="#ff44ff" opacity="0.9" />
+    
+    <!-- GPS antenna -->
+    <rect x="393" y="170" width="14" height="10" fill="#00e5ff" rx="3" />
+    <line x1="400" y1="170" x2="400" y2="160" stroke="#00e5ff" stroke-width="3" />
+  </g>
+</svg>

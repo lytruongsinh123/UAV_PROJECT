@@ -16,7 +16,7 @@ class Homeuav extends Component {
     render() {
         return (
             <div className="homeuav">
-                <div className="avatar">Hello</div>
+                <div className="avatar">Hello Uav</div>
             </div>
         );
     }

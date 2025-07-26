@@ -8,4 +8,7 @@ const handleUpdateUser = (userData) => {
 const getUserById = (id) => {
     return axios.get(`/api/get-user-by-id?id=${id}`);
 };
-export { handleLogin, handleUpdateUser, getUserById };
+const createNewUser = (userData) => { 
+    return axios.post("/api/create-new-user", userData);
+};
+export { handleLogin, handleUpdateUser, getUserById, createNewUser };
