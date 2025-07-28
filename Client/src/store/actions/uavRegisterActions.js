@@ -1,7 +1,7 @@
 import actionTypes from "./actionTypes";
 import { toast } from "react-toastify";
 import { statusFlightPath } from "../../utils/constants";
-import notificationService from "../../services/notificationService";
+import notificationService from "../../service/notificationService";
 import {
     registerNewUav,
     getAllUavsRegisterByOwner,

@@ -3,11 +3,11 @@ import { connect } from "react-redux";
 import { FormattedMessage } from "react-intl";
 import { useNavigate } from "react-router-dom";
 import { getUserById } from "../../service/userService";
-import notificationService from "../../services/notificationService";
+import notificationService from "../../service/notificationService";
 import * as actions from "../../store/actions";
 import themeUtils from "../../utils/ThemeUtils";
 import "./SideBar.css";
-import { Buffer } from 'buffer';
+import { Buffer } from "buffer";
 
 class SlideBar extends Component {
     constructor(props) {
@@ -194,7 +194,14 @@ class SlideBar extends Component {
                     <div
                         className="image-avatar"
                         style={{
-                            backgroundImage: `url(${this.state.user.image ? Buffer.from(this.state.user.image, "base64").toString("binary") : defaultAvatar})`,
+                            backgroundImage: `url(${
+                                this.state.user.image
+                                    ? Buffer.from(
+                                          this.state.user.image,
+                                          "base64"
+                                      ).toString("binary")
+                                    : defaultAvatar
+                            })`,
                         }}></div>
                     {isOpenSidebar ? (
                         <span>

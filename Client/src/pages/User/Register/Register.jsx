@@ -180,7 +180,7 @@ class Register extends Component {
                                 </div>
                                 <div className="register-signin">
                                     Already have an account?{" "}
-                                    <span className="register-signin-link">
+                                    <span className="register-signin-link" onClick={() => this.props.navigate("/login")}>
                                         Sign in
                                     </span>
                                 </div>

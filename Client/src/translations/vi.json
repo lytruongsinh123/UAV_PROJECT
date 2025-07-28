@@ -263,5 +263,12 @@
         "phone-number": "Số điện thoại",
         "avatar": "Ảnh đại diện",
         "update": "Cập nhật"
+    },
+    "homeuav": {
+        "title": "Đăng ký UAV",
+        "sub-title": "Nền tảng quản lý UAV hiện đại, hiệu quả và linh hoạt",
+        "description": "Mục tiêu của hệ thống là xây dựng một nền tảng phần mềm dựa trên web nhằm quản lý, theo dõi và kiểm soát thiết bị bay vận tải không người lái (UAV) một cách hiệu quả, an toàn và linh hoạt.",
+        "tagline": "Điều phối tối ưu – An toàn tối đa!",
+        "btn-register": "Khám phá hệ thống"
     }
 }

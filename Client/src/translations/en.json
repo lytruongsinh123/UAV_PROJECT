@@ -264,5 +264,12 @@
         "phone-number": "Phone Number",
         "avatar": "Avatar",
         "update": "Update"
+    },
+    "homeuav": {
+        "title": "Sky Registry",
+        "sub-title": "Modern, Efficient, and Flexible UAV Management Platform",
+        "description": "The goal of the system is to build a web-based software platform to manage, track, and control unmanned aerial vehicles (UAVs) effectively, safely, and flexibly.",
+        "tagline": "Optimal Coordination – Maximum Safety!",
+        "btn-register": "Explore the System"
     }
 }

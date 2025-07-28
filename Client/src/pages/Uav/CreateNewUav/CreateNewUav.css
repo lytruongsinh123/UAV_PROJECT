@@ -392,6 +392,22 @@ body.dark-theme .image-preview img {
     transform: scale(0.95);
 }
 
+/* Light theme remove-image button */
+[data-theme="light"] .remove-image,
+body.light-theme .remove-image {
+    background: linear-gradient(135deg, #ef4444, #dc2626) !important;
+    color: white !important;
+    border: 2px solid white !important;
+}
+
+/* Dark theme remove-image button */
+[data-theme="dark"] .remove-image,
+body.dark-theme .remove-image {
+    background: linear-gradient(135deg, #dc2626, #b91c1c) !important;
+    color: #fff !important;
+    border: 2px solid #475569 !important;
+}
+
 /* Image upload area enhancement */
 .file-input {
     position: relative;
