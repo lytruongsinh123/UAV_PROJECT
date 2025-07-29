@@ -7,7 +7,6 @@ import { getUserById } from "../../service/userService";
 import * as actions from "../../store/actions/userActions";
 import CommonUtils from "../../utils/CommonUtils";
 import themeUtils from "../../utils/ThemeUtils";
-import { Buffer } from "buffer";
 import { toast } from "react-toastify";
 import "./EditUser.css";
 
@@ -33,9 +32,7 @@ class EditUser extends Component {
                 positionId: user.positionId,
                 gender: user.gender,
                 phoneNumber: user.phoneNumber,
-                previewImgUrl: user.image
-                    ? new Buffer(user.image, "base64").toString("binary")
-                    : "",
+                previewImgUrl: user.image ? user.image : "",
             });
         }
         this.handleThemeChange();

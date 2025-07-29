@@ -12,11 +12,13 @@ import {
     getUavsUpdatedRecently,
     getUavCompletedRecently,
 } from "../../service/uavRegisterService";
+import { getUserById } from "../../service/userService";
 import "./Dashboard.css";
 class Dashboard extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            userimage: "",
             currentTime: new Date(),
             countUavs: 0,
             countActiveUavs: 0,
@@ -47,9 +49,12 @@ class Dashboard extends Component {
                 statusUav.COMPLETED,
                 userInfo.id
             );
+            let user = await getUserById(userInfo.id);
+            console.log(user);
             this.setState({
                 listCompletedUavs: listUavsByStatus,
                 countFlightPaths: listUavsByStatus.uavs.length,
+                userimage: user.data.image,
             });
             // Calculate total flight hours
             let totalHours = 0;
@@ -231,8 +236,7 @@ class Dashboard extends Component {
     };
     render() {
         const { userInfo } = this.props;
-        const { currentTime } = this.state;
-        console.log("check state: ", this.state);
+        const { currentTime, userimage } = this.state;
         return (
             <div className="dashboard">
                 <div className="dashboard-container">
@@ -265,7 +269,11 @@ class Dashboard extends Component {
                     {/* User Info Card */}
                     <div className="user-info-card">
                         <div className="user-avatar">
-                            <i className="fas fa-user"></i>
+                            {userimage ? (
+                                <img src={userimage} alt="userimage" />
+                            ) : (
+                                <i className="fas fa-user"></i>
+                            )}
                         </div>
                         <div className="user-details">
                             <h3>

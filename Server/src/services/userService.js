@@ -254,6 +254,13 @@ let getUserById = (userId) => {
                 },
             });
             if (user) {
+                if (user.image)
+                {
+                    user.image = Buffer.from(
+                        user.image,
+                        "base64"
+                    ).toString("binary")
+                }
                 resolve({
                     errCode: 0,
                     data: user,

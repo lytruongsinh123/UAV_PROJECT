@@ -9,7 +9,11 @@ module.exports = (sequelize, DataTypes) => {
          */
         static associate(models) {
             // define association here
-           
+            RegisterUav.belongsTo(models.Uav, {
+                foreignKey: "droneId",
+                targetKey: "droneId", // vì droneId không phải là PK
+                as: "uavData",
+            });
         }
     }
     RegisterUav.init(

@@ -194,14 +194,7 @@ class SlideBar extends Component {
                     <div
                         className="image-avatar"
                         style={{
-                            backgroundImage: `url(${
-                                this.state.user.image
-                                    ? Buffer.from(
-                                          this.state.user.image,
-                                          "base64"
-                                      ).toString("binary")
-                                    : defaultAvatar
-                            })`,
+                            backgroundImage: `url(${this.state.user.image ? this.state.user.image : defaultAvatar})`,
                         }}></div>
                     {isOpenSidebar ? (
                         <span>

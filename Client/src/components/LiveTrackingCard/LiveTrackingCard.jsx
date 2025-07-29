@@ -7,7 +7,7 @@ import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import "./LiveTrackingCard.css";
-
+import { Buffer } from "buffer";
 class LiveTrackingCard extends Component {
     constructor(props) {
         super(props);
@@ -32,9 +32,10 @@ class LiveTrackingCard extends Component {
             uavInfo: {
                 id: this.props.uav.droneId,
                 name: this.props.uav.droneName,
+                image: this.props.uav.uavData.image,
                 status: "Đang hoạt động",
-            }
-        })
+            },
+        });
         let step = 0;
         this.trackingInterval = setInterval(() => {
             if (!this.state.tracking) return;
@@ -62,7 +63,11 @@ class LiveTrackingCard extends Component {
             <div className="map-livetracking-container">
                 <div className="map-sidebar">
                     <div className="map-avatar">
-                        <img src="/assets/drone.svg" alt="UAV" />
+                        {uavInfo.image ? (
+                            <img src={uavInfo.image} alt="UAV" />
+                        ) : (
+                            <div className="avatar-placeholder">No Image</div>
+                        )}
                     </div>
                     <div className="map-main">
                         <h2>{uavInfo.name}</h2>

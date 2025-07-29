@@ -27,12 +27,10 @@ class LiveTracking extends Component {
     };
 
     componentDidUpdate = async (prevProps, prevState, snapshot) => {
-        if (prevProps.uavs !== this.props.uavs) {
-            // Filter UAVs đang hoạt động
-            const activeUAVs = this.props.uavs.filter(
-                (uav) => uav.status === "S1"
-            );
-            this.setState({ activeUAVs });
+        if (prevProps.uavsByStatus !== this.props.uavsByStatus) {
+            this.setState({
+                activeUAVs: this.props.uavsByStatus,
+            });
         }
     };
 
@@ -46,7 +44,6 @@ class LiveTracking extends Component {
 
     render() {
         const { activeUAVs, selectedUAV, showFullMap } = this.state;
-
         if (showFullMap && selectedUAV) {
             return (
                 <div className="live-tracking-fullscreen">
@@ -182,6 +179,7 @@ const mapStateToProps = (state) => {
     return {
         userInfo: state.user.userInfo,
         uavs: state.uavRegister.uavsByStatus,
+        uavsByStatus: state.uavRegister.uavsByStatus,
     };
 };
 

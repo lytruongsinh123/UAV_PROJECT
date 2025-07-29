@@ -1,0 +1,27 @@
+version: '3'
+
+services:
+  client:
+    build:
+      context: ./Client
+      dockerfile: Dockerfile
+    ports:
+      - "3000:80"
+    restart: unless-stopped
+    volumes:
+      - ./Client:/app
+    environment:
+      - NODE_ENV=production
+      - REACT_APP_API_URL=http://localhost:8083
+  server:
+    build:
+      context: ./Server
+      dockerfile: Dockerfile
+    ports:
+      - "8083:8083"
+    restart: unless-stopped
+    volumes:
+      - ./Server:/app
+    environment:
+      - NODE_ENV=production
+      - PORT=8083

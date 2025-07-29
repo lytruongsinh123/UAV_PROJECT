@@ -9,6 +9,11 @@ module.exports = (sequelize, DataTypes) => {
          */
         static associate(models) {
             // define association here
+            Uav.hasOne(models.RegisterUav, {
+                foreignKey: "droneId",
+                sourceKey: "droneId",  // vì droneId không phải là PK
+                as: "uavData"
+            });
         }
     }
     Uav.init(

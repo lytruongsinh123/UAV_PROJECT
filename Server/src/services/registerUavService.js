@@ -1,6 +1,6 @@
 import db from "../models/index";
 import MapService from "./MapService";
-
+import { Buffer } from "buffer";
 let handleRegisterNewUav = async (data) => {
     return new Promise(async (resolve, reject) => {
         try {
@@ -30,48 +30,62 @@ let handleRegisterNewUav = async (data) => {
                     });
                 } else {
                     // Lấy khoảng cách, kiểm tra null
-                let startCoords = await MapService.getCoordinates(data.startPoint);
-                let endCoords = await MapService.getCoordinates(data.endPoint);
-                let distance = null;
-                try {
-                    distance = await MapService.getDistance(startCoords, endCoords);
-                } catch (err) {
-                    console.error("Lỗi lấy khoảng cách OpenRouteService:", err);
-                    distance = null;
-                }
-                // Nếu không lấy được khoảng cách, thử OSRM
-                if (distance === null) {
+                    let startCoords = await MapService.getCoordinates(
+                        data.startPoint
+                    );
+                    let endCoords = await MapService.getCoordinates(
+                        data.endPoint
+                    );
+                    let distance = null;
                     try {
-                        if (startCoords && endCoords) {
-                            distance = await MapService.getDistanceOSRM(startCoords, endCoords);
-                        }
+                        distance = await MapService.getDistance(
+                            startCoords,
+                            endCoords
+                        );
                     } catch (err) {
-                        console.error("Lỗi lấy khoảng cách OSRM:", err);
+                        console.error(
+                            "Lỗi lấy khoảng cách OpenRouteService:",
+                            err
+                        );
                         distance = null;
                     }
-                }
-                // Nếu vẫn không lấy được khoảng cách, trả về lỗi cho client
-                if (distance === null) {
-                    return resolve({
-                        errCode: 3,
-                        message: "Không lấy được khoảng cách giữa hai điểm. Vui lòng kiểm tra lại địa chỉ hoặc thử lại sau!",
+                    // Nếu không lấy được khoảng cách, thử OSRM
+                    if (distance === null) {
+                        try {
+                            if (startCoords && endCoords) {
+                                distance = await MapService.getDistanceOSRM(
+                                    startCoords,
+                                    endCoords
+                                );
+                            }
+                        } catch (err) {
+                            console.error("Lỗi lấy khoảng cách OSRM:", err);
+                            distance = null;
+                        }
+                    }
+                    // Nếu vẫn không lấy được khoảng cách, trả về lỗi cho client
+                    if (distance === null) {
+                        return resolve({
+                            errCode: 3,
+                            message:
+                                "Không lấy được khoảng cách giữa hai điểm. Vui lòng kiểm tra lại địa chỉ hoặc thử lại sau!",
+                        });
+                    }
+                    await db.RegisterUav.create({
+                        ownerId: data.ownerId,
+                        droneId: data.droneId,
+                        droneName: data.droneName,
+                        startPoint: data.startPoint,
+                        endPoint: data.endPoint,
+                        heightFly: data.heightFly,
+                        speed: data.speed,
+                        status: "S0",
+                        distance: distance,
                     });
-                }
-                await db.RegisterUav.create({
-                    ownerId: data.ownerId,
-                    droneId: data.droneId,
-                    droneName: data.droneName,
-                    startPoint: data.startPoint,
-                    endPoint: data.endPoint,
-                    heightFly: data.heightFly,
-                    speed: data.speed,
-                    status: "S0",
-                    distance: distance,
-                });
-                resolve({
-                    errCode: 0,
-                    message: "UAV registered successfully",
-                });
+                    resolve({
+                        errCode: 0,
+                        message: "UAV registered successfully",
+                    });
                 }
             }
         } catch (error) {
@@ -136,19 +150,30 @@ let handleUpdateUav = async (data) => {
                 uav.endPoint = data.endPoint;
                 uav.heightFly = data.heightFly;
                 uav.speed = data.speed;
-                let startCoords = await MapService.getCoordinates(data.startPoint);
+                let startCoords = await MapService.getCoordinates(
+                    data.startPoint
+                );
                 let endCoords = await MapService.getCoordinates(data.endPoint);
                 let distance = null;
                 try {
-                    distance = await MapService.getDistance(startCoords, endCoords);
+                    distance = await MapService.getDistance(
+                        startCoords,
+                        endCoords
+                    );
                 } catch (err) {
-                    console.error("Lỗi cập nhật khoảng cách OpenRouteService:", err);
+                    console.error(
+                        "Lỗi cập nhật khoảng cách OpenRouteService:",
+                        err
+                    );
                     distance = null;
                 }
                 if (distance === null) {
                     try {
                         if (startCoords && endCoords) {
-                            distance = await MapService.getDistanceOSRM(startCoords, endCoords);
+                            distance = await MapService.getDistanceOSRM(
+                                startCoords,
+                                endCoords
+                            );
                         }
                     } catch (err) {
                         console.error("Lỗi cập nhật khoảng cách OSRM:", err);
@@ -182,7 +207,6 @@ let handleGetUavsByDroneId = async (droneId) => {
             let uavs = await db.RegisterUav.findOne({
                 where: { droneId: droneId },
             });
-            console.log("UAVs found:", uavs);
             resolve({
                 errCode: 0,
                 message: "OK",
@@ -304,11 +328,29 @@ let handleGetUavByStatus = async (status, ownerId) => {
                     status: status,
                     ownerId: ownerId,
                 },
+                include: [
+                    {
+                        model: db.Uav,
+                        as: "uavData",
+                        attributes: ["image"],
+                    },
+                ],
+            });
+
+            // Chuyển trường image từ Buffer sang link base64 dùng Buffer.from
+            let uavsWithImageLink = uavs.map((uav) => {
+                if (uav.uavData && uav.uavData.image) {
+                    uav.uavData.image = Buffer.from(
+                        uav.uavData.image,
+                        "base64"
+                    ).toString("binary");
+                }
+                return uav;
             });
             resolve({
                 errCode: 0,
                 message: "OK",
-                uavs: uavs,
+                uavs: uavsWithImageLink,
             });
         } catch (error) {
             console.error("Error getting UAV by status:", error);
@@ -347,7 +389,7 @@ let handleDeleteUav = async (droneId) => {
     });
 };
 
-let getUavsRegiteredRecently = async (ownerId) => { 
+let getUavsRegiteredRecently = async (ownerId) => {
     return new Promise(async (resolve, reject) => {
         try {
             let uavs = await db.RegisterUav.findAll({
@@ -364,8 +406,8 @@ let getUavsRegiteredRecently = async (ownerId) => {
             reject(error);
         }
     });
-}
-let getUavsUpdatedRecently = async (ownerId) => { 
+};
+let getUavsUpdatedRecently = async (ownerId) => {
     return new Promise(async (resolve, reject) => {
         try {
             let uavs = await db.RegisterUav.findAll({
@@ -383,7 +425,7 @@ let getUavsUpdatedRecently = async (ownerId) => {
             reject(error);
         }
     });
-}
+};
 // lấy uav hoàn thành gần nhất để hiện thị thời gian ago
 let getUavCompletedRecently = async (ownerId) => {
     return new Promise(async (resolve, reject) => {
@@ -403,7 +445,7 @@ let getUavCompletedRecently = async (ownerId) => {
             reject(error);
         }
     });
-};    
+};
 module.exports = {
     handleRegisterNewUav,
     handleGetAllUavs,
@@ -415,5 +457,5 @@ module.exports = {
     handleDeleteUav,
     getUavsRegiteredRecently,
     getUavsUpdatedRecently,
-    getUavCompletedRecently
+    getUavCompletedRecently,
 };
