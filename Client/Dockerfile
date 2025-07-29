@@ -5,7 +5,7 @@ WORKDIR /app
 # Sao chép package.json và package-lock.json để cài đặt các phụ thuộc
 COPY package*.json ./
 # Cài đặt các phụ thuộc
-RUN npm install
+RUN npm install --legacy-peer-deps
 # Sao chép mã nguồn ứng dụng vào thư mục làm việc
 COPY . .
 # Biên dịch ứng dụng REACT
@@ -14,6 +14,8 @@ RUN npm run build
 FROM nginx:alpine
 # Copy các file build sang thư mục phục vụ của Nginx
 COPY --from=build /app/build /usr/share/nginx/html
+COPY ./nginx/default.conf /etc/nginx/conf.d/default.conf
+
 # Mặc định dùng cổng 80
 EXPOSE 80
 # Cấu hình Nginx để phục vụ ứng dụng REACT

@@ -1,4 +1,4 @@
-version: '3'
+version: '3.8'
 
 services:
   client:
@@ -6,22 +6,41 @@ services:
       context: ./Client
       dockerfile: Dockerfile
     ports:
-      - "3000:80"
+      - "3001:80"
     restart: unless-stopped
     volumes:
       - ./Client:/app
     environment:
       - NODE_ENV=production
       - REACT_APP_API_URL=http://localhost:8083
+
   server:
     build:
       context: ./Server
       dockerfile: Dockerfile
     ports:
       - "8083:8083"
-    restart: unless-stopped
     volumes:
       - ./Server:/app
+    restart: unless-stopped
     environment:
       - NODE_ENV=production
-      - PORT=8083
+      - DB_NAME=${DB_NAME}
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_PORT=${DB_PORT}
+      - DB_HOST=${DB_HOST}
+    depends_on:
+      - mysql
+
+  mysql:
+    image: mysql:8.0
+    restart: unless-stopped
+    environment:
+      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+      - MYSQL_DATABASE=${DB_NAME}
+    volumes:
+      - db_data:/var/lib/mysql
+
+volumes:
+  db_data:

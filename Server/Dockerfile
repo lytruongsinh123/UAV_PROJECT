@@ -8,7 +8,7 @@ WORKDIR /app
 COPY package*.json ./
 
 # Cài đặt các phụ thuộc
-RUN npm install
+RUN npm install --legacy-peer-deps
 
 # Sao chép toàn bộ mã nguồn server vào container
 COPY . .
@@ -17,4 +17,5 @@ COPY . .
 EXPOSE 8083
 
 # Chạy server (sửa lại nếu bạn dùng file khác ngoài index.js)
-CMD ["node", "server.js"]
+CMD ["npm", "run", "migrate-start"]
+
