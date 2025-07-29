@@ -30,7 +30,6 @@ class FlightPath extends Component {
     componentWillUnmount() {}
 
     render() {
-        console.log("list uavs", this.state.listuavs);
         return (
             <div style={{ height: "100vh", width: "100%" }}>
                 {this.state.listuavs.length > 0 ? (

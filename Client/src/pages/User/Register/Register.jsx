@@ -54,7 +54,6 @@ class Register extends Component {
             const x = Math.sin(seed) * 10000;
             return x - Math.floor(x);
         };
-        console.log("Register state: ", this.state);
         return (
             <div className="register-bg">
                 {/* Floating particles - sử dụng seed cố định cho mỗi particle */}

@@ -50,7 +50,6 @@ class Dashboard extends Component {
                 userInfo.id
             );
             let user = await getUserById(userInfo.id);
-            console.log(user);
             this.setState({
                 listCompletedUavs: listUavsByStatus,
                 countFlightPaths: listUavsByStatus.uavs.length,
