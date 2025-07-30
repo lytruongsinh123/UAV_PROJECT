@@ -220,7 +220,6 @@ let handleGetUavsByDroneId = async (droneId) => {
         }
     });
 };
-
 let handleChangeUavStatus = async (droneId, newStatus) => {
     return new Promise(async (resolve, reject) => {
         try {
@@ -446,6 +445,36 @@ let getUavCompletedRecently = async (ownerId) => {
         }
     });
 };
+let saveFlightPath = async (droneId, flightPathFile) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            if (!droneId) {
+                resolve({
+                    errCode: 1,
+                    message: `Missing required parameters ${droneId}`,
+                });
+            }
+            let uav = await db.RegisterUav.findOne({
+                where: { droneId: droneId },
+            });
+            if (uav) {
+                uav.flightPathFile = Buffer.from(flightPathFile,"base64").toString("binary");
+                await uav.save();
+                resolve({
+                    errCode: 0,
+                    message: "Flight path saved successfully",
+                });
+            } else {
+                resolve({
+                    errCode: 2,
+                    message: "UAV not found",
+                });
+            }
+        } catch (error) {
+            reject(error);
+        }
+    });
+};
 module.exports = {
     handleRegisterNewUav,
     handleGetAllUavs,
@@ -458,4 +487,5 @@ module.exports = {
     getUavsRegiteredRecently,
     getUavsUpdatedRecently,
     getUavCompletedRecently,
+    saveFlightPath,
 };

@@ -623,7 +623,7 @@ class Dashboard extends Component {
                                     <FormattedMessage id="dashboard.live-tracking" />
                                 </span>
                             </button>
-                            <button className="action-btn">
+                            <button className="action-btn" onClick={() => this.handleRegisterUAV("export-data")}>
                                 <i className="fas fa-download"></i>
                                 <span>
                                     <FormattedMessage id="dashboard.export-data" />

@@ -28,6 +28,7 @@ import Help from "../containers/Help/Help";
 import CreateNewUav from "../pages/Uav/CreateNewUav/CreateNewUav";
 import ShowListUavs from "../pages/Uav/ShowLishUavs/ShowListUavs";
 import Register from "../pages/User/Register/Register";
+import ExportData from "../containers/ExportData/ExportData";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 
 class App extends Component {
@@ -133,10 +134,15 @@ class App extends Component {
                                     Component={userIsAuthenticated(HomePage)}>
                                     <Route index element={<CreateNewUav />} />
                                 </Route>
-                                 <Route
+                                <Route
                                     path={"/show-list-uavs"}
                                     Component={userIsAuthenticated(HomePage)}>
                                     <Route index element={<ShowListUavs />} />
+                                </Route>
+                                <Route
+                                    path={"/export-data"}
+                                    Component={userIsAuthenticated(HomePage)}>
+                                    <Route index element={<ExportData />} />
                                 </Route>
                                 <Route
                                     path="/"

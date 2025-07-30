@@ -56,6 +56,7 @@ let initWebRouters = (app) => {
         "/api/get-uav-completed-recently",
         registerUavController.getUavCompletedRecently
     );
+    router.post("/api/save-flight-path", registerUavController.saveFlightPath);
 
     // API FEEDBACK
     router.post(

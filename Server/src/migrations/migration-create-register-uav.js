@@ -54,6 +54,10 @@ module.exports = {
                 type: Sequelize.INTEGER,
                 allowNull: false,
             },
+            flightPathFile: {
+                type: Sequelize.BLOB("long"),
+                allowNull: true, // Có thể không có file đường bay
+            },
             createdAt: {
                 allowNull: false,
                 type: Sequelize.DATE,

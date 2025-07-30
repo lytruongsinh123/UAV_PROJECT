@@ -1,0 +1,154 @@
+.export-data-container {
+    max-width: 900px;
+    margin: 40px auto;
+    background: #fff;
+    border-radius: 14px;
+    box-shadow: 0 2px 16px rgba(0, 0, 0, 0.08);
+    padding: 32px 24px;
+    transition: background 0.3s, color 0.3s;
+    color: #222;
+}
+
+.export-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+}
+
+.export-data-container h2 {
+    color: #2d3a4b;
+    font-size: 2rem;
+    font-weight: 600;
+    margin: 0;
+}
+
+.export-data-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #f9f9f9;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.export-data-table th,
+.export-data-table td {
+    padding: 14px 10px;
+    text-align: left;
+    border-bottom: 1px solid #eaeaea;
+}
+
+.export-data-table th {
+    background: #f0f4fa;
+    color: #3a4a5d;
+    font-weight: 500;
+}
+
+.export-data-table tr:last-child td {
+    border-bottom: none;
+}
+
+.export-data-table tbody tr:hover {
+    background: #eaf6ff;
+    transition: background 0.2s;
+}
+
+.export-data-table button {
+    background: #1976d2;
+    color: #fff;
+    border: none;
+    padding: 8px 18px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background 0.2s;
+    font-weight: 500;
+}
+
+.export-data-table button:hover {
+    background: #1565c0;
+}
+
+/* DARK MODE - dựa vào class .dark của export-data-container */
+.export-data-container.dark {
+    background: #23272f;
+    color: #e0e6ed;
+}
+
+.export-data-container.dark h2 {
+    color: #e0e6ed;
+}
+
+.export-data-container.dark .export-data-table {
+    background: #2c313a;
+}
+
+.export-data-container.dark .export-data-table th {
+    background: #23272f;
+    color: #b0b8c1;
+}
+
+.export-data-container.dark .export-data-table td {
+    border-bottom: 1px solid #444b57;
+}
+
+.export-data-container.dark .export-data-table tbody tr:hover {
+    background: #31363f;
+}
+
+.export-data-container.dark .export-data-table button {
+    background: #444b57;
+    color: #e0e6ed;
+}
+
+.export-data-container.dark .export-data-table button:hover {
+    background: #1976d2;
+}
+
+/* Đảm bảo thẻ export chuyển nền khi dark mode */
+body.dark-theme .export-data-container {
+    background: #23272f !important;
+    color: #e0e6ed !important;
+    box-shadow: 0 2px 16px rgba(0, 0, 0, 0.18);
+}
+
+body.dark-theme .export-data-container h2 {
+    color: #e0e6ed !important;
+}
+
+body.dark-theme .export-data-table {
+    background: #2c313a !important;
+}
+
+body.dark-theme .export-data-table th {
+    background: #23272f !important;
+    color: #b0b8c1 !important;
+}
+
+body.dark-theme .export-data-table td {
+    border-bottom: 1px solid #444b57 !important;
+}
+
+body.dark-theme .export-data-table tbody tr:hover {
+    background: #31363f !important;
+}
+
+body.dark-theme .export-data-table button {
+    background: #444b57 !important;
+    color: #e0e6ed !important;
+}
+
+body.dark-theme .export-data-table button:hover {
+    background: #1976d2 !important;
+}
+
+@media (max-width: 600px) {
+    .export-data-container {
+        padding: 12px 4px;
+    }
+    .export-data-table th,
+    .export-data-table td {
+        padding: 8px 4px;
+        font-size: 0.95rem;
+    }
+}

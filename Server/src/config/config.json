@@ -3,7 +3,7 @@
         "username": "root",
         "password": null,
         "database": "uav",
-        "host": "mysql",
+        "host": "localhost",
         "dialect": "mysql",
         "logging": false
     },

@@ -154,6 +154,19 @@ let getUavCompletedRecently = async (req, res) => {
         });
     }
 };
+let saveFlightPath = async (req, res) => {
+    try {
+        let { droneId, flightPathFile } = req.body;
+        let result = await registerUavService.saveFlightPath(droneId, flightPathFile);
+        return res.status(200).json(result);
+    } catch (e) {
+        console.log(e);
+        return res.status(500).json({
+            errCode: -1,
+            message: "Error from server...",
+        });
+    }
+};
 module.exports = {
     handleRegisterNewUav,
     handleGetAllUavs,
@@ -165,5 +178,6 @@ module.exports = {
     handleDeleteUav,
     getUavsRegiteredRecently,
     getUavsUpdatedRecently,
-    getUavCompletedRecently
+    getUavCompletedRecently,
+    saveFlightPath
 };

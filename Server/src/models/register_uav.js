@@ -27,6 +27,7 @@ module.exports = (sequelize, DataTypes) => {
             speed: DataTypes.INTEGER,
             status: DataTypes.STRING,
             distance: DataTypes.INTEGER,
+            flightPathFile: DataTypes.TEXT,
         },
         {
             sequelize,

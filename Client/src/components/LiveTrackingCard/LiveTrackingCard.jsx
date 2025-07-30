@@ -7,7 +7,7 @@ import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import "./LiveTrackingCard.css";
-import { Buffer } from "buffer";
+import { saveFlightPath } from "../../service/uavRegisterService";
 class LiveTrackingCard extends Component {
     constructor(props) {
         super(props);
@@ -21,6 +21,7 @@ class LiveTrackingCard extends Component {
             tracking: true,
         };
         this.trackingInterval = null;
+        this.flightPathLogs = [];
     }
     componentDidMount = async () => {
         // Giả lập UAV di chuyển từ Hà Nội đến Hải Phòng
@@ -28,6 +29,9 @@ class LiveTrackingCard extends Component {
         const raw2 = await geocodeAddress(this.props.position2);
         const start = { lat: raw1.lat, lng: raw1.lng };
         const end = { lat: raw2.lat, lng: raw2.lng };
+        const uavSpeed = this.props.uav.speed;
+        const uavDistance = this.props.uav.distance;
+        const travelTime = (uavDistance / uavSpeed) * 3600;
         this.setState({
             uavInfo: {
                 id: this.props.uav.droneId,
@@ -37,21 +41,38 @@ class LiveTrackingCard extends Component {
             },
         });
         let step = 0;
-        this.trackingInterval = setInterval(() => {
+        this.trackingInterval = setInterval(async () => {
             if (!this.state.tracking) return;
             step += 1;
             // Di chuyển tuyến tính
-            const lat = start.lat + ((end.lat - start.lat) * step) / 100;
-            const lng = start.lng + ((end.lng - start.lng) * step) / 100;
+            const lat = start.lat + ((end.lat - start.lat) * step) / travelTime;
+            const lng = start.lng + ((end.lng - start.lng) * step) / travelTime;
             this.setState({ uavPosition: { lat, lng } });
-            if (step >= 100) {
+            this.flightPathLogs.push(
+                `second: ${step}, lat: ${lat}, lng: ${lng}`
+            );
+            if (step >= travelTime) {
                 clearInterval(this.trackingInterval);
                 this.setState({
                     tracking: false,
                     uavInfo: { ...this.state.uavInfo, status: "Đã đến nơi" },
                 });
+                // Lưu log đường bay
+                const flightPathText = this.flightPathLogs.join("\n");
+                const flightPathBase64 = btoa(
+                    unescape(encodeURIComponent(flightPathText))
+                );
+                try {
+                    await saveFlightPath({
+                        droneId: this.state.uavInfo.id,
+                        flightPathFile: flightPathBase64,
+                    });
+                    alert("Đã lưu đường bay!");
+                } catch (err) {
+                    alert("Lỗi lưu đường bay!");
+                }
             }
-        }, 200);
+        }, 1000);
     };
 
     componentWillUnmount = () => {

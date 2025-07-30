@@ -36,6 +36,9 @@ const getUavsUpdatedRecently = (ownerId) => {
 const getUavCompletedRecently = (ownerId) => {
     return axios.get(`/api/get-uav-completed-recently?ownerId=${ownerId}`);
 };
+const saveFlightPath = (data) => {
+    return axios.post("/api/save-flight-path", data);
+};
 export {
     registerNewUav,
     getAllUavs,
@@ -47,5 +50,6 @@ export {
     deleteUav,
     getUavsRegisteredRecently,
     getUavsUpdatedRecently,
-    getUavCompletedRecently
+    getUavCompletedRecently,
+    saveFlightPath,
 };

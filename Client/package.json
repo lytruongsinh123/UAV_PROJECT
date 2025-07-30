@@ -20,6 +20,7 @@
     "bootstrap": "^5.3.7",
     "buffer": "^6.0.3",
     "connected-react-router": "^6.9.3",
+    "file-saver": "^2.0.5",
     "history": "^4.10.1",
     "leaflet": "^1.9.4",
     "leaflet-routing-machine": "^3.2.12",
