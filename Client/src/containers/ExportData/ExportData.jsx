@@ -72,15 +72,25 @@ class ExportData extends Component {
         return (
             <div className={`export-data-container${isDark ? " dark" : ""}`}>
                 <div className="export-header">
-                    <h2>Danh sách UAV đã hoàn thành</h2>
+                    <h2>
+                        <FormattedMessage id="export-data.title" />
+                    </h2>
                 </div>
                 <table className="export-data-table">
                     <thead>
                         <tr>
-                            <th>Drone ID</th>
-                            <th>Tên UAV</th>
-                            <th>Thời gian hoàn thành</th>
-                            <th>Export Flight Path</th>
+                            <th>
+                                <FormattedMessage id="export-data.drone-id" />
+                            </th>
+                            <th>
+                                <FormattedMessage id="export-data.drone-name" />
+                            </th>
+                            <th>
+                                <FormattedMessage id="export-data.time-completed" />
+                            </th>
+                            <th>
+                                <FormattedMessage id="export-data.export-flight-path" />
+                            </th>
                         </tr>
                     </thead>
                     <tbody>
@@ -96,7 +106,7 @@ class ExportData extends Component {
                                             onClick={() =>
                                                 this.handleExport(uav)
                                             }>
-                                            Tải đường bay
+                                            <FormattedMessage id="export-data.download-flight-path" />
                                         </button>
                                     </td>
                                 </tr>
@@ -104,7 +114,7 @@ class ExportData extends Component {
                         ) : (
                             <tr>
                                 <td colSpan="4">
-                                    Không có dữ liệu UAV hoàn thành
+                                    <FormattedMessage id="export-data.no-data" />
                                 </td>
                             </tr>
                         )}

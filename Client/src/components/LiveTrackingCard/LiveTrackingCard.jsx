@@ -8,30 +8,39 @@ import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import "./LiveTrackingCard.css";
 import { saveFlightPath } from "../../service/uavRegisterService";
+import * as actions from "../../store/actions";
+import { statusUav } from "../../utils/constants";
 class LiveTrackingCard extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            uavPosition: { lat: 21.0285, lng: 105.8542 }, // Hà Nội
+            uavPosition: { lat: 21.0285, lng: 105.8542 },
             uavInfo: {
                 id: "UAV001",
                 name: "Drone A",
                 status: "Đang hoạt động",
             },
             tracking: true,
+            step: 0,
+            start: null,
+            end: null,
         };
         this.trackingInterval = null;
         this.flightPathLogs = [];
     }
-    componentDidMount = async () => {
-        // Giả lập UAV di chuyển từ Hà Nội đến Hải Phòng
+
+    async componentDidMount() {
+        // Lấy vị trí start/end từ geocode và lưu vào state
         const raw1 = await geocodeAddress(this.props.position1);
         const raw2 = await geocodeAddress(this.props.position2);
         const start = { lat: raw1.lat, lng: raw1.lng };
         const end = { lat: raw2.lat, lng: raw2.lng };
+        this.setState({ start, end });
+
         const uavSpeed = this.props.uav.speed;
         const uavDistance = this.props.uav.distance;
-        const travelTime = (uavDistance / uavSpeed) * 3600;
+        const travelTime = parseFloat((uavDistance / uavSpeed) * 3600);
+
         this.setState({
             uavInfo: {
                 id: this.props.uav.droneId,
@@ -40,44 +49,172 @@ class LiveTrackingCard extends Component {
                 status: "Đang hoạt động",
             },
         });
-        let step = 0;
-        this.trackingInterval = setInterval(async () => {
-            if (!this.state.tracking) return;
-            step += 1;
-            // Di chuyển tuyến tính
-            const lat = start.lat + ((end.lat - start.lat) * step) / travelTime;
-            const lng = start.lng + ((end.lng - start.lng) * step) / travelTime;
-            this.setState({ uavPosition: { lat, lng } });
-            this.flightPathLogs.push(
-                `second: ${step}, lat: ${lat}, lng: ${lng}`
-            );
-            if (step >= travelTime) {
-                clearInterval(this.trackingInterval);
-                this.setState({
-                    tracking: false,
-                    uavInfo: { ...this.state.uavInfo, status: "Đã đến nơi" },
-                });
-                // Lưu log đường bay
-                const flightPathText = this.flightPathLogs.join("\n");
-                const flightPathBase64 = btoa(
-                    unescape(encodeURIComponent(flightPathText))
-                );
-                try {
-                    await saveFlightPath({
-                        droneId: this.state.uavInfo.id,
-                        flightPathFile: flightPathBase64,
-                    });
-                    alert("Đã lưu đường bay!");
-                } catch (err) {
-                    alert("Lỗi lưu đường bay!");
+
+        // Lấy lại log nếu có từ localStorage
+        const savedLogs = localStorage.getItem(
+            `flightPath_${this.props.uav.droneId}`
+        );
+        let initialStep = 0;
+        if (savedLogs) {
+            this.flightPathLogs = JSON.parse(savedLogs);
+            if (this.flightPathLogs.length > 0) {
+                const lastLog =
+                    this.flightPathLogs[this.flightPathLogs.length - 1];
+                const match = lastLog.match(/second: (\d+)/);
+                if (match) {
+                    initialStep = parseInt(match[1], 10);
                 }
             }
+        } else {
+            this.flightPathLogs = [];
+        }
+        this.setState({ step: initialStep });
+
+        this.trackingInterval = setInterval(() => {
+            if (!this.state.tracking) return;
+            this.setState(
+                (prevState) => ({ step: prevState.step + 1 }),
+                () => {
+                    const { step, start, end } = this.state;
+                    if (!start || !end) return;
+                    const lat =
+                        start.lat + ((end.lat - start.lat) * step) / travelTime;
+                    const lng =
+                        start.lng + ((end.lng - start.lng) * step) / travelTime;
+                    if (isNaN(lat) || isNaN(lng)) return;
+                    this.setState({ uavPosition: { lat, lng } });
+                    this.flightPathLogs.push(
+                        `second: ${step}, lat: ${lat}, lng: ${lng}`
+                    );
+                    localStorage.setItem(
+                        `flightPath_${this.state.uavInfo.id}`,
+                        JSON.stringify(this.flightPathLogs)
+                    );
+                    if (step >= travelTime) {
+                        clearInterval(this.trackingInterval);
+                        this.setState({
+                            tracking: false,
+                            uavInfo: {
+                                ...this.state.uavInfo,
+                                status: "Đã đến nơi",
+                            },
+                        });
+                        this.saveFlightPathAndNavigate();
+                    }
+                }
+            );
         }, 1000);
-    };
+    }
 
     componentWillUnmount = () => {
         if (this.trackingInterval) clearInterval(this.trackingInterval);
+
+        // Lưu dữ liệu flight path khi chuyển trang
+        if (this.flightPathLogs.length > 0) {
+            const flightPathText = this.flightPathLogs.join("\n");
+            const flightPathBase64 = btoa(
+                unescape(encodeURIComponent(flightPathText))
+            );
+            saveFlightPath({
+                droneId: this.state.uavInfo.id,
+                flightPathFile: flightPathBase64,
+            })
+                .then(() => {
+                    alert("Đã lưu đường bay khi chuyển trang!");
+                    // KHÔNG xóa localStorage ở đây để có thể tiếp tục khi quay lại
+                })
+                .catch(() => {
+                    alert("Lỗi lưu đường bay khi chuyển trang!");
+                });
+        }
     };
+
+    handleStopTracking = async () => {
+        if (this.state.tracking) {
+            // Dừng tracking
+            this.setState({ tracking: false });
+            if (this.trackingInterval) clearInterval(this.trackingInterval);
+
+            const flightPathText = this.flightPathLogs.join("\n");
+            const flightPathBase64 = btoa(
+                unescape(encodeURIComponent(flightPathText))
+            );
+            try {
+                await saveFlightPath({
+                    droneId: this.state.uavInfo.id,
+                    flightPathFile: flightPathBase64,
+                });
+                localStorage.removeItem(`flightPath_${this.state.uavInfo.id}`);
+                alert("Đã lưu đường bay đến vị trí hiện tại!");
+            } catch (err) {
+                alert("Lỗi lưu đường bay!");
+            }
+        } else {
+            // Tiếp tục tracking
+            this.setState({ tracking: true }, () => {
+                this.trackingInterval = setInterval(() => {
+                    if (!this.state.tracking) return;
+                    this.setState(
+                        (prevState) => ({ step: prevState.step + 1 }),
+                        () => {
+                            const { step, start, end } = this.state;
+                            const uavSpeed = this.props.uav.speed;
+                            const uavDistance = this.props.uav.distance;
+                            const travelTime = parseFloat(
+                                (uavDistance / uavSpeed) * 3600
+                            );
+                            if (!start || !end) return;
+                            const lat =
+                                start.lat +
+                                ((end.lat - start.lat) * step) / travelTime;
+                            const lng =
+                                start.lng +
+                                ((end.lng - start.lng) * step) / travelTime;
+                            if (isNaN(lat) || isNaN(lng)) return;
+                            this.setState({ uavPosition: { lat, lng } });
+                            this.flightPathLogs.push(
+                                `second: ${step}, lat: ${lat}, lng: ${lng}`
+                            );
+                            localStorage.setItem(
+                                `flightPath_${this.state.uavInfo.id}`,
+                                JSON.stringify(this.flightPathLogs)
+                            );
+                            if (step >= travelTime) {
+                                clearInterval(this.trackingInterval);
+                                this.setState({
+                                    tracking: false,
+                                    uavInfo: {
+                                        ...this.state.uavInfo,
+                                        status: "Đã đến nơi",
+                                    },
+                                });
+                                this.saveFlightPathAndNavigate();
+                            }
+                        }
+                    );
+                }, 1000);
+            });
+        }
+    };
+
+    saveFlightPathAndNavigate = async () => {
+        const flightPathText = this.flightPathLogs.join("\n");
+        const flightPathBase64 = btoa(
+            unescape(encodeURIComponent(flightPathText))
+        );
+        try {
+            await saveFlightPath({
+                droneId: this.state.uavInfo.id,
+                flightPathFile: flightPathBase64,
+            });
+            localStorage.removeItem(`flightPath_${this.state.uavInfo.id}`);
+            alert("Đã lưu đường bay!");
+            this.props.navigate("/live-tracking");
+        } catch (err) {
+            alert("Lỗi lưu đường bay!");
+        }
+    };
+
     render() {
         const { uavPosition, uavInfo, tracking } = this.state;
         return (
@@ -106,9 +243,7 @@ class LiveTrackingCard extends Component {
                     <div className="map-sub">
                         <button
                             className={tracking ? "map-stop" : ""}
-                            onClick={() => {
-                                this.setState({ tracking: !tracking });
-                            }}>
+                            onClick={this.handleStopTracking}>
                             {tracking ? "Dừng theo dõi" : "Tiếp tục"}
                         </button>
                     </div>
@@ -153,7 +288,10 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = (dispatch) => {
-    return {};
+    return {
+        HandleChangeStatus: (droneId, status, oldStatus) =>
+            dispatch(actions.changeUavStatus(droneId, status, oldStatus)),
+    };
 };
 
 export default withNavigate(

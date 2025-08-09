@@ -94,24 +94,23 @@ class ModalUav extends Component {
                 this.props.userInfo.id
             );
 
-            // ⏳ Sau 10 giây, chuyển UAV sang trạng thái COMPLETED
+            // 👉 Điều hướng sang trang tracking UAV
+            this.props.navigate(`/live-tracking/${uav.droneId}`);
+
+            // ⏳ Sau thời gian bay, chuyển UAV sang trạng thái COMPLETED
             setTimeout(async () => {
                 let updatedStates = { ...this.state.uavStates };
                 updatedStates[uav.droneId] = statusUav.COMPLETED;
-                console.log("Updated UAV states:", updatedStates);
                 this.setState({ uavStates: updatedStates });
-
                 await this.props.HandleChangeStatus(
                     uav.droneId,
                     statusUav.COMPLETED
                 );
-
                 await this.props.fetchUavsByStatusAndOwner(
                     statusUav.ACTIVE,
                     this.props.userInfo.id
                 );
-                // speed = distance / time => time = distance / speed ,speed(km/h) distance(km) => time (hour)
-            }, (uav.distance / uav.speed) * 3600 * 1000); // Chuyển đổi hour  giây sang mili giây
+            }, (uav.distance / uav.speed) * 3600 * 1000 + 5000);
         } catch (error) {
             let rollbackUavStates = { ...this.state.uavStates };
             rollbackUavStates[uav.droneId] = uav.status;

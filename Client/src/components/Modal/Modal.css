@@ -24,7 +24,9 @@
 .uav-list::-webkit-scrollbar-thumb:hover {
     background: #5a6fd8;
 }
-
+.uav-list span {
+    color: #718096;
+}
 /* Empty State */
 .empty-state {
     text-align: center;

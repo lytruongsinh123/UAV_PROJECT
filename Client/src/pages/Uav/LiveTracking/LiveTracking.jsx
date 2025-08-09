@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { FormattedMessage } from "react-intl";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import LiveTrackingCard from "../../../components/LiveTrackingCard/LiveTrackingCard";
 import * as actions from "../../../store/actions/uavRegisterActions";
 import "./LiveTracking.css";
@@ -24,6 +24,17 @@ class LiveTracking extends Component {
                 this.props.userInfo.id
             );
         }
+
+        // Lấy droneId từ URL params và tự động chọn UAV nếu có
+        const { droneId } = this.props.params || {};
+        if (droneId && this.props.uavsByStatus) {
+            const uav = this.props.uavsByStatus.find(
+                (u) => u.droneId === droneId
+            );
+            if (uav) {
+                this.handleSelectUAV(uav);
+            }
+        }
     };
 
     componentDidUpdate = async (prevProps, prevState, snapshot) => {
@@ -31,6 +42,17 @@ class LiveTracking extends Component {
             this.setState({
                 activeUAVs: this.props.uavsByStatus,
             });
+
+            // Nếu có droneId trên URL thì tự động chọn UAV khi dữ liệu cập nhật
+            const { droneId } = this.props.params || {};
+            if (droneId) {
+                const uav = this.props.uavsByStatus.find(
+                    (u) => u.droneId === droneId
+                );
+                if (uav) {
+                    this.handleSelectUAV(uav);
+                }
+            }
         }
     };
 
@@ -169,12 +191,15 @@ class LiveTracking extends Component {
         );
     }
 }
-const withNavigate = (Component) => {
+// HOC để truyền params cho class component
+const withNavigateAndParams = (Component) => {
     return (props) => {
         const navigate = useNavigate();
-        return <Component {...props} navigate={navigate} />;
+        const params = useParams();
+        return <Component {...props} navigate={navigate} params={params} />;
     };
 };
+
 const mapStateToProps = (state) => {
     return {
         userInfo: state.user.userInfo,
@@ -190,6 +215,6 @@ const mapDispatchToProps = (dispatch) => {
     };
 };
 
-export default withNavigate(
+export default withNavigateAndParams(
     connect(mapStateToProps, mapDispatchToProps)(LiveTracking)
 );

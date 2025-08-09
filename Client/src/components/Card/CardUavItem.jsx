@@ -57,7 +57,7 @@ class CardUavItem extends Component {
                         <div className="info-item">
                             <i className="fas fa-tag"></i>
                             <span className="label">
-                                <FormattedMessage id="modal.name-uav"/>
+                                <FormattedMessage id="modal.name-uav" />
                             </span>
                             <span className="value">{uav.droneName}</span>
                         </div>
@@ -65,7 +65,7 @@ class CardUavItem extends Component {
                         <div className="info-item">
                             <i className="fas fa-map-marker-alt"></i>
                             <span className="label">
-                                <FormattedMessage id="modal.start-point"/>
+                                <FormattedMessage id="modal.start-point" />
                             </span>
                             <span className="value">{uav.startPoint}</span>
                         </div>
@@ -73,7 +73,7 @@ class CardUavItem extends Component {
                         <div className="info-item">
                             <i className="fas fa-flag-checkered"></i>
                             <span className="label">
-                                <FormattedMessage id="modal.end-point"/>
+                                <FormattedMessage id="modal.end-point" />
                             </span>
                             <span className="value">{uav.endPoint}</span>
                         </div>
@@ -81,7 +81,7 @@ class CardUavItem extends Component {
                         <div className="info-item">
                             <i className="fas fa-arrows-alt-v"></i>
                             <span className="label">
-                                <FormattedMessage id="modal.height-fly"/>
+                                <FormattedMessage id="modal.height-fly" />
                             </span>
                             <span className="value">{uav.heightFly}m</span>
                         </div>
@@ -89,7 +89,7 @@ class CardUavItem extends Component {
                         <div className="info-item">
                             <i className="fas fa-tachometer-alt"></i>
                             <span className="label">
-                                <FormattedMessage id="modal.speed"/>
+                                <FormattedMessage id="modal.speed" />
                             </span>
                             <span className="value">{uav.speed} km/h</span>
                         </div>
@@ -108,19 +108,19 @@ class CardUavItem extends Component {
                                     className="btn-delete"
                                     onClick={() => onDelete(uav)}>
                                     <i className="fas fa-trash"></i>
-                                    <FormattedMessage id="modal.delete"/>
+                                    <FormattedMessage id="modal.delete" />
                                 </button>
                                 <button
                                     className="btn-launch"
                                     onClick={() => onActivate(uav)}>
                                     <i className="fas fa-rocket"></i>
-                                    <FormattedMessage id="modal.active"/>
+                                    <FormattedMessage id="modal.active" />
                                 </button>
                                 <button
                                     className="maintenance-notice"
                                     onClick={() => onMaintenance(uav)}>
                                     <i className="fas fa-tools"></i>
-                                    <FormattedMessage id="modal.maintenance"/>
+                                    <FormattedMessage id="modal.maintenance" />
                                 </button>
                             </>
                         )}
@@ -128,7 +128,7 @@ class CardUavItem extends Component {
                             <>
                                 <span className="not-allowed">
                                     <i className="fas fa-ban"></i>
-                                    <FormattedMessage id="modal.drone-is-active"/>
+                                    <FormattedMessage id="modal.drone-is-active" />
                                 </span>
                             </>
                         )}
@@ -136,15 +136,15 @@ class CardUavItem extends Component {
                             <>
                                 <span className="maintenance-notice">
                                     <i className="fas fa-tools"></i>
-                                    <FormattedMessage id="modal.drone-is-maintenance"/>
+                                    <FormattedMessage id="modal.drone-is-maintenance" />
                                 </span>
                             </>
                         )}
-                        {this.completedUav() && (
+                        {this.props.uavState === "S3" && (
                             <>
                                 <span className="completed-notice">
                                     <i className="fas fa-check-circle"></i>
-                                    <FormattedMessage id="modal.completed"/>
+                                    <FormattedMessage id="modal.completed" />
                                 </span>
                             </>
                         )}

@@ -41,12 +41,12 @@ class Dashboard extends Component {
         const { userInfo } = this.props;
         if (userInfo && userInfo.id) {
             await this.props.fetchUavsRegisteredByOwner(userInfo.id);
-            await this.props.fetchUavsByStatusAndOwner(
-                statusUav.ACTIVE,
-                userInfo.id
-            );
             let listUavsByStatus = await getUavByStatusAndOwner(
                 statusUav.COMPLETED,
+                userInfo.id
+            );
+            await this.props.fetchUavsByStatusAndOwner(
+                statusUav.ACTIVE,
                 userInfo.id
             );
             let user = await getUserById(userInfo.id);
@@ -168,7 +168,8 @@ class Dashboard extends Component {
             let totalHours = 0;
             listUavsByStatus.uavs.forEach((uav) => {
                 if (uav.distance && uav.speed) {
-                    totalHours += uav.distance / uav.speed;
+                    totalHours +=
+                        parseFloat(uav.distance) / parseFloat(uav.speed);
                 }
             });
             this.setState({ sumTotalHours: totalHours });
@@ -623,7 +624,11 @@ class Dashboard extends Component {
                                     <FormattedMessage id="dashboard.live-tracking" />
                                 </span>
                             </button>
-                            <button className="action-btn" onClick={() => this.handleRegisterUAV("export-data")}>
+                            <button
+                                className="action-btn"
+                                onClick={() =>
+                                    this.handleRegisterUAV("export-data")
+                                }>
                                 <i className="fas fa-download"></i>
                                 <span>
                                     <FormattedMessage id="dashboard.export-data" />

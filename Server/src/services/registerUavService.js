@@ -387,7 +387,6 @@ let handleDeleteUav = async (droneId) => {
         }
     });
 };
-
 let getUavsRegiteredRecently = async (ownerId) => {
     return new Promise(async (resolve, reject) => {
         try {

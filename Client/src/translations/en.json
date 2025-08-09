@@ -81,7 +81,8 @@
         "drone-is-maintenance": "UAV is Under Maintenance",
         "completed": "Completed",
         "register-new-uav": "Register New UAV",
-        "close": "Close"
+        "close": "Close",
+        "return-uav": "Return Uav"
     },
     "settings": {
         "title": "Settings",
@@ -271,5 +272,40 @@
         "description": "The goal of the system is to build a web-based software platform to manage, track, and control unmanned aerial vehicles (UAVs) effectively, safely, and flexibly.",
         "tagline": "Optimal Coordination – Maximum Safety!",
         "btn-register": "Explore the System"
+    },
+    "export-data": {
+        "title": "List of Completed UAVs",
+        "drone-id": "Drone ID",
+        "drone-name": "Drone Name",
+        "time-completed": "Time Completed",
+        "export-flight-path": "Export Flight Path",
+        "download-flight-path": "Download Flight Path",
+        "no-data": "No data available"
+    },
+    "registration": {
+        "title": "UAV Registration",
+        "subtitle": "Register your drone for flight operations",
+        "owner-id": "Owner ID",
+        "drone-id": "Drone ID",
+        "start-point": "Start Point",
+        "end-point": "End Point",
+        "flight-height": "Flight Height",
+        "flight-speed": "Flight Speed",
+        "drone-name": "Drone Name",
+        "cancel": "Cancel",
+        "register": "Register UAV",
+        "update": "Update UAV"
+    },
+    "create-uav" : {
+        "title": "Create New UAV",
+        "drone-id": "Drone ID *",
+        "drone-name": "Drone Name *",
+        "max-speed": "Max Speed (km/h) *",
+        "max-height": "Max Height (m) *",
+        "performance": "Performance *",
+        "drone-image": "Drone Image",
+        "cancel": "Cancel",
+        "create": "Create UAV",
+        "is-creating": "Creating UAV..."
     }
 }

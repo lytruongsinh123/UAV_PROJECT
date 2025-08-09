@@ -80,7 +80,8 @@
         "drone-is-maintenance": "UAV đang bảo trì",
         "completed": "Đã hoàn thành",
         "register-new-uav": "Đăng ký UAV mới",
-        "close": "Đóng"
+        "close": "Đóng",
+        "return-uav": "Trả Uav"
     },
     "settings": {
         "title": "Cài đặt",
@@ -270,5 +271,40 @@
         "description": "Mục tiêu của hệ thống là xây dựng một nền tảng phần mềm dựa trên web nhằm quản lý, theo dõi và kiểm soát thiết bị bay vận tải không người lái (UAV) một cách hiệu quả, an toàn và linh hoạt.",
         "tagline": "Điều phối tối ưu – An toàn tối đa!",
         "btn-register": "Khám phá hệ thống"
+    },
+    "export-data" : {
+        "title" : "Danh sách UAV đã hoàn thành",
+        "drone-id": "Drone ID",
+        "drone-name": "Tên UAV",
+        "time-completed": "Thời gian hoàn thành",
+        "export-flight-path": "Xuất lộ trình bay",
+        "download-flight-path": "Tải đường bay",
+        "No-data": "Không có dữ liệu"
+    },
+    "registration": {
+        "title": "Đăng ký UAV",
+        "subtitle": "Đăng ký UAV của bạn cho các hoạt động bay",
+        "owner-id": "ID chủ sở hữu",
+        "drone-id": "ID UAV",
+        "start-point": "Điểm bắt đầu",
+        "end-point": "Điểm kết thúc",
+        "flight-height": "Chiều cao bay",
+        "flight-speed": "Tốc độ bay",
+        "drone-name": "Tên UAV",
+        "cancel": "Hủy",
+        "register": "Đăng ký UAV",
+        "update": "Cập nhật UAV"
+    },
+    "create-uav" : {
+        "title": "Tạo UAV mới",
+        "drone-id": "ID UAV *",
+        "drone-name": "Tên UAV *",
+        "max-speed": "Tốc độ tối đa (km/h) *",
+        "max-height": "Độ cao tối đa (m) *",
+        "performance": "Hiệu suất *",
+        "drone-image": "Hình ảnh UAV",
+        "cancel": "Hủy",
+        "create": "Tạo UAV",
+        "is-creating": "Đang tạo UAV..."
     }
 }

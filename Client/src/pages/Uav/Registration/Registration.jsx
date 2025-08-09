@@ -229,8 +229,12 @@ class RegisterUav extends Component {
                     <div className="header-icon">
                         <i className="fas fa-helicopter"></i>
                     </div>
-                    <h1>UAV Registration</h1>
-                    <p>Register your drone for flight operations</p>
+                    <h1>
+                        <FormattedMessage id="registration.title" />
+                    </h1>
+                    <p>
+                        <FormattedMessage id="registration.subtitle" />
+                    </p>
                 </div>
 
                 <form
@@ -241,7 +245,7 @@ class RegisterUav extends Component {
                         <div className="form-group">
                             <label htmlFor="ownerId">
                                 <i className="fas fa-user"></i>
-                                Owner ID
+                                <FormattedMessage id="registration.owner-id" />
                             </label>
                             <input
                                 type="number"
@@ -259,7 +263,7 @@ class RegisterUav extends Component {
                         <div className="form-group">
                             <label htmlFor="droneId">
                                 <i className="fas fa-barcode"></i>
-                                Drone ID
+                                <FormattedMessage id="registration.drone-id" />
                             </label>
                             <select
                                 id="droneId"
@@ -267,7 +271,13 @@ class RegisterUav extends Component {
                                 value={droneId || ""}
                                 onChange={this.handleInputChange}
                                 required>
-                                <option value="">Select Drone</option>
+                                <option value="" disabled>
+                                    {
+                                        this.props.language === "vi"
+                                            ? "Chọn UAV"
+                                            : "Select UAV"
+                                    }
+                                </option>
                                 {listChoicesUavs.map((uav) => (
                                     <option key={uav.id} value={uav.droneId}>
                                         {uav.droneId}
@@ -280,7 +290,7 @@ class RegisterUav extends Component {
                         <div className="form-group full-width">
                             <label htmlFor="startPoint">
                                 <i className="fas fa-map-marker-alt"></i>
-                                Start Point
+                                <FormattedMessage id="registration.start-point" />
                             </label>
                             <input
                                 type="text"
@@ -297,7 +307,7 @@ class RegisterUav extends Component {
                         <div className="form-group full-width">
                             <label htmlFor="endPoint">
                                 <i className="fas fa-flag-checkered"></i>
-                                End Point
+                                <FormattedMessage id="registration.end-point" />
                             </label>
                             <input
                                 type="text"
@@ -314,7 +324,7 @@ class RegisterUav extends Component {
                         <div className="form-group">
                             <label htmlFor="heightFly">
                                 <i className="fas fa-arrows-alt-v"></i>
-                                Flight Height (m)
+                                <FormattedMessage id="registration.flight-height" />
                             </label>
                             <input
                                 type="number"
@@ -333,7 +343,7 @@ class RegisterUav extends Component {
                         <div className="form-group">
                             <label htmlFor="speed">
                                 <i className="fas fa-tachometer-alt"></i>
-                                Speed (km/h)
+                                <FormattedMessage id="registration.flight-speed" />
                             </label>
                             <input
                                 type="number"
@@ -352,7 +362,7 @@ class RegisterUav extends Component {
                         <div className="form-group">
                             <label htmlFor="droneName">
                                 <i className="fas fa-tag"></i>
-                                Drone Name
+                                <FormattedMessage id="registration.drone-name" />
                             </label>
                             <input
                                 type="text"
@@ -372,13 +382,13 @@ class RegisterUav extends Component {
                             className="btn-cancel"
                             onClick={this.handleCancel}>
                             <i className="fas fa-times"></i>
-                            Cancel
+                            <FormattedMessage id="registration.cancel" />
                         </button>
                         <button type="submit" className="btn-submit">
                             <i className="fas fa-paper-plane"></i>
                             {this.props.actions === crud_actions.CREATE
-                                ? "Register UAV"
-                                : "Update UAV"}
+                                ? <FormattedMessage id="registration.register" />
+                                : <FormattedMessage id="registration.update" />}
                         </button>
                     </div>
                 </form>
@@ -399,6 +409,7 @@ const mapStateToProps = (state) => {
     return {
         userInfo: state.user.userInfo,
         actions: state.uavRegister.actions,
+        language: state.app.language,
     };
 };
 

@@ -115,6 +115,11 @@ class App extends Component {
                                     <Route index element={<LiveTracking />} />
                                 </Route>
                                 <Route
+                                    path={"/live-tracking/:droneId"}
+                                    Component={userIsAuthenticated(HomePage)}>
+                                    <Route index element={<LiveTracking />} />
+                                </Route>
+                                <Route
                                     path={"/settings"}
                                     Component={userIsAuthenticated(HomePage)}>
                                     <Route index element={<Settings />} />

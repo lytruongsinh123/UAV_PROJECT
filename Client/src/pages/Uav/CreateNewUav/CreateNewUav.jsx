@@ -129,7 +129,7 @@ class CreateNewUav extends Component {
                 <div className="create-drone-header">
                     <h1>
                         <i className="fas fa-plus"></i>
-                        Tạo Drone Mới
+                        <FormattedMessage id="create-uav.title" defaultMessage="Tạo Drone Mới" />
                     </h1>
                 </div>
 
@@ -139,7 +139,7 @@ class CreateNewUav extends Component {
                         <div className="form-group">
                             <label>
                                 <i className="fas fa-tag"></i>
-                                Drone ID *
+                                <FormattedMessage id="create-uav.drone-id" defaultMessage="Drone ID *" />
                             </label>
                             <input
                                 type="text"
@@ -157,7 +157,7 @@ class CreateNewUav extends Component {
                         <div className="form-group">
                             <label>
                                 <i className="fas fa-drone"></i>
-                                Tên Drone *
+                                <FormattedMessage id="create-uav.drone-name" defaultMessage="Tên Drone *" />
                             </label>
                             <input
                                 type="text"
@@ -175,7 +175,7 @@ class CreateNewUav extends Component {
                         <div className="form-group">
                             <label>
                                 <i className="fas fa-tachometer-alt"></i>
-                                Tốc độ tối đa (km/h) *
+                                <FormattedMessage id="create-uav.max-speed" defaultMessage="Tốc độ tối đa (km/h) *" />
                             </label>
                             <input
                                 type="number"
@@ -194,7 +194,7 @@ class CreateNewUav extends Component {
                         <div className="form-group">
                             <label>
                                 <i className="fas fa-arrows-alt-v"></i>
-                                Độ cao tối đa (m) *
+                                <FormattedMessage id="create-uav.max-height" defaultMessage="Độ cao tối đa (m) *" />
                             </label>
                             <input
                                 type="number"
@@ -213,7 +213,7 @@ class CreateNewUav extends Component {
                         <div className="form-group">
                             <label>
                                 <i className="fas fa-star"></i>
-                                Hiệu suất
+                                <FormattedMessage id="create-uav.performance" defaultMessage="Hiệu suất" />
                             </label>
                             <select
                                 name="performance"
@@ -224,10 +224,18 @@ class CreateNewUav extends Component {
                                         "performance"
                                     )
                                 }>
-                                <option value="Excellent">Xuất sắc</option>
-                                <option value="Good">Tốt</option>
-                                <option value="Average">Trung bình</option>
-                                <option value="Poor">Kém</option>
+                                <option value="Excellent">
+                                    { this.props.language === 'vi' ? 'Xuất sắc' : 'Excellent'   }
+                                </option>
+                                <option value="Good">
+                                    { this.props.language === 'vi' ? 'Tốt' : 'Good' }
+                                </option>
+                                <option value="Average">
+                                    { this.props.language === 'vi' ? 'Trung bình' : 'Average' }
+                                </option>
+                                <option value="Poor">
+                                    { this.props.language === 'vi' ? 'Yếu' : 'Poor' }
+                                </option>
                             </select>
                         </div>
 
@@ -235,7 +243,7 @@ class CreateNewUav extends Component {
                         <div className="form-group">
                             <label>
                                 <i className="fas fa-image"></i>
-                                Hình ảnh drone
+                                <FormattedMessage id="create-uav.drone-image" defaultMessage="Hình ảnh" />
                             </label>
                             <input
                                 type="file"
@@ -271,7 +279,7 @@ class CreateNewUav extends Component {
                             onClick={this.handleCancel}
                             disabled={isSubmitting}>
                             <i className="fas fa-times"></i>
-                            Hủy
+                            <FormattedMessage id="create-uav.cancel" defaultMessage="Hủy" />
                         </button>
                         <button
                             type="submit"
@@ -280,12 +288,12 @@ class CreateNewUav extends Component {
                             {isSubmitting ? (
                                 <>
                                     <i className="fas fa-spinner fa-spin"></i>
-                                    Đang tạo...
+                                    <FormattedMessage id="create-uav.is-creating" defaultMessage="Đang tạo..." />
                                 </>
                             ) : (
                                 <>
                                     <i className="fas fa-save"></i>
-                                    Tạo Drone
+                                    <FormattedMessage id="create-uav.create" defaultMessage="Tạo Drone" />
                                 </>
                             )}
                         </button>
@@ -305,7 +313,7 @@ const withNavigate = (Component) => {
 
 const mapStateToProps = (state) => {
     return {
-        // language: state.app.language,
+        language: state.app.language,
     };
 };
 
