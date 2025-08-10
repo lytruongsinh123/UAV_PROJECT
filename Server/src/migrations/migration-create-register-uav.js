@@ -51,7 +51,7 @@ module.exports = {
                 allowNull: false,
             },
             distance: {
-                type: Sequelize.INTEGER,
+                type: Sequelize.FLOAT,
                 allowNull: false,
             },
             flightPathFile: {

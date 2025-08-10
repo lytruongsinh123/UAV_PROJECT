@@ -26,7 +26,7 @@ module.exports = (sequelize, DataTypes) => {
             heightFly: DataTypes.INTEGER,
             speed: DataTypes.INTEGER,
             status: DataTypes.STRING,
-            distance: DataTypes.INTEGER,
+            distance: DataTypes.FLOAT,
             flightPathFile: DataTypes.TEXT,
         },
         {

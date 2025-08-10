@@ -143,6 +143,7 @@ let handleUpdateUav = async (data) => {
         try {
             let uav = await db.RegisterUav.findOne({
                 where: { droneId: data.droneId },
+                raw: false
             });
             if (uav) {
                 uav.droneName = data.droneName;
@@ -231,6 +232,7 @@ let handleChangeUavStatus = async (droneId, newStatus) => {
             }
             let uav = await db.RegisterUav.findOne({
                 where: { droneId: droneId },
+                raw: false,
             });
 
             if (uav) {
@@ -334,6 +336,7 @@ let handleGetUavByStatus = async (status, ownerId) => {
                         attributes: ["image"],
                     },
                 ],
+                raw: false,
             });
 
             // Chuyển trường image từ Buffer sang link base64 dùng Buffer.from
@@ -455,6 +458,7 @@ let saveFlightPath = async (droneId, flightPathFile) => {
             }
             let uav = await db.RegisterUav.findOne({
                 where: { droneId: droneId },
+                raw: false,
             });
             if (uav) {
                 uav.flightPathFile = Buffer.from(flightPathFile,"base64").toString("binary");

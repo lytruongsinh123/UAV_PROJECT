@@ -24,12 +24,24 @@ services:
       - ./Server:/app
     restart: unless-stopped
     environment:
-      - NODE_ENV=production
-      - DB_NAME=${DB_NAME}
-      - DB_USER=${DB_USER}
+      - NODE_ENV=${NODE_ENV}
+      - DB_DATABASE_NAME=${DB_DATABASE_NAME}
+      - DB_USERNAME=${DB_USERNAME}
       - DB_PASSWORD=${DB_PASSWORD}
       - DB_PORT=${DB_PORT}
       - DB_HOST=${DB_HOST}
+      - DB_DIALECT=${DB_DIALECT}
+      - DB_SSL=${DB_SSL}
+      - PORT=${PORT}
+      - NODE_ENV=${NODE_ENV}
+      - URL_REACT=${URL_REACT}
+      - MAX_NUMBER_SCHEDULE=${MAX_NUMBER_SCHEDULE}
+      - EMAIL_APP_PASSWORD=${EMAIL_APP_PASSWORD}
+      - EMAIL_APP=${EMAIL_APP}
+      - SMTP_HOST=${SMTP_HOST}
+      - SMTP_PORT=${SMTP_PORT}
+      - API_KEY_MAP=${API_KEY_MAP}
+      - API_KEY_MAP_OPENROUTES=${API_KEY_MAP_OPENROUTES}
     depends_on:
       - postgres
 
@@ -37,8 +49,8 @@ services:
     image: postgres:15
     restart: unless-stopped
     environment:
-      - POSTGRES_DB=${DB_NAME}
-      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_DB=${DB_DATABASE_NAME}
+      - POSTGRES_USER=${DB_USERNAME}
       - POSTGRES_PASSWORD=${DB_PASSWORD}
     volumes:
       - db_data:/var/lib/postgresql/data
