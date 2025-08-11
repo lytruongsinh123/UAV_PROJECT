@@ -1,7 +1,8 @@
 const { Sequelize } = require("sequelize");
 require("dotenv").config();
-
+// file này để Tạo một Instance Sequelize và cung cấp hàm connectDB để kết nối database khi chạy ứng dụng Node.js (runtime). Dùng để truy vấn thêm sửa xóa dữ liệu
 // Option 2: Passing parameters separately (other dialects)
+// Instance Sequelize là đối tượng đại diện cho kết nối tới database, giúp bạn thao tác với database bằng cú pháp của Sequelize.
 const sequelize = new Sequelize(
     process.env.DB_DATABASE_NAME,
     process.env.DB_USERNAME,

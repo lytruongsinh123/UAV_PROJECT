@@ -1,3 +1,5 @@
+// File này được tạo ra với chức năng xuất ra một object cho các trường ( development, production, test )
+// để Sequelize CLI sử dụng khi migrate, seed, v.v.
 require("dotenv").config(); // this is important!
 module.exports = {
     development: {
