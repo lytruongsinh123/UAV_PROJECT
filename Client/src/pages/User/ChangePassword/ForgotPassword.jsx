@@ -21,7 +21,7 @@ class ForgotPassword extends Component {
     handleSubmit = async (e) => {
         e.preventDefault();
         this.setState({ loading: true, error: "", message: "" });
-        const res = await forgotPassword({ email: this.state.email });
+        const res = await forgotPassword(this.state.email);
         if (res && res.errCode === 0) {
             toast.success("Reset link sent to your email!");
             this.setState({ message: res.message, loading: false });
