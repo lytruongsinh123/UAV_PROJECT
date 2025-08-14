@@ -103,7 +103,7 @@ class Login extends Component {
                                         Remember me
                                     </label>
                                 </div>
-                                <div className="forgot-link">
+                                <div className="forgot-link" onClick={() => this.props.navigate("/forgot-password")}>
                                     Forgot password?
                                 </div>
                             </div>

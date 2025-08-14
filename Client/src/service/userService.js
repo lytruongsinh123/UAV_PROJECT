@@ -11,4 +11,7 @@ const getUserById = (id) => {
 const createNewUser = (userData) => { 
     return axios.post("/api/create-new-user", userData);
 };
-export { handleLogin, handleUpdateUser, getUserById, createNewUser };
+const forgotPassword = (email) => {
+    return axios.post("/api/forgot-password", { email });
+};
+export { handleLogin, handleUpdateUser, getUserById, createNewUser, forgotPassword };

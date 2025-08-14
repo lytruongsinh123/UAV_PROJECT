@@ -30,6 +30,7 @@ import ShowListUavs from "../pages/Uav/ShowLishUavs/ShowListUavs";
 import Register from "../pages/User/Register/Register";
 import ExportData from "../containers/ExportData/ExportData";
 import "@fortawesome/fontawesome-free/css/all.min.css";
+import ForgotPassword from "../pages/User/ChangePassword/ForgotPassword";
 
 class App extends Component {
     constructor(props) {
@@ -76,6 +77,10 @@ class App extends Component {
                                 <Route
                                     path={"/register"}
                                     Component={userIsNotAuthenticated(Register)}
+                                />
+                                <Route
+                                    path={"/forgot-password"}
+                                    Component={userIsNotAuthenticated(ForgotPassword)}
                                 />
                                 {/* HomePage layout với Header + Sidebar */}
                                 <Route
