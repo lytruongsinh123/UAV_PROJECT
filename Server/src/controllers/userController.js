@@ -76,18 +76,27 @@ let getUserById = async (req, res) => {
 };
 let forgotPassword = async (req, res) => {
     try {
-        let data = await userService.requestResetPassword(req.body.email, req.body.baseUrl);
+        let data = await userService.requestResetPassword(req.body.email);
         return res.status(200).json(data);
     } catch (e) {
-        return res.status(500).json({ errCode: -1, message: "Server error" });
+        return res.status(200).json({
+            errCode: -1,
+            errMessage: "Error from server",
+        });
     }
 };
 let resetPassword = async (req, res) => {
     try {
-        let data = await userService.resetPassword(req.body.token, req.body.newPassword);
+        let data = await userService.resetPassword(
+            req.body.token,
+            req.body.newPassword
+        );
         return res.status(200).json(data);
     } catch (e) {
-        return res.status(500).json({ errCode: -1, message: "Server error" });
+        return res.status(200).json({
+            errCode: -1,
+            errMessage: "Error from server",
+        });
     }
 };
 module.exports = {
