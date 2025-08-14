@@ -29,6 +29,7 @@ export const handleLoginSuccess = (res) => ({
         password: res.user.password,
         firstName: res.user.firstName,
         lastName: res.user.lastName,
+        address: res.user.address,
         positionId: res.user.positionId,
     },
 });
