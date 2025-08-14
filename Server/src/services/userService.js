@@ -1,7 +1,7 @@
 import db from "../models/index";
 import bcrypt from "bcryptjs";
 import crypto from "crypto";
-import emailService from "../services/emailService"
+import emailService from "../services/emailService";
 let salt = bcrypt.genSaltSync(10);
 
 let hashUserPassWord = (password) => {
@@ -279,7 +279,10 @@ let getUserById = (userId) => {
 let requestResetPassword = (email) => {
     return new Promise(async (resolve, reject) => {
         try {
-            let user = await db.User.findOne({ where: { email } });
+            let user = await db.User.findOne({
+                where: { email },
+                raw: false,
+            });
             if (!user) {
                 resolve({ errCode: 1, message: "Email not found" });
                 return;

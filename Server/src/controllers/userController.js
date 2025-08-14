@@ -79,7 +79,6 @@ let forgotPassword = async (req, res) => {
         let data = await userService.requestResetPassword(req.body.email);
         return res.status(200).json(data);
     } catch (e) {
-        console.error("Error in forgotPassword:", e);
         return res.status(200).json({
             errCode: -1,
             errMessage: "Error from server",
