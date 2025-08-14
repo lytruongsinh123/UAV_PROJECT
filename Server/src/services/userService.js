@@ -1,5 +1,7 @@
 import db from "../models/index";
 import bcrypt from "bcryptjs";
+import crypto from "crypto";
+import emailService from "../services/emailService"
 let salt = bcrypt.genSaltSync(10);
 
 let hashUserPassWord = (password) => {
@@ -254,12 +256,10 @@ let getUserById = (userId) => {
                 },
             });
             if (user) {
-                if (user.image)
-                {
-                    user.image = Buffer.from(
-                        user.image,
-                        "base64"
-                    ).toString("binary")
+                if (user.image) {
+                    user.image = Buffer.from(user.image, "base64").toString(
+                        "binary"
+                    );
                 }
                 resolve({
                     errCode: 0,
@@ -276,6 +276,59 @@ let getUserById = (userId) => {
         }
     });
 };
+let requestResetPassword = (email) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let user = await db.User.findOne({ where: { email } });
+            if (!user) {
+                resolve({ errCode: 1, message: "Email not found" });
+                return;
+            }
+            // Tạo token ngẫu nhiên
+            const token = crypto.randomBytes(32).toString("hex");
+            const expire = new Date(Date.now() + 60 * 60 * 1000); // 1 giờ
+
+            user.resetToken = token;
+            user.resetTokenExpire = expire;
+            await user.save();
+
+            // Gửi email chứa link reset
+            await emailService.changePasswordEmail(user.email, user.resetToken);
+
+            resolve({
+                errCode: 0,
+                message: "Check your email to reset password",
+            });
+        } catch (e) {
+            reject(e);
+        }
+    });
+};
+
+let resetPassword = (token, newPassword) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let user = await db.User.findOne({
+                where: {
+                    resetToken: token,
+                    resetTokenExpire: { [db.Sequelize.Op.gt]: new Date() },
+                },
+            });
+            if (!user) {
+                resolve({ errCode: 1, message: "Token is invalid or expired" });
+                return;
+            }
+            let hashPasswordFromBcrypt = await hashUserPassWord(newPassword);
+            user.password = hashPasswordFromBcrypt;
+            user.resetToken = null;
+            user.resetTokenExpire = null;
+            await user.save();
+            resolve({ errCode: 0, message: "Password reset successful" });
+        } catch (e) {
+            reject(e);
+        }
+    });
+};
 
 module.exports = {
     handleUserLogin: handleUserLogin,
@@ -285,4 +338,6 @@ module.exports = {
     deleteUser: deleteUser,
     updateUserData: updateUserData,
     getAllCodeService: getAllCodeService,
+    requestResetPassword: requestResetPassword,
+    resetPassword: resetPassword,
 };

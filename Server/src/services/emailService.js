@@ -68,6 +68,35 @@ let getBodyHTML = (feedbackData) => {
     }
     return result;
 };
+let changePasswordEmail = async (userEmail, resetToken) => {
+    const transporter = nodemailer.createTransport({
+        host: process.env.SMTP_HOST,
+        port: process.env.SMTP_PORT,
+        secure: false,
+        auth: {
+            user: process.env.EMAIL_APP,
+            pass: process.env.EMAIL_APP_PASSWORD,
+        },
+    });
+
+    try {
+        await transporter.verify();
+    } catch (error) {
+        console.error("Email transporter is not configured correctly.", error);
+        throw new Error("Email transporter configuration failed.");
+    }
+
+    await transporter.sendMail({
+        from: `"UAV System" <${process.env.EMAIL_APP}>`,
+        to: userEmail,
+        subject: "Password Change Request",
+        html: `<p>Click the link below to change your password:</p>
+               <a href="${process.env.BASE_URL}/reset-password?resetToken=${resetToken}">Change Password</a>
+               <p>This link will expire in 1 hour.</p>`,
+    });
+};
+
 module.exports = {
     sendFeedbackEmail: sendFeedbackEmail,
+    changePasswordEmail: changePasswordEmail,
 };

@@ -4,6 +4,7 @@ import registerUavController from "../controllers/registerUavController";
 import feedbackController from "../controllers/feedbackController";
 import uavsController from "../controllers/uavsController";
 
+
 let router = express.Router();
 let initWebRouters = (app) => {
     // API USER
@@ -14,6 +15,8 @@ let initWebRouters = (app) => {
     router.delete("/api/delete-user", userController.handleDeleteUser);
     router.get("/api/allcode", userController.getAllCode);
     router.get("/api/get-user-by-id", userController.getUserById);
+    router.post("/api/forgot-password", userController.forgotPassword);
+    router.post("/api/reset-password", userController.resetPassword);
 
     // API UAV
     router.post("/api/create-new-uav", uavsController.handleCreateNewUav);

@@ -74,15 +74,30 @@ let getUserById = async (req, res) => {
         });
     }
 };
-
-
+let forgotPassword = async (req, res) => {
+    try {
+        let data = await userService.requestResetPassword(req.body.email, req.body.baseUrl);
+        return res.status(200).json(data);
+    } catch (e) {
+        return res.status(500).json({ errCode: -1, message: "Server error" });
+    }
+};
+let resetPassword = async (req, res) => {
+    try {
+        let data = await userService.resetPassword(req.body.token, req.body.newPassword);
+        return res.status(200).json(data);
+    } catch (e) {
+        return res.status(500).json({ errCode: -1, message: "Server error" });
+    }
+};
 module.exports = {
     handleLogin: handleLogin,
     handleGetAllUsers: handleGetAllUsers,
     handleCreateNewUser: handleCreateNewUser,
     handleEditUser: handleEditUser,
+    forgotPassword: forgotPassword,
     handleDeleteUser: handleDeleteUser,
     getAllCode: getAllCode,
     getUserById: getUserById,
-    
+    resetPassword: resetPassword,
 };
