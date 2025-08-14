@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { FormattedMessage } from "react-intl";
 import { useNavigate } from "react-router-dom";
-import { handleUpdateUser } from "../../service/userService";
 import { getUserById } from "../../service/userService";
 import * as actions from "../../store/actions/userActions";
 import CommonUtils from "../../utils/CommonUtils";
@@ -77,7 +76,7 @@ class EditUser extends Component {
 
     handleSubmit = async (e) => {
         e.preventDefault();
-        let res = await handleUpdateUser({
+        let res = await this.props.handleUpdateUser({
             id: this.props.userInfo.id,
             firstName: this.state.firstName,
             lastName: this.state.lastName,
@@ -87,13 +86,9 @@ class EditUser extends Component {
             phoneNumber: this.state.phoneNumber,
             image: this.state.image,
         });
-        if (res && res.errCode === 0) {
-            toast.success("Update user successfully!");
-            if (this.props.navigate) {
-                this.props.navigate(`/homeuav`);
-            }
-        } else {
-            toast.error("Update user failed!");
+
+        if (this.props.navigate) {
+            this.props.navigate(`/homeuav`);
         }
     };
 
