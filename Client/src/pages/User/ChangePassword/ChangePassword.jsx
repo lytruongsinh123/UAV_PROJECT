@@ -44,7 +44,7 @@ class ChangePassword extends Component {
         const token = params.get("resetToken");
 
         try {
-            const res = await resetPassword({ token, password });
+            const res = await resetPassword(token, password);
             if (res && res.errCode === 0) {
                 toast.success("Password updated successfully!");
                 this.setState({ message: res.message, loading: false });
