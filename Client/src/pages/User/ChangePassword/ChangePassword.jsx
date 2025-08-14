@@ -79,7 +79,7 @@ class ChangePassword extends Component {
                 <form
                     className="change-password-form"
                     onSubmit={this.handleSubmit}>
-                    <div className="form-group">
+                    <div className="form-group-reset">
                         <label htmlFor="password">
                             <FormattedMessage
                                 id="changepassword.new"
@@ -96,7 +96,7 @@ class ChangePassword extends Component {
                             placeholder="Enter new password"
                         />
                     </div>
-                    <div className="form-group">
+                    <div className="form-group-reset">
                         <label htmlFor="confirmPassword">
                             <FormattedMessage
                                 id="changepassword.confirm"
