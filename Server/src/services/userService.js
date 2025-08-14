@@ -316,6 +316,7 @@ let resetPassword = (token, newPassword) => {
                     resetToken: token,
                     resetTokenExpire: { [db.Sequelize.Op.gt]: new Date() },
                 },
+                raw: false,
             });
             if (!user) {
                 resolve({ errCode: 1, message: "Token is invalid or expired" });
