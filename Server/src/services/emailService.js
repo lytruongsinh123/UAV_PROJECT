@@ -90,9 +90,24 @@ let changePasswordEmail = async (userEmail, resetToken) => {
         from: `"UAV System" <${process.env.EMAIL_APP}>`,
         to: userEmail,
         subject: "Password Change Request",
-        html: `<p>Click the link below to change your password:</p>
-               <a href="${process.env.URL_REACT}/reset-password?resetToken=${resetToken}">Change Password</a>
-               <p>This link will expire in 1 hour.</p>`,
+        html: `
+          <div style="max-width:480px;margin:40px auto;padding:32px 24px;background:linear-gradient(135deg,#2d225a 0%,#1a1333 100%);border-radius:16px;box-shadow:0 8px 32px 0 rgba(31,38,135,0.25),0 2px 16px rgba(0,0,0,0.15);color:#fff;font-family:'Segoe UI',Arial,sans-serif;">
+            <h2 style="color:#3fa7ff;text-align:center;margin-bottom:24px;">Reset Your Password</h2>
+            <p style="font-size:1.05rem;margin-bottom:24px;text-align:center;">
+              We received a request to reset your password.<br>
+              Click the button below to set a new password. This link will expire in 1 hour.
+            </p>
+            <div style="text-align:center;margin-bottom:32px;">
+              <a href="${process.env.URL_REACT}/change-password?token=${resetToken}"
+                 style="display:inline-block;padding:12px 32px;background:linear-gradient(90deg,#3fa7ff 0%,#a259ff 100%);color:#fff;border-radius:8px;font-weight:600;text-decoration:none;font-size:1.1rem;box-shadow:0 2px 8px 0 #3fa7ff22;">
+                Change Password
+              </a>
+            </div>
+            <p style="font-size:0.95rem;text-align:center;color:#bbb;">
+              If you did not request a password reset, please ignore this email.
+            </p>
+          </div>
+        `,
     });
 };
 
