@@ -46,7 +46,14 @@ module.exports = {
             image: {
                 type: Sequelize.BLOB("long"),
             },
-
+            resetToken: {
+                type: Sequelize.STRING,
+                allowNull: true,
+            },
+            resetTokenExpire: {
+                type: Sequelize.DATE,
+                allowNull: true,
+            },
             createdAt: {
                 allowNull: false,
                 type: Sequelize.DATE,

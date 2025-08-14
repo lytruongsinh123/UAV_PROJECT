@@ -23,6 +23,8 @@ module.exports = (sequelize, DataTypes) => {
             phoneNumber: DataTypes.STRING,
             positionId: DataTypes.STRING,
             image: DataTypes.TEXT,
+            resetToken: DataTypes.STRING,         // Thêm dòng này
+            resetTokenExpire: DataTypes.DATE,
         },
         {
             sequelize,
