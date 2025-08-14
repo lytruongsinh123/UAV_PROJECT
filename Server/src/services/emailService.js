@@ -98,7 +98,7 @@ let changePasswordEmail = async (userEmail, resetToken) => {
               Click the button below to set a new password. This link will expire in 1 hour.
             </p>
             <div style="text-align:center;margin-bottom:32px;">
-              <a href="${process.env.URL_REACT}/change-password?token=${resetToken}"
+              <a href="${process.env.URL_REACT}/reset-password?resetToken=${resetToken}"
                  style="display:inline-block;padding:12px 32px;background:linear-gradient(90deg,#3fa7ff 0%,#a259ff 100%);color:#fff;border-radius:8px;font-weight:600;text-decoration:none;font-size:1.1rem;box-shadow:0 2px 8px 0 #3fa7ff22;">
                 Change Password
               </a>
