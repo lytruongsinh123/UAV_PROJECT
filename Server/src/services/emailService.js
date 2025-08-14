@@ -91,7 +91,7 @@ let changePasswordEmail = async (userEmail, resetToken) => {
         to: userEmail,
         subject: "Password Change Request",
         html: `<p>Click the link below to change your password:</p>
-               <a href="${process.env.BASE_URL}/reset-password?resetToken=${resetToken}">Change Password</a>
+               <a href="${process.env.URL_REACT}/reset-password?resetToken=${resetToken}">Change Password</a>
                <p>This link will expire in 1 hour.</p>`,
     });
 };

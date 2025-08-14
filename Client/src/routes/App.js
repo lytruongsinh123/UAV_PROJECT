@@ -31,6 +31,7 @@ import Register from "../pages/User/Register/Register";
 import ExportData from "../containers/ExportData/ExportData";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import ForgotPassword from "../pages/User/ChangePassword/ForgotPassword";
+import ChangePassword from "../pages/User/ChangePassword/ChangePassword";
 
 class App extends Component {
     constructor(props) {
@@ -81,6 +82,10 @@ class App extends Component {
                                 <Route
                                     path={"/forgot-password"}
                                     Component={userIsNotAuthenticated(ForgotPassword)}
+                                />
+                                <Route
+                                    path={"/reset-password"}
+                                    Component={userIsNotAuthenticated(ChangePassword)}
                                 />
                                 {/* HomePage layout với Header + Sidebar */}
                                 <Route

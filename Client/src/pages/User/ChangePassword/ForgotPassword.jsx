@@ -25,6 +25,10 @@ class ForgotPassword extends Component {
         if (res && res.errCode === 0) {
             toast.success("Reset link sent to your email!");
             this.setState({ message: res.message, loading: false });
+            // Chuyển hướng về trang đăng nhập
+            if (this.props.navigate) {
+                this.props.navigate(`/`); // Dùng navigate để chuyển hướng
+            }
         } else {
             toast.error(res?.message || "Error");
             this.setState({ loading: false });
@@ -46,9 +50,7 @@ class ForgotPassword extends Component {
                         onSubmit={this.handleSubmit}
                         className="forgot-password-form">
                         <div className="form-group-email">
-                            <label htmlFor="email">
-                                Email
-                            </label>
+                            <label htmlFor="email">Email</label>
                             <input
                                 type="email"
                                 id="email"

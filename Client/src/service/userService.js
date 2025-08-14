@@ -14,4 +14,7 @@ const createNewUser = (userData) => {
 const forgotPassword = (email) => {
     return axios.post("/api/forgot-password", { email });
 };
-export { handleLogin, handleUpdateUser, getUserById, createNewUser, forgotPassword };
+const resetPassword = (token, newPassword) => {
+    return axios.post("/api/reset-password", { token, newPassword });
+};
+export { handleLogin, handleUpdateUser, getUserById, createNewUser, forgotPassword, resetPassword };
