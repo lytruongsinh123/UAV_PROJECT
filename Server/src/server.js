@@ -20,7 +20,7 @@ app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 viewEngine(app);
 initWebRoutes(app);
 connectdb();
-let PORT = process.env.PORT || 8080;
+let PORT = process.env.PORT;
 app.listen(PORT, ()=> {
     console.log("Backend is running on the port :"+PORT)
 })
